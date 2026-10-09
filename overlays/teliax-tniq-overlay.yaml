@@ -1,0 +1,27 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for the TNIQ Customer API
+  version: 1.0.0
+extends: ../openapi/_original/teliax-tniq-openapi.yml
+x-generated: '2026-10-09'
+x-method: generated
+x-source: openapi/teliax-tniq-openapi.yml
+x-rationale: >-
+  The spec defines components.securitySchemes.bearerAuth and its description says to
+  pass a Bearer token, but it has no root security requirement: only 16 of 291
+  operations declare security. This overlay adds the root requirement so tools treat
+  every operation as authenticated, and marks the production server. Operations that
+  already declare their own security keep it. The original spec is not modified.
+actions:
+- target: $
+  description: Apply the documented bearer scheme API-wide.
+  update:
+    security:
+    - bearerAuth: []
+- target: $.info
+  update:
+    x-provider-brand: TNIQ by Ringer (formerly Teliax)
+    x-docs: https://tniq.ringer.tel/docs/api-reference
+- target: $.servers[0]
+  update:
+    x-environment: production

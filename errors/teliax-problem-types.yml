@@ -1,0 +1,118 @@
+generated: '2026-10-09'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/teliax-telique-openapi.yml
+- openapi/teliax-tniq-openapi.yml
+- openapi/teliax-warp-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: SoaResponse
+coverage:
+  operations: 467
+  statuses_declared: 12
+problems:
+- status: 400
+  title: Bad Request
+  description: Bad Request
+  operations: 117
+  media_types:
+  - application/json
+  - application/xml
+  - '*/*'
+  schema: SoaResponse
+- status: 401
+  title: Unauthorized
+  description: Unauthorized
+  operations: 96
+  media_types:
+  - application/json
+  - application/xml
+  - '*/*'
+  schema: SoaResponse
+- status: 403
+  title: Forbidden
+  description: Forbidden
+  operations: 40
+  media_types:
+  - application/json
+  - application/xml
+  - '*/*'
+  schema: SoaResponse
+- status: 404
+  title: Not Found
+  description: Not Found
+  operations: 109
+  media_types:
+  - application/json
+  - application/xml
+  - '*/*'
+  schema: SoaResponse
+- status: 409
+  title: Conflict
+  description: Conflict
+  operations: 22
+  media_types:
+  - application/json
+  - application/xml
+  - '*/*'
+  schema: SoaResponse
+- status: 410
+  title: Gone
+  description: 'RESULTS_EXPIRED: detailed results expired; summary remains available'
+  operations: 6
+  media_types:
+  - application/json
+  - application/xml
+  schema: null
+- status: 413
+  title: Content Too Large
+  description: REQUEST_TOO_LARGE
+  operations: 5
+  media_types:
+  - application/json
+  schema: null
+- status: 422
+  title: Unprocessable Content
+  description: Validation error
+  operations: 5
+  media_types:
+  - application/json
+  - application/xml
+  - '*/*'
+  schema: SoaResponse
+- status: 429
+  title: Too Many Requests
+  description: 'RATE_LIMITED: API key request limit exceeded'
+  operations: 17
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 500
+  title: Internal Server Error
+  description: Internal Server Error
+  operations: 61
+  media_types:
+  - application/json
+  - application/xml
+  - text/html
+  schema: ErrorResponse
+- status: 502
+  title: Bad Gateway
+  description: Bad Gateway
+  operations: 48
+  media_types:
+  - application/json
+  - '*/*'
+  - application/octet-stream
+  schema: CnamErrorResponse
+- status: 503
+  title: Service Unavailable
+  description: Service Unavailable
+  operations: 28
+  media_types:
+  - application/json
+  - application/xml
+  - application/pdf
+  schema: ErrorResponse

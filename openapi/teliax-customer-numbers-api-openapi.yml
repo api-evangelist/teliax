@@ -1,0 +1,3882 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Numbers API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/Numbers across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/Numbers
+paths:
+  /v1/number-operations:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:read. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: Recent number operation
+      operationId: numberOperationsRecent
+      parameters:
+      - description: Opaque cursor
+        name: cursor
+        in: query
+        schema:
+          type: string
+      - description: Page size
+        name: size
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.RecentOperations'
+        '400':
+          description: INVALID_PAGE, INVALID_CURSOR
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: 'RATE_LIMITED: API key request limit exceeded'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:read
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/capabilities:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:read. Available even when provider configuration disables mutations.
+      tags:
+      - Customer/Numbers
+      summary: Read number operation capabilities
+      operationId: numberOperationsCapabilities
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Capabilities'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: 'RATE_LIMITED: API key request limit exceeded'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:read
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/edit-state/{assignmentID}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:read. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: EditState number operation
+      operationId: numberOperationsEditState
+      parameters:
+      - description: Assignment UUID
+        name: assignmentID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - description: Field
+        name: field
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - cnam
+          - lookup
+          - trunk
+          - friendly_name
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numbermutation.FieldSnapshot'
+        '400':
+          description: INVALID_ID, INVALID_PARAM
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: ASSIGNMENT_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: 'RATE_LIMITED: API key request limit exceeded'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:read
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/inline:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:write. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: Inline number operation
+      operationId: numberOperationsInline
+      parameters:
+      - description: Customer-scoped idempotency key, at most 255 bytes
+        name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 255
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.InlineRequest'
+        description: Request (maximum 1 MiB)
+        required: true
+        x-max-bytes: 1048576
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Operation'
+        '400':
+          description: EMPTY_SELECTION, INVALID_PAYLOAD, INVALID_TOKEN, INVALID_IDEMPOTENCY_KEY, INVALID_ACTION, INVALID_ACTOR, TRUNK_UNAVAILABLE, ASSIGNMENT_UNAVAILABLE, NO_ELIGIBLE_ITEMS
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: OPERATION_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: IDEMPOTENCY_CONFLICT, FIELD_CHANGED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '413':
+          description: REQUEST_TOO_LARGE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: 'RATE_LIMITED: API key request limit exceeded'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: GATEWAY_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:write
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/previews:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:write. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: Preview number operation
+      operationId: numberOperationsPreview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.PreviewRequest'
+        description: Request (maximum 1 MiB)
+        required: true
+        x-max-bytes: 1048576
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Operation'
+        '400':
+          description: INVALID_PAYLOAD, INVALID_ACTION, INVALID_SELECTION, EMPTY_SELECTION, INVALID_FILTERS, SELECTION_TOO_LARGE, INVALID_ACTOR, TRUNK_UNAVAILABLE, ASSIGNMENT_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '413':
+          description: REQUEST_TOO_LARGE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: RATE_LIMITED, PREVIEW_BUSY
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: PREVIEW_UNAVAILABLE, PREVIEW_TIMEOUT, GATEWAY_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:write
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/{id}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:read. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: Get number operation
+      operationId: numberOperationsGet
+      parameters:
+      - description: Operation UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Operation'
+        '400':
+          description: INVALID_ID
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: OPERATION_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: 'RATE_LIMITED: API key request limit exceeded'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:read
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/{id}/items:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:read. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: Items number operation
+      operationId: numberOperationsItems
+      parameters:
+      - description: Operation UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - description: Opaque cursor
+        name: cursor
+        in: query
+        schema:
+          type: string
+      - description: Page size
+        name: size
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - description: Item state
+        name: state
+        in: query
+        schema:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - unchanged
+          - skipped
+          - failed
+          - needs_review
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.OperationPage'
+        '400':
+          description: INVALID_ID, INVALID_PAGE, INVALID_CURSOR, INVALID_STATE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: OPERATION_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '410':
+          description: 'RESULTS_EXPIRED: detailed results expired; summary remains available'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: 'RATE_LIMITED: API key request limit exceeded'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:read
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/{id}/results.csv:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:read. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: ResultsCSV number operation
+      operationId: numberOperationsResultsCSV
+      parameters:
+      - description: Operation UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: TN,Assignment ID,Action,Result,Reason CSV
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: INVALID_ID
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: OPERATION_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '410':
+          description: 'RESULTS_EXPIRED: detailed results expired; summary remains available'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: 'RATE_LIMITED: CSV capacity busy'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: 'GATEWAY_UNAVAILABLE: CSV capacity exceeded'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:read
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/{id}/retry-preview:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:write. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: RetryPreview number operation
+      operationId: numberOperationsRetryPreview
+      parameters:
+      - description: Operation UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Operation'
+        '400':
+          description: INVALID_ID, INVALID_PAYLOAD, ASSIGNMENT_UNAVAILABLE, INVALID_ACTOR, TRUNK_UNAVAILABLE, SELECTION_TOO_LARGE, EMPTY_SELECTION
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: OPERATION_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '410':
+          description: 'RESULTS_EXPIRED: detailed results expired; summary remains available'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '413':
+          description: REQUEST_TOO_LARGE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: RATE_LIMITED, PREVIEW_BUSY
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: PREVIEW_TIMEOUT, GATEWAY_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:write
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/number-operations/{id}/submit:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: Requires numbers:write. Operation keys return current persisted state.
+      tags:
+      - Customer/Numbers
+      summary: Submit number operation
+      operationId: numberOperationsSubmit
+      parameters:
+      - description: Operation UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - description: Customer-scoped idempotency key, at most 255 bytes
+        name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 255
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Operation'
+        '400':
+          description: INVALID_ID, INVALID_PAYLOAD, INVALID_IDEMPOTENCY_KEY, INVALID_ACTION, NO_ELIGIBLE_ITEMS
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: UNAUTHORIZED, SESSION_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: NO_ACTIVE_CUSTOMER, FORBIDDEN, IP_NOT_ALLOWED, MFA_REQUIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: OPERATION_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: IDEMPOTENCY_CONFLICT
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '410':
+          description: PREVIEW_EXPIRED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '413':
+          description: REQUEST_TOO_LARGE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: 'RATE_LIMITED: API key request limit exceeded'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: INTERNAL_ERROR, SESSION_LOOKUP_FAILED, API_KEY_LOOKUP_FAILED, CUSTOMER_LOOKUP_FAILED, RATE_LIMIT_CHECK_FAILED, SCOPE_LOOKUP_FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: GATEWAY_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - success
+                - error
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      x-required-scopes:
+      - numbers:write
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Lists the customer's telephone numbers with voice/SMS configuration state. Filterable by status, type, and configuration flags.
+      tags:
+      - Customer/Numbers
+      summary: List numbers
+      parameters:
+      - description: Page (1-based)
+        name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - description: Page size
+        name: size
+        in: query
+        schema:
+          type: integer
+          default: 50
+      - description: active | held | released | all
+        name: status
+        in: query
+        schema:
+          type: string
+      - description: did | tfn
+        name: type
+        in: query
+        schema:
+          type: string
+      - description: TN or metadata search
+        name: search
+        in: query
+        schema:
+          type: string
+      - description: Filter by voice configuration
+        name: voice_configured
+        in: query
+        schema:
+          type: boolean
+      - description: Filter by SMS configuration
+        name: sms_configured
+        in: query
+        schema:
+          type: boolean
+      - description: Inventory column
+        name: sort_by
+        in: query
+        schema:
+          type: string
+          enum:
+          - tn
+          - friendly_name
+          - number_type
+          - voice
+          - sms
+          - cnam_enabled
+          - e911_enabled
+          - cnam_display_name
+          - acquired_at
+      - description: Sort direction
+        name: sort_order
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.NumbersPage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1Numbers
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/bulk-assign:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Procures and assigns up to 200 numbers in one idempotent batch. Requires a UUID Idempotency-Key header (reused as procurement_request_id). Per-TN failures do not abort the batch. Provider sourcing (TNIQ vs Inteliquent) is automatic per TN, following how each number was found in search; a mixed cart is fine. Optional extras — cnam_enabled (inbound caller-name dip; requires a trunk), cnam_display_name (outbound CNAM listing, ≤15 chars, DIDs only), campaign_id (attach to a 10DLC campaign) — apply per successfully assigned TN, best-effort: outcomes land in each result''s extras map (keys cnam_dip/cnam_listing/campaign) and never fail the batch. Optional batch voice routing: routing_type trunk|forward|reject (+forward_to_number, forward_preserve_ani); voicemail not yet available. Errors: INVALID_REQUEST, MISSING_IDEMPOTENCY_KEY, INVALID_IDEMPOTENCY_KEY, TRUNK_UNOWNED (whole-request 403 on default_trunk_id).'
+      tags:
+      - Customer/Numbers
+      summary: Bulk assign numbers
+      parameters:
+      - description: Batch idempotency key (UUID)
+        name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.BulkAssignRequest'
+        description: Batch assignment request
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_services.BulkAssignResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1NumbersBulkAssign
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/bulk-route:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Assigns up to 200 held numbers to a single voice trunk-group in one request. Idempotent at the SQL level. Errors: INVALID_REQUEST, TRUNK_UNOWNED (whole-request 403).'
+      tags:
+      - Customer/Numbers
+      summary: Bulk route numbers to a trunk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.BulkRouteRequest'
+        description: Numbers and target trunk
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_services.BulkAssignResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1NumbersBulkRoute
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/pricing:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Resolves the active customer''s effective monthly rate for a local DID and a toll-free number — plan price (version-pinned) → customer override → list price, the same tiering the Rater bills with. monthly_rate is null when no price is configured at any tier. Errors: NO_ACTIVE_CUSTOMER, INTERNAL_ERROR.'
+      tags:
+      - Customer/Numbers
+      summary: Effective per-number monthly pricing
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.NumberPricingResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1NumbersPricing
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/search:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Searches the upstream inventory for purchasable telephone numbers by area code, rate center, locality, or pattern. Returns a paginated list of candidates. Errors: PROVIDER_UPSTREAM_ERROR.'
+      tags:
+      - Customer/Numbers
+      summary: Search available numbers
+      parameters:
+      - description: Number type
+        name: type
+        in: query
+        schema:
+          type: string
+          default: did
+      - description: Area code (NPA)
+        name: npa
+        in: query
+        schema:
+          type: string
+      - description: Exchange (NXX)
+        name: nxx
+        in: query
+        schema:
+          type: string
+      - description: State (2-letter)
+        name: state
+        in: query
+        schema:
+          type: string
+      - description: City
+        name: city
+        in: query
+        schema:
+          type: string
+      - description: Locality
+        name: locality
+        in: query
+        schema:
+          type: string
+      - description: Rate center
+        name: rate_center
+        in: query
+        schema:
+          type: string
+      - description: Digit pattern
+        name: pattern
+        in: query
+        schema:
+          type: string
+      - description: Last-4 prefix
+        name: last_4_prefix
+        in: query
+        schema:
+          type: string
+      - description: Page (1-based)
+        name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - description: Page size
+        name: size
+        in: query
+        schema:
+          type: integer
+          default: 25
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_services.SearchResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1NumbersSearch
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/{tn}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Returns one telephone number with its voice and SMS usage configuration.
+      tags:
+      - Customer/Numbers
+      summary: Get a number
+      parameters:
+      - description: Telephone number (10 or 11 digit)
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.AssignmentWithUsages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1NumbersByTn
+      x-operation-id-source: derived
+    patch:
+      security:
+      - ApiKeyAuth: []
+      description: 'Updates the friendly name and/or description on an owned number. ASSIGNMENT_BUSY returns 503 with Retry-After. Errors: INVALID_REQUEST, TN_NOT_OWNED.'
+      tags:
+      - Customer/Numbers
+      summary: Update number metadata
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.UpdateMetadataRequest'
+        description: Metadata fields
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Assignment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: patchV1NumbersByTn
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/{tn}/assign:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Procures a telephone number from inventory and assigns it to the active customer. Idempotent via the Idempotency-Key header. TNIQ-only in v1 — this path has no provider selector; Inteliquent-sourced numbers arrive via search→cart→POST /v1/numbers/bulk-assign (the only UI path that can pick a non-TNIQ provider). Errors: TN_ALREADY_ASSIGNED, TN_UNAVAILABLE, PROVIDER_UPSTREAM_ERROR.'
+      tags:
+      - Customer/Numbers
+      summary: Assign a number
+      parameters:
+      - description: Telephone number (10 or 11 digit)
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.AssignNumberRequest'
+        description: Optional friendly name / description
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.AssignmentWithUsages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '410':
+          description: Gone
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1NumbersByTnAssign
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/{tn}/port-out-pin:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Reports whether a port-out PIN is set on the number and, when locked out after failed verify attempts, the lock-expiry timestamp. The PIN hash is never returned. Response is bare (no success/data envelope). Errors: TN_NOT_OWNED.'
+      tags:
+      - Customer/Numbers
+      summary: Get port-out PIN status
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_handlers.PortOutPINStatusResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1NumbersByTnPortOutPin
+      x-operation-id-source: derived
+    put:
+      security:
+      - ApiKeyAuth: []
+      description: 'Sets the customer-chosen 4–10 digit port-out PIN on an owned number (hashed at rest; resets the failed-attempt lock). Requires step-up MFA. Response is bare (no envelope). Errors: INVALID_REQUEST, INVALID_PIN, TN_NOT_OWNED.'
+      tags:
+      - Customer/Numbers
+      summary: Set port-out PIN
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.setPINReq'
+        description: PIN (4–10 digits)
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_handlers.PortOutPINSetResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: putV1NumbersByTnPortOutPin
+      x-operation-id-source: derived
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Clears the port-out PIN on an owned number (idempotent). Requires step-up MFA. Returns 204 No Content on success. Errors: TN_NOT_OWNED.'
+      tags:
+      - Customer/Numbers
+      summary: Clear port-out PIN
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: PIN cleared
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1NumbersByTnPortOutPin
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/{tn}/release:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Releases a telephone number back to inventory. ASSIGNMENT_BUSY returns 503 with Retry-After; PUBLICATION_UNRESOLVED returns a nonretryable 409. Errors: TN_NOT_OWNED, POI_LOCKED (number is a POI fallback ANI), PROVIDER_UPSTREAM_ERROR.'
+      tags:
+      - Customer/Numbers
+      summary: Release a number
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.ReleaseNumberRequest'
+        description: Optional release reason
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.ReleaseNumberResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1NumbersByTnRelease
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/{tn}/sms:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Removes the SMS usage row for an owned number. Errors: TN_NOT_OWNED.'
+      tags:
+      - Customer/Numbers
+      summary: Clear SMS configuration
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.SmsClearedResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1NumbersByTnSms
+      x-operation-id-source: derived
+    patch:
+      security:
+      - ApiKeyAuth: []
+      description: 'Updates the customer-owned SMS fields (inbound webhook URL/secret, fallback URL, MMS toggle) on an owned number. Requests containing tniq-owned fields are rejected. Errors: INVALID_REQUEST, TN_NOT_OWNED.'
+      tags:
+      - Customer/Numbers
+      summary: Update SMS configuration
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.UpdateSmsUsageRequest'
+        description: SMS configuration
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.SmsUsage'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: patchV1NumbersByTnSms
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/numbers/{tn}/voice:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Removes the voice usage row for an owned number, disabling voice routing. ASSIGNMENT_BUSY returns 503 with Retry-After. Errors: TN_NOT_OWNED.'
+      tags:
+      - Customer/Numbers
+      summary: Clear voice configuration
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.VoiceClearedResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1NumbersByTnVoice
+      x-operation-id-source: derived
+    patch:
+      security:
+      - ApiKeyAuth: []
+      description: 'Sets or updates voice routing, E911, inbound CNAM dip (cnam_enabled), outbound CNARG listing (cnam_display_name: omit/null=unchanged, empty=clear), and forward routing (forward_to_number + forward_preserve_ani, required when voice_routing_type=forward). ASSIGNMENT_BUSY returns 503 with Retry-After; PUBLICATION_UNRESOLVED returns a nonretryable 409. Errors: INVALID_REQUEST, TN_NOT_OWNED, CNAM_LISTING_NOT_AVAILABLE, TNIQ_ERROR, PROVIDER_UPSTREAM_ERROR.'
+      tags:
+      - Customer/Numbers
+      summary: Update voice configuration
+      parameters:
+      - description: Telephone number
+        name: tn
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.UpdateVoiceUsageRequest'
+        description: Voice configuration
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.VoiceUsage'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: patchV1NumbersByTnVoice
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    internal_handlers.VoiceClearedResponse:
+      type: object
+      properties:
+        voice_cleared:
+          type: boolean
+    internal_handlers.PortOutPINSetResponse:
+      type: object
+      properties:
+        set:
+          type: boolean
+    internal_handlers.setPINReq:
+      type: object
+      properties:
+        pin:
+          type: string
+    internal_handlers.NumbersPage:
+      type: object
+      properties:
+        numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Assignment'
+        page:
+          type: integer
+        size:
+          type: integer
+        total_elements:
+          type: integer
+    internal_handlers.BulkAssignTNMetadata:
+      type: object
+      properties:
+        locality:
+          type: string
+        state:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_numbermutation.FieldSnapshot:
+      type: object
+      additionalProperties: false
+      required:
+      - assignment_id
+      - tn
+      - field
+      - value
+      - token
+      - routing_type
+      - trunk_name
+      - editable
+      - reason_code
+      properties:
+        assignment_id:
+          type: string
+          format: uuid
+        tn:
+          type: string
+        field:
+          type: string
+          enum:
+          - cnam
+          - lookup
+          - trunk
+          - friendly_name
+        value:
+          oneOf:
+          - type:
+            - string
+            - 'null'
+          - type: boolean
+        token:
+          type: string
+          pattern: ^[0-9a-fA-F]{64}$
+        routing_type:
+          type:
+          - string
+          - 'null'
+        trunk_name:
+          type:
+          - string
+          - 'null'
+        editable:
+          type: boolean
+        reason_code:
+          type:
+          - string
+          - 'null'
+          enum:
+          - assignment_unavailable
+          - field_changed
+          - unsupported_number_type
+          - trunk_required
+          - trunk_unavailable
+          - publication_rejected
+          - outcome_unknown
+          - service_unavailable
+          - null
+    github_com_ringer-warp_api-gateway_internal_numberops.Operation:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - state
+      - action
+      - details_expired
+      - retention_blocked_reason
+      - total
+      - eligible
+      - counts
+      - expires_at
+      - created_at
+      - completed_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+          - preview
+          - queued
+          - running
+          - completed
+        action:
+          oneOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numbermutation.Action'
+          - type:
+            - object
+            - 'null'
+            enum:
+            - null
+        details_expired:
+          type: boolean
+        retention_blocked_reason:
+          type:
+          - string
+          - 'null'
+          enum:
+          - preserved_evidence_or_reference
+          - null
+        total:
+          type: integer
+          minimum: 0
+        eligible:
+          type: integer
+          minimum: 0
+        counts:
+          type: object
+          additionalProperties: false
+          required:
+          - queued
+          - running
+          - succeeded
+          - unchanged
+          - skipped
+          - failed
+          - needs_review
+          properties:
+            queued:
+              type: integer
+              minimum: 0
+            running:
+              type: integer
+              minimum: 0
+            succeeded:
+              type: integer
+              minimum: 0
+            unchanged:
+              type: integer
+              minimum: 0
+            skipped:
+              type: integer
+              minimum: 0
+            failed:
+              type: integer
+              minimum: 0
+            needs_review:
+              type: integer
+              minimum: 0
+        expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+    github_com_ringer-warp_api-gateway_internal_numberops.Selection:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        required:
+        - mode
+        - assignment_ids
+        properties:
+          mode:
+            type: string
+            enum:
+            - explicit
+          assignment_ids:
+            type: array
+            minItems: 1
+            maxItems: 10000
+            items:
+              type: string
+              format: uuid
+      - type: object
+        additionalProperties: false
+        required:
+        - mode
+        - filters
+        - excluded_assignment_ids
+        properties:
+          mode:
+            type: string
+            enum:
+            - all_matching
+          filters:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.InventoryFilter'
+          excluded_assignment_ids:
+            type: array
+            maxItems: 10000
+            items:
+              type: string
+              format: uuid
+      discriminator:
+        propertyName: mode
+    internal_handlers.SmsClearedResponse:
+      type: object
+      properties:
+        sms_cleared:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_numberops.RecentOperations:
+      type: object
+      additionalProperties: false
+      required:
+      - operations
+      - next_cursor
+      properties:
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.NumberOperation'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    internal_handlers.NumberPricingEntry:
+      type: object
+      properties:
+        monthly_rate:
+          description: null = no price configured at any tier
+          type: number
+        sku_code:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_numberops.InlineRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - assignment_id
+      - action
+      - expected_token
+      properties:
+        assignment_id:
+          type: string
+          format: uuid
+        action:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numbermutation.Action'
+        expected_token:
+          type: string
+          pattern: ^[0-9a-fA-F]{64}$
+    github_com_ringer-warp_api-gateway_internal_numbermutation.Action:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - name
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_cnam
+          name:
+            type: string
+            minLength: 1
+            description: Normalized published CNAM; must remain nonempty and satisfy CNAM normalization.
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        properties:
+          kind:
+            type: string
+            enum:
+            - clear_cnam
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - enabled
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_lookup
+          enabled:
+            type: boolean
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - trunk_id
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_trunk
+          trunk_id:
+            type: string
+            format: uuid
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - name
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_friendly_name
+          name:
+            type: string
+            maxLength: 255
+      discriminator:
+        propertyName: kind
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    internal_handlers.PortOutPINStatusResponse:
+      type: object
+      properties:
+        locked_until:
+          type: string
+        set:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.SmsUsage:
+      type: object
+      properties:
+        assignment_id:
+          type: string
+        campaign_source:
+          type: string
+        created_at:
+          type: string
+        fallback_inbound_url:
+          type: string
+        inbound_webhook_secret:
+          type: string
+        inbound_webhook_url:
+          type: string
+        messaging_last_sync_at:
+          type: string
+        messaging_status:
+          type: string
+        mms_enabled:
+          type: boolean
+        tniq_brand_id:
+          type: string
+        tniq_campaign_id:
+          type: string
+        updated_at:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_services.BulkAssignTNResult:
+      type: object
+      properties:
+        assignment_id:
+          type: string
+        error:
+          type: string
+        extras:
+          description: 'Extras carries per-option outcomes of the OPTIONAL post-procurement
+
+            extras (cnam_dip / cnam_listing / campaign), populated by the HANDLER
+
+            layer after BulkAssign returns, and of the service''s own post-procurement
+
+            voice write (voice_routing). Extras are best-effort: an extras failure
+
+            never changes Status.'
+          type: object
+          additionalProperties:
+            type: string
+        status:
+          description: '"ok" | "failed"'
+          type: string
+        tn:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_services.SearchResponse:
+      type: object
+      properties:
+        numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_services.SearchResult'
+        page:
+          type: integer
+        size:
+          type: integer
+        total_elements:
+          type: integer
+    internal_handlers.BulkRouteRequest:
+      type: object
+      properties:
+        tns:
+          type: array
+          items:
+            type: string
+        trunk_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.VoiceUsage:
+      type: object
+      properties:
+        assignment_id:
+          type: string
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          type: boolean
+        cnam_listed_at:
+          type: string
+        created_at:
+          type: string
+        e911_address_id:
+          type: string
+        e911_enabled:
+          type: boolean
+        forward_preserve_ani:
+          type: boolean
+        forward_to_number:
+          description: Destination number or SIP URI used when voice_routing_type is "forward".
+          type: string
+        reject_reason_phrase:
+          type: string
+        reject_response_code:
+          type: integer
+        trunk_id:
+          type: string
+        updated_at:
+          type: string
+        voice_destination:
+          type: string
+        voice_failover_destination:
+          type: string
+        voice_routing_type:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_numberops.OperationPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - next_cursor
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.OperationItem'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    internal_handlers.NumberPricingResponse:
+      type: object
+      properties:
+        did:
+          $ref: '#/components/schemas/internal_handlers.NumberPricingEntry'
+        tfn:
+          $ref: '#/components/schemas/internal_handlers.NumberPricingEntry'
+    internal_handlers.AssignNumberRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        friendly_name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_numberops.PreviewRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - selection
+      - action
+      properties:
+        selection:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Selection'
+        action:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.BulkAction'
+    github_com_ringer-warp_api-gateway_internal_numberops.NumberOperation:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - state
+      - action
+      - details_expired
+      - retention_blocked_reason
+      - total
+      - eligible
+      - counts
+      - expires_at
+      - created_at
+      - completed_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+          - preview
+          - queued
+          - running
+          - completed
+        action:
+          oneOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numbermutation.Action'
+          - type:
+            - object
+            - 'null'
+            enum:
+            - null
+        details_expired:
+          type: boolean
+        retention_blocked_reason:
+          type:
+          - string
+          - 'null'
+          enum:
+          - preserved_evidence_or_reference
+          - null
+        total:
+          type: integer
+          minimum: 0
+        eligible:
+          type: integer
+          minimum: 0
+        counts:
+          type: object
+          additionalProperties: false
+          required:
+          - queued
+          - running
+          - succeeded
+          - unchanged
+          - skipped
+          - failed
+          - needs_review
+          properties:
+            queued:
+              type: integer
+              minimum: 0
+            running:
+              type: integer
+              minimum: 0
+            succeeded:
+              type: integer
+              minimum: 0
+            unchanged:
+              type: integer
+              minimum: 0
+            skipped:
+              type: integer
+              minimum: 0
+            failed:
+              type: integer
+              minimum: 0
+            needs_review:
+              type: integer
+              minimum: 0
+        expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+    internal_handlers.UpdateMetadataRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        friendly_name:
+          type: string
+    internal_handlers.BulkAssignRequest:
+      type: object
+      properties:
+        campaign_id:
+          type: string
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          description: 'Optional post-procurement extras, applied per successfully assigned TN
+
+            (best-effort; outcomes in each result''s extras map, never failing the
+
+            batch). CNAMEnabled turns on the inbound caller-name dip (requires the
+
+            TN to be routed to a trunk — trunkless TNs report skipped_no_trunk).
+
+            CNAMDisplayName sets one outbound CNARG listing name (≤15 chars A–Z,
+
+            0–9, spaces; DIDs only) on every TN in the batch.
+
+            CampaignID attaches all assigned TNs to that 10DLC messaging campaign.'
+          type: boolean
+        default_trunk_id:
+          type: string
+        forward_preserve_ani:
+          type: boolean
+        forward_to_number:
+          type: string
+        note:
+          type: string
+        per_tn_overrides:
+          type: object
+          additionalProperties:
+            type: string
+        provider_by_tn:
+          description: 'ProviderByTN routes each TN to the DID provider that should fulfill it
+
+            ("TNIQ" | "INTELIQUENT"); missing/empty entries default to TNIQ.
+
+            Sourcing is automatic from the cart the customer built via search — a
+
+            caller-spoofed key is harmless: the wrong vendor simply doesn''t have
+
+            that TN in its own inventory, so the order fails per-TN rather than
+
+            misattributing cost.'
+          type: object
+          additionalProperties:
+            type: string
+        routing_type:
+          description: 'RoutingType selects batch-level voice routing: "trunk" (default when
+
+            trunk fields are present), "forward", or "reject". Voicemail is not
+
+            yet available and 400s. Forward and reject ignore trunk fields.'
+          type: string
+        tn_metadata:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/internal_handlers.BulkAssignTNMetadata'
+        tns:
+          type: array
+          items:
+            type: string
+    internal_handlers.ReleaseNumberResponse:
+      type: object
+      properties:
+        released:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.POILock:
+      type: object
+      properties:
+        account:
+          description: referenced at the account level
+          type: boolean
+        locked:
+          type: boolean
+        trunk_groups:
+          description: never null; empty array when no trunks reference this number
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.POITrunkRef'
+    github_com_ringer-warp_api-gateway_internal_numberops.BulkAction:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - name
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_cnam
+          name:
+            type: string
+            minLength: 1
+            description: Normalized published CNAM; must remain nonempty and satisfy CNAM normalization.
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        properties:
+          kind:
+            type: string
+            enum:
+            - clear_cnam
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - enabled
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_lookup
+          enabled:
+            type: boolean
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - trunk_id
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_trunk
+          trunk_id:
+            type: string
+            format: uuid
+      discriminator:
+        propertyName: kind
+    github_com_ringer-warp_api-gateway_internal_numberops.InventoryFilter:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - active
+          - held
+        search:
+          type: string
+        type:
+          type: string
+          enum:
+          - did
+          - tfn
+        voice_configured:
+          type: boolean
+        sms_configured:
+          type: boolean
+    internal_handlers.ReleaseNumberRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_numberops.Capabilities:
+      type: object
+      additionalProperties: false
+      required:
+      - available
+      - all_matching_enabled
+      - max_matching
+      properties:
+        available:
+          type: boolean
+        all_matching_enabled:
+          type: boolean
+        max_matching:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+    github_com_ringer-warp_api-gateway_internal_services.BulkAssignResult:
+      type: object
+      properties:
+        cnam_listing_operation_id:
+          description: 'CNAMListingOperationID is the durable number-operation that publishes
+
+            the batch''s cnam_display_name, set by the handler when the listing was
+
+            queued (TNs then carry extras.cnam_listing="queued"). Progress is at
+
+            GET /v1/number-operations/{id}; per-TN outcomes at .../{id}/items.'
+          type: string
+        failed:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_services.BulkAssignTNResult'
+        succeeded:
+          type: integer
+        total:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.Assignment:
+      type: object
+      properties:
+        acquired_at:
+          type: string
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          description: Service settings are list-only; a missing voice usage means disabled.
+          type: boolean
+        created_at:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        e911_enabled:
+          type: boolean
+        friendly_name:
+          type: string
+        id:
+          type: string
+        locality:
+          type: string
+        monthly_rate_at_assignment:
+          description: Monthly recurring rate captured at the time this number was assigned.
+          type: number
+        npa:
+          type: string
+        number_type:
+          description: did | tfn
+          type: string
+        nxx:
+          type: string
+        procurement_note:
+          type: string
+        procurement_request_id:
+          type: string
+        provider:
+          description: 'Provider records which upstream supplies this TN (IQNT DID integration).
+
+            Deliberately wire-visible — the cart/search flow already surfaces it.'
+          type: string
+        release_reason:
+          type: string
+        released_at:
+          type: string
+        sms_usage:
+          description: 'SMS summary for list rows; null on single-number reads — use the
+
+            embedded sms_usage there.'
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.SmsUsage'
+        source:
+          description: procure | port_in | claim
+          type: string
+        state:
+          type: string
+        status:
+          description: active | released
+          type: string
+        tn:
+          type: string
+        tniq_application_id:
+          type: string
+        tniq_last_sync_at:
+          type: string
+        trunk_id:
+          type: string
+        trunk_name:
+          type: string
+        updated_at:
+          type: string
+        voice_routing_type:
+          description: 'Voice-routing summary for list rows; null on single-number reads — use
+
+            the embedded voice_usage there.'
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.AssignmentWithUsages:
+      type: object
+      properties:
+        acquired_at:
+          type: string
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          description: Service settings are list-only; a missing voice usage means disabled.
+          type: boolean
+        created_at:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        e911_enabled:
+          type: boolean
+        friendly_name:
+          type: string
+        id:
+          type: string
+        locality:
+          type: string
+        monthly_rate_at_assignment:
+          description: Monthly recurring rate captured at the time this number was assigned.
+          type: number
+        npa:
+          type: string
+        number_type:
+          description: did | tfn
+          type: string
+        nxx:
+          type: string
+        poi_lock:
+          description: POILock is set only when the number is POI-locked; omitted otherwise.
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.POILock'
+        procurement_note:
+          type: string
+        procurement_request_id:
+          type: string
+        provider:
+          description: 'Provider records which upstream supplies this TN (IQNT DID integration).
+
+            Deliberately wire-visible — the cart/search flow already surfaces it.'
+          type: string
+        release_reason:
+          type: string
+        released_at:
+          type: string
+        sms_usage:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.SmsUsage'
+        source:
+          description: procure | port_in | claim
+          type: string
+        state:
+          type: string
+        status:
+          description: active | released
+          type: string
+        tn:
+          type: string
+        tniq_application_id:
+          type: string
+        tniq_last_sync_at:
+          type: string
+        trunk_id:
+          type: string
+        trunk_name:
+          type: string
+        updated_at:
+          type: string
+        voice_routing_type:
+          description: 'Voice-routing summary for list rows; null on single-number reads — use
+
+            the embedded voice_usage there.'
+          type: string
+        voice_usage:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.VoiceUsage'
+    internal_handlers.UpdateSmsUsageRequest:
+      type: object
+      properties:
+        fallback_inbound_url:
+          type: string
+        inbound_webhook_secret:
+          type: string
+        inbound_webhook_url:
+          type: string
+        mms_enabled:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_services.SearchResult:
+      type: object
+      properties:
+        locality:
+          type: string
+        monthly_rate:
+          type: number
+        npa:
+          type: string
+        number_type:
+          type: string
+        nxx:
+          type: string
+        provider:
+          description: 'Provider identifies which upstream returned this candidate: "TNIQ" or
+
+            a fallback provider''s Key() (e.g. "INTELIQUENT"). Explicit beats
+
+            implicit on the wire — set on every result, including primary-path
+
+            TNIQ hits.'
+          type: string
+        reservation_expires_at:
+          type: string
+        reservation_status:
+          description: '"spare" — DID inventory and TFN search-spare both browse without reserving; nothing here is pre-reserved'
+          type: string
+        state:
+          type: string
+        tn:
+          type: string
+    internal_handlers.UpdateVoiceUsageRequest:
+      type: object
+      properties:
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          type: boolean
+        e911_address_id:
+          type: string
+        e911_enabled:
+          type: boolean
+        forward_preserve_ani:
+          type: boolean
+        forward_to_number:
+          description: 'ForwardToNumber / ForwardPreserveANI configure voice_routing_type=forward.
+
+            An empty string on ForwardToNumber leaves the value unchanged — there
+
+            is no "clear the forward target" wire affordance here; switch
+
+            voice_routing_type away from "forward" instead.'
+          type: string
+        trunk_id:
+          type: string
+        voice_destination:
+          type: string
+        voice_failover_destination:
+          type: string
+        voice_routing_type:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.POITrunkRef:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_numberops.OperationItem:
+      type: object
+      additionalProperties: false
+      required:
+      - assignment_id
+      - tn
+      - state
+      - reason_code
+      - retryable
+      properties:
+        assignment_id:
+          type: string
+          format: uuid
+        tn:
+          type: string
+        state:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - unchanged
+          - skipped
+          - failed
+          - needs_review
+        reason_code:
+          type:
+          - string
+          - 'null'
+          enum:
+          - assignment_unavailable
+          - field_changed
+          - unsupported_number_type
+          - trunk_required
+          - trunk_unavailable
+          - publication_rejected
+          - outcome_unknown
+          - service_unavailable
+          - null
+        retryable:
+          type: boolean
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

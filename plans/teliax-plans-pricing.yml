@@ -1,0 +1,41 @@
+generated: '2026-10-09'
+method: searched
+source: https://telique.ringer.tel/pricing
+name: Telique pricing
+audience: developer-api
+pricing_basis: per-call
+published: true
+currency: USD
+delivery:
+  delivery: managed
+note: Page is JavaScript-rendered; text read via a headless render on 2026-10-09. These are Telique (telecom data API) prices only. TNIQ and WARP publish no API pricing. Ringer Business publishes separate business-phone pricing at https://ringer.tel/ringer-business/pricing ("Month-to-Month Packages Starting at $20/Month"), a product rather than API pricing.
+plan_count: 2
+plans:
+- name: Free
+  description: Rate-limited to 10 operations per minute
+  price: 0
+  price_text: $0
+  billing_period: forever
+  features:
+  - All 13 telecom tools
+  - Single user account
+  - Community support
+  - API token management
+  - Usage dashboard
+  limits:
+  - 10 operations per minute
+- name: Paid
+  description: Prepaid balance, unlimited throughput
+  price: 0.01
+  price_text: $0.01
+  billing_period: per operation
+  features:
+  - All 13 telecom tools
+  - Organization support
+  - Priority support
+  - Role-based access (Owner / Admin / User)
+  - Team token management
+  - Auto-replenish billing
+  - Usage analytics & invoices
+  limits:
+  - Unlimited operations

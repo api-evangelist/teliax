@@ -1,0 +1,158 @@
+openapi: 3.2.0
+info:
+  title: Teliax Messaging Number NNID API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Messaging Number NNID across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Messaging Number NNID
+  description: Assign or remove NNIDs on phone numbers (nnSR push)
+paths:
+  /v1/messaging/numbers/nnid:
+    post:
+      tags:
+      - Messaging Number NNID
+      summary: Assign NNID to numbers
+      description: Queues nnSR entries (action=A) for the given TNs. Campaign linkage is optional. Returns 202 with a push reference.
+      operationId: assign
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignNumbersNnidRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Messaging Number NNID
+      summary: Remove NNID from numbers
+      description: Queues nnSR deletes (action=D). When nnid is omitted, each TN's locally recorded NNID is used; TNs with neither are skipped.
+      operationId: remove
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveNumbersNnidRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/numbers/nnid/pushes/{reference}:
+    get:
+      tags:
+      - Messaging Number NNID
+      summary: Get NNID push status
+      description: Counters for a queued NNID push (NP-... reference)
+      operationId: getPush
+      parameters:
+      - name: reference
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    AssignNumbersNnidRequest:
+      required:
+      - nnid
+      - tns
+      type: object
+      properties:
+        tns:
+          maxItems: 50000
+          minItems: 0
+          type: array
+          items:
+            type: string
+        nnid:
+          type: string
+        tcrCampaignId:
+          type: string
+        contextA2P:
+          type: boolean
+        context:
+          pattern: A2P|P2P
+          type: string
+    RemoveNumbersNnidRequest:
+      required:
+      - tns
+      type: object
+      properties:
+        tns:
+          maxItems: 50000
+          minItems: 0
+          type: array
+          items:
+            type: string
+        nnid:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

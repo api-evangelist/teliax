@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-port-project-detail-response-schema.json",
+  "title": "PortProjectDetailResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-tniq-openapi.yml#/components/schemas/PortProjectDetailResponse",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "tn": {
+      "type": "string"
+    },
+    "lata": {
+      "type": "string"
+    },
+    "current_lata_source": {
+      "type": "string"
+    },
+    "gaining_lata_source": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "locality": {
+      "type": "string"
+    },
+    "npac_region": {
+      "type": "string"
+    },
+    "current_ocn": {
+      "type": "string"
+    },
+    "current_lrn": {
+      "type": "string"
+    },
+    "current_spid": {
+      "type": "string"
+    },
+    "current_tandem": {
+      "type": "string"
+    },
+    "current_tandem_name": {
+      "type": "string"
+    },
+    "gaining_ocn": {
+      "type": "string"
+    },
+    "gaining_lrn": {
+      "type": "string"
+    },
+    "gaining_spid": {
+      "type": "string"
+    },
+    "gaining_tandem": {
+      "type": "string"
+    },
+    "gaining_tandem_name": {
+      "type": "string"
+    },
+    "user_provided_lrn": {
+      "type": "string"
+    },
+    "btn": {
+      "type": "string"
+    },
+    "soa_status": {
+      "type": "string"
+    },
+    "lsr_status": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "SENDING",
+        "SENT",
+        "EBOND",
+        "FAILED",
+        "SKIPPED",
+        "UNRECOGNIZED"
+      ]
+    },
+    "csr_status": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "SENT",
+        "EBOND",
+        "MANUAL_APPROVAL"
+      ]
+    },
+    "lsr_submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "foc_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "lifecycle_state": {
+      "type": "string"
+    },
+    "lifecycle_state_display": {
+      "type": "string"
+    },
+    "lifecycle_status_display": {
+      "$ref": "#/$defs/LifecycleStatusDisplay"
+    },
+    "can_activate": {
+      "type": "boolean"
+    },
+    "can_activate_early": {
+      "type": "boolean"
+    },
+    "can_update_due_date": {
+      "type": "boolean"
+    },
+    "activation_blocker": {
+      "type": "string"
+    },
+    "reconciliation_source": {
+      "type": "string"
+    },
+    "reconciliation_validation_status": {
+      "type": "string"
+    },
+    "failure_reason": {
+      "type": "string"
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "VALIDATING",
+        "VALID",
+        "ERROR"
+      ]
+    },
+    "validation_errors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "notes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_pushed_release": {
+      "type": "boolean"
+    },
+    "pushed_ddd": {
+      "type": "string",
+      "format": "date"
+    },
+    "pushed_release_event_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "carrier_release_recovery": {
+      "$ref": "#/$defs/CarrierReleaseRecoveryProjection"
+    },
+    "npac": {
+      "$ref": "#/$defs/NpacStateResponse"
+    }
+  },
+  "$defs": {
+    "CarrierReleaseRecoveryProjection": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "QUEUED",
+            "SUBMITTING",
+            "AWAITING_CARRIER",
+            "AWAITING_NPAC_RELEASE",
+            "READY_TO_RESUBMIT",
+            "FAILED",
+            "OUTCOME_UNKNOWN",
+            "VERIFICATION_REQUIRED"
+          ]
+        },
+        "requested_due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "carrier_display_name": {
+          "type": "string"
+        },
+        "carrier_order_id": {
+          "type": "string"
+        },
+        "carrier_foc_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "npac_release_due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "can_request": {
+          "type": "boolean"
+        },
+        "can_resubmit": {
+          "type": "boolean"
+        },
+        "blocker_code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "LifecycleStatusDisplay": {
+      "type": "object",
+      "properties": {
+        "display_text": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "next_action": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "NpacStateResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "our_spid": {
+          "type": "string"
+        },
+        "new_spid": {
+          "type": "string"
+        },
+        "old_spid": {
+          "type": "string"
+        },
+        "lrn": {
+          "type": "string"
+        },
+        "new_sp_due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "old_sp_due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "old_sp_authorization": {
+          "type": "string"
+        },
+        "conflict_placed_by": {
+          "type": "string"
+        },
+        "conflict_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "raw_sv_state": {
+          "type": "string"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "current_spid": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

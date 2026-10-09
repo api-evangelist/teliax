@@ -1,0 +1,418 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Api Keys API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/ApiKeys across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/ApiKeys
+paths:
+  /v1/customers/{id}/api-keys:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists this customer''s API keys with their scopes (secrets are never returned — only prefixes). Requires the api_keys:read scope. Errors: FORBIDDEN, INTERNAL_ERROR.'
+      tags:
+      - Customer/ApiKeys
+      summary: List API keys
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Include revoked keys
+        name: include_revoked
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIKey'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdApiKeys
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/api-keys/audit:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the most recent 100 audit events across ALL of this customer''s API keys. Requires the api_keys:read scope. Errors: FORBIDDEN, INTERNAL_ERROR.'
+      tags:
+      - Customer/ApiKeys
+      summary: Customer-wide API key audit trail
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIKeyAudit'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdApiKeysAudit
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/api-keys/{keyId}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns one API key''s metadata and scopes (never the secret). Requires the api_keys:read scope. Errors: INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/ApiKeys
+      summary: Get an API key
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: API key UUID
+        name: keyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.APIKeyWithScopesResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdApiKeysByKeyId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/api-keys/{keyId}/audit:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the most recent 100 audit events (create/rotate/revoke/auth activity) for one API key. Requires the api_keys:read scope. Errors: INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/ApiKeys
+      summary: API key audit trail
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: API key UUID
+        name: keyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIKeyAudit'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdApiKeysByKeyIdAudit
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    github_com_ringer-warp_api-gateway_internal_models.APIKeyAudit:
+      type: object
+      properties:
+        api_key_id:
+          type: string
+        customer_id:
+          type: string
+        duration_ms:
+          type: integer
+        error_code:
+          type: string
+        id:
+          type: integer
+        method:
+          type: string
+        path:
+          type: string
+        request_id:
+          type: string
+        scope_checked:
+          type: string
+        source_ip:
+          type: array
+          items:
+            type: integer
+        status_code:
+          type: integer
+        ts:
+          type: string
+        user_agent:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.KeyEnvironment:
+      type: string
+      enum:
+      - live
+      - test
+      x-enum-varnames:
+      - KeyEnvironmentLive
+      - KeyEnvironmentTest
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    internal_handlers.APIKeyWithScopesResponse:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIKey'
+        scopes:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+    net.IPNet:
+      type: object
+      properties:
+        ip:
+          description: network number
+          type: array
+          items:
+            type: integer
+        mask:
+          description: network mask
+          type: array
+          items:
+            type: integer
+    github_com_ringer-warp_api-gateway_internal_models.APIKey:
+      type: object
+      properties:
+        allowed_ips:
+          type: array
+          items:
+            $ref: '#/components/schemas/net.IPNet'
+        created_at:
+          type: string
+        created_by_user_id:
+          type: string
+        customer_id:
+          type: string
+        environment:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.KeyEnvironment'
+        expires_at:
+          type: string
+        id:
+          type: string
+        key_prefix:
+          type: string
+        last_used_at:
+          type: string
+        last_used_ip:
+          type: array
+          items:
+            type: integer
+        name:
+          type: string
+        rate_limit_per_min:
+          type: integer
+        revoke_reason:
+          type: string
+        revoked_at:
+          type: string
+        revoked_by:
+          type: string
+        scopes:
+          description: 'Scopes is a transient field (not a column) populated from auth.role/scope
+
+            joins by the list handler so the API contract always carries the key''s
+
+            granted scopes. No omitempty: an empty grant must serialize as [].'
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

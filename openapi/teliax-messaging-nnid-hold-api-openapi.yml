@@ -1,0 +1,301 @@
+openapi: 3.2.0
+info:
+  title: Teliax Messaging NNID Hold API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Messaging NNID Hold across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Messaging NNID Hold
+  description: Per-SPID NNID hold policy, collision-safe backfill, and overwrite findings (#245)
+paths:
+  /v1/messaging/nnid-hold/policies/{spid}:
+    put:
+      tags:
+      - Messaging NNID Hold
+      summary: Set NNID hold policy
+      description: Enable/disable the hold policy for a SPID and set its hold NNID (upserts)
+      operationId: setPolicy
+      parameters:
+      - name: spid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NnidHoldPolicyRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-hold/reclaim:
+    post:
+      tags:
+      - Messaging NNID Hold
+      summary: Reclaim TN(s) to the SPID's hold NNID
+      description: Single-entry SET_NNID push of the given TN(s) back to the caller's configured hold NNID via the existing durable nnSR pipeline (spec §C3). The current holder then has the standard 48h nnSR window to reject before it auto-approves.
+      operationId: reclaim
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NnidHoldReclaimRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-hold/policies/{spid}/backfill:
+    post:
+      tags:
+      - Messaging NNID Hold
+      summary: Commit hold backfill
+      description: Push the eligible TNs to the hold NNID via the durable nnSR pipeline. Requires collisionRiskAcknowledged=true.
+      operationId: commitBackfill
+      parameters:
+      - name: spid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NnidHoldBackfillRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-hold/policies/{spid}/backfill/preview:
+    post:
+      tags:
+      - Messaging NNID Hold
+      summary: Preview hold backfill
+      description: Preview the TNs a hold backfill would touch, plus exclusions and collision warnings
+      operationId: previewBackfill
+      parameters:
+      - name: spid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-hold/findings/{id}/resolve:
+    post:
+      tags:
+      - Messaging NNID Hold
+      summary: Resolve an NNID overwrite finding
+      description: Marks an OPEN finding RESOLVED (e.g. after manual review or action taken outside this queue). Does not itself push anything to nnSR — pair with the reclaim endpoint below when the resolution IS a reclaim.
+      operationId: resolveFinding
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NnidFindingResolveRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-hold/policies:
+    get:
+      tags:
+      - Messaging NNID Hold
+      summary: List NNID hold policies
+      description: List all per-SPID NNID hold policies for the customer
+      operationId: listPolicies
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-hold/findings:
+    get:
+      tags:
+      - Messaging NNID Hold
+      summary: List NNID overwrite findings
+      description: List backfill/enrichment overwrite findings for the customer, filtered by status
+      operationId: listFindings
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          default: OPEN
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    NnidHoldReclaimRequest:
+      type: object
+      properties:
+        tns:
+          type: array
+          items:
+            type: string
+    NnidFindingResolveRequest:
+      type: object
+      properties:
+        note:
+          type: string
+    NnidHoldBackfillRequest:
+      type: object
+      properties:
+        collisionRiskAcknowledged:
+          type: boolean
+    NnidHoldPolicyRequest:
+      required:
+      - holdNnid
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        holdNnid:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

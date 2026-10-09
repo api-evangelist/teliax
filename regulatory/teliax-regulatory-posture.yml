@@ -1,0 +1,48 @@
+generated: '2026-10-09'
+method: searched
+source:
+- https://ringer.tel/privacy-policy
+- https://ringer.tel/terms-of-service
+entity: Teliax, Inc. dba Ringer
+signals:
+  data_subject_request:
+    url: https://ringer.tel/privacy-policy
+    section: EUROPEAN ECONOMIC AREA VISITORS
+    channel: privacy@ringer.tel
+    note: EEA visitors are told they may have access, rectification, erasure, restriction, objection and portability rights, plus the right to complain to a supervisory authority; California residents get a Shine-the-Light style disclosure list request. Rights are framed as "may have", in accordance with applicable laws.
+    evidence:
+    - source: https://ringer.tel/privacy-policy
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: In accordance with applicable laws, you may have the right to request access to, rectification, and erasure of your personal information; restriction of processing of personal information; objecting to certain processing of personal information; and the right to data portability.
+    - source: https://ringer.tel/privacy-policy
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: Residents of the State of California may request a list of all third parties to which Ringer has disclosed certain information collected in connection with this Site and Service during the preceding year for the third parties’ direct marketing purposes.
+  data_retention:
+    url: https://ringer.tel/privacy-policy
+    section: RETENTION OF PERSONAL INFORMATION
+    note: Retention is purpose-bound (account active, legal obligations, disputes) with no fixed periods stated.
+    evidence:
+    - source: https://ringer.tel/privacy-policy
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: For so long as your account is active or as needed to provide you with Services or to fulfill our contractual obligations;
+    - source: https://ringer.tel/privacy-policy
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: As necessary to comply with our legal obligations, resolve disputes, and enforce our agreements; and
+  age_assurance:
+    url: https://ringer.tel/privacy-policy
+    section: PROCEDURES REGARDING CHILDREN
+    note: A COPPA-style under-13 exclusion and deletion commitment; no age-verification mechanism is described, so this is a policy statement, not active age assurance.
+    evidence:
+    - source: https://ringer.tel/privacy-policy
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: Our Site and Service is not intended for children under 13 years of age. No one under age 13 may provide any information to us using the Site or Service.
+    - source: https://ringer.tel/privacy-policy
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: If we learn we have collected or received personal information from a child under 13 without verification of parental consent, we will delete that information.
+note: Legal pages are published under the Ringer brand (privacy policy last updated April 29, 2025; it names "Teliax, Inc. dba Ringer"). The privacy policy states "We do not respond to browser-based “do not track” signals." and says nothing about Global Privacy Control, so no global_privacy_control signal is recorded. The fetch-dossier candidate for exit_assistance was the EEA data-portability clause (recorded under data_subject_request); the Master Services Agreement at /terms-of-service provides one-month termination notice but no exit/transition assistance. No subprocessor list, data-residency statement, incident-notification commitment, AI transparency, accessibility conformance, SBOM or transparency report was found on these pages.

@@ -1,0 +1,19 @@
+generated: '2026-10-09'
+method: derived
+source:
+- openapi/teliax-tniq-openapi.yml
+- openapi/teliax-warp-openapi.yml
+- openapi/teliax-telique-openapi.yml
+versioning:
+  scheme: path
+  detail: TNIQ and WARP are served under /v1; Telique under /v1/telique. Telique contract info.version 2026.6.25; WARP 1.0.0; TNIQ v1. No published versioning policy found on the docs sites.
+deprecation:
+  policy: none published
+  headers: none declared (no Sunset/Deprecation headers in the contracts)
+  deprecated_operations:
+  - api: TNIQ
+    operation: POST /v1/lnp/soa/create
+  - api: TNIQ
+    operation: GET /v1/port-projects/projects/{projectId}/progress-old
+note: No status page link was found on docs.ringer.tel, tniq/warp/telique docs; docs.ringer.tel shows an inline "Network API operational" indicator only.
+status_page: null

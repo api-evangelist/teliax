@@ -1,0 +1,39 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for the WARP Customer API
+  version: 1.0.0
+extends: ../openapi/_original/teliax-warp-openapi.yml
+x-generated: '2026-10-09'
+x-method: generated
+x-source: openapi/teliax-warp-openapi.yml
+x-rationale: >-
+  The spec's only server is the scheme-relative '//api.warp.ringer.tel'. info.contact is
+  empty, there is no top-level tags list, and only 10 of 152 operations carry an
+  operationId. This overlay sets the absolute HTTPS server (the baseURL in apis.yml),
+  declares the 10 tags the operations already use, and points to the docs. It does NOT
+  invent operationIds. The original spec is not modified.
+actions:
+- target: $.servers
+  remove: true
+- target: $
+  update:
+    servers:
+    - url: https://api.warp.ringer.tel
+      description: WARP production (customer API keys "Bearer rk_..."; test keys "Bearer rk_test_...")
+    tags:
+    - {name: Customer/Account}
+    - {name: Customer/Billing}
+    - {name: Customer/Analytics}
+    - {name: Customer/ApiKeys}
+    - {name: Customer/Team}
+    - {name: Customer/Messaging}
+    - {name: Customer/Network}
+    - {name: Customer/Numbers}
+    - {name: Customer/Porting}
+    - {name: Customer/Trunks}
+- target: $.info
+  update:
+    x-provider-brand: WARP by Ringer (formerly Teliax)
+    x-docs: https://warp.ringer.tel/docs/api-reference
+    x-response-envelope: '{success, data}'
+    x-operationid-coverage: 10 of 152 operations have an operationId

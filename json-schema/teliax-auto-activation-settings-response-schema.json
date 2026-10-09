@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-auto-activation-settings-response-schema.json",
+  "title": "AutoActivationSettingsResponse",
+  "description": "Auto-activation settings for a port project",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-tniq-openapi.yml#/components/schemas/AutoActivationSettingsResponse",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "The project ID",
+      "format": "uuid"
+    },
+    "project_name": {
+      "type": "string",
+      "description": "The project name"
+    },
+    "auto_activation_mode": {
+      "type": "string",
+      "description": "Auto-activation mode: DISABLED (manual), ASAP (immediate after DDD), SCHEDULED (specific datetime)",
+      "enum": [
+        "DISABLED",
+        "ASAP",
+        "SCHEDULED"
+      ]
+    },
+    "scheduled_activation_at": {
+      "type": "string",
+      "description": "ISO 8601 datetime for scheduled activation (UTC). Only present when mode is SCHEDULED.",
+      "format": "date-time"
+    },
+    "last_auto_activation_attempt": {
+      "type": "string",
+      "description": "Timestamp of last auto-activation attempt",
+      "format": "date-time"
+    },
+    "auto_activation_failure_count": {
+      "type": "integer",
+      "description": "Number of consecutive failed auto-activation attempts",
+      "format": "int32"
+    },
+    "max_retry_attempts": {
+      "type": "integer",
+      "description": "Maximum allowed retry attempts before auto-activation stops",
+      "format": "int32"
+    },
+    "retry_cooldown_minutes": {
+      "type": "integer",
+      "description": "Cooldown period in minutes between retry attempts",
+      "format": "int32"
+    },
+    "can_auto_activate": {
+      "type": "boolean",
+      "description": "Whether auto-activation can run (not at max retries)"
+    }
+  }
+}

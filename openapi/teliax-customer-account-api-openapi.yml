@@ -1,0 +1,370 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Account API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/Account across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/Account
+paths:
+  /v1/account/capacity:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the authenticated customer''s per-class × per-direction CPS and channel capacity ceilings. Errors: NO_ACTIVE_CUSTOMER, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Account
+      summary: Get my account capacity
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.AccountCapacityResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1AccountCapacity
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/me/balance:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns your prepaid balance and currency. 404 when no active customer is bound to the session. POSTPAID customers see prepaid_balance=0. Errors: NO_ACTIVE_CUSTOMER, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Account
+      summary: Get your prepaid balance
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.balancePayload'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersMeBalance
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/me/utilization:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns your aggregate CPS/channel capacity and current concurrent usage across trunk groups. counters_available is false (and the current_* fields null) when live counters cannot be read. Errors: NO_ACTIVE_CUSTOMER, INTERNAL_ERROR.'
+      tags:
+      - Customer/Account
+      summary: Get your capacity utilization
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.utilizationPayload'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersMeUtilization
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/scopes:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns every scope in the platform registry, grouped by category, for role and API-key editors. Requires the team:read scope. Errors: INTERNAL_ERROR.'
+      tags:
+      - Customer/Account
+      summary: List the scope catalog
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.scopeCategoryDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1Scopes
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    internal_handlers.AccountCapacityResponse:
+      type: object
+      properties:
+        ch_in_international:
+          type: integer
+        ch_in_interstate:
+          type: integer
+        ch_in_intrastate:
+          type: integer
+        ch_in_local:
+          type: integer
+        ch_in_tollfree:
+          type: integer
+        ch_in_zone1:
+          type: integer
+        ch_out_international:
+          type: integer
+        ch_out_interstate:
+          type: integer
+        ch_out_intrastate:
+          type: integer
+        ch_out_local:
+          type: integer
+        ch_out_tollfree:
+          type: integer
+        ch_out_zone1:
+          type: integer
+        cps_in_international:
+          type: integer
+        cps_in_interstate:
+          type: integer
+        cps_in_intrastate:
+          type: integer
+        cps_in_local:
+          type: integer
+        cps_in_tollfree:
+          type: integer
+        cps_in_zone1:
+          type: integer
+        cps_out_international:
+          type: integer
+        cps_out_interstate:
+          type: integer
+        cps_out_intrastate:
+          type: integer
+        cps_out_local:
+          type: integer
+        cps_out_tollfree:
+          type: integer
+        cps_out_zone1:
+          type: integer
+    internal_handlers.scopeEntryDTO:
+      type: object
+      properties:
+        description:
+          type: string
+        display_name:
+          type: string
+        display_order:
+          type: integer
+        is_superadmin_only:
+          type: boolean
+        name:
+          type: string
+        resource_patterns:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    internal_handlers.balancePayload:
+      type: object
+      properties:
+        currency:
+          type: string
+        fetched_at:
+          type: string
+        prepaid_balance:
+          type: number
+    internal_handlers.utilizationPayload:
+      type: object
+      properties:
+        counters_available:
+          type: boolean
+        current_channels_inbound:
+          type: integer
+        current_channels_outbound:
+          type: integer
+        current_cps_inbound:
+          type: integer
+        current_cps_outbound:
+          type: integer
+        fetched_at:
+          type: string
+        total_capacity_channels_inbound:
+          type: integer
+        total_capacity_channels_outbound:
+          type: integer
+        total_capacity_cps_inbound:
+          type: integer
+        total_capacity_cps_outbound:
+          type: integer
+    internal_handlers.scopeCategoryDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.scopeEntryDTO'
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

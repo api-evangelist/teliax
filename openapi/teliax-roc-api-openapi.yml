@@ -1,0 +1,832 @@
+openapi: 3.2.0
+info:
+  title: Teliax ROC API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged ROC across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: ROC
+  description: Resp Org Change workflow management
+paths:
+  /v1/roc/projects/{projectId}/tfns/remove:
+    put:
+      tags:
+      - ROC
+      summary: Remove TFNs from open ROC transaction
+      operationId: removeTfns
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/cancel:
+    put:
+      tags:
+      - ROC
+      summary: Cancel ROC
+      operationId: cancelRoc
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/inbound/projects/{projectId}/process:
+    put:
+      tags:
+      - ROC
+      summary: Process inbound ROC (approve/deny per TFN)
+      operationId: processInboundRoc
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RocProcessRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/inbound/projects/{projectId}/checkout:
+    put:
+      tags:
+      - ROC
+      summary: Checkout inbound ROC for processing
+      operationId: checkoutInboundRoc
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/inbound/projects/{projectId}/checkin:
+    put:
+      tags:
+      - ROC
+      summary: Checkin inbound ROC
+      operationId: checkinInboundRoc
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/webhook:
+    post:
+      tags:
+      - ROC
+      summary: Somos ROC webhook receiver
+      description: Receives push notifications from Somos when ROC status changes. No JWT required.
+      operationId: handleWebhook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/sync:
+    post:
+      tags:
+      - ROC
+      summary: Sync ROC requests from Somos search
+      operationId: syncFromSomos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RocSyncRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects:
+    get:
+      tags:
+      - ROC
+      summary: List ROC projects
+      operationId: listProjects
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: direction
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - ROC
+      summary: Create ROC project
+      description: Create a new outbound ROC request (DRAFT)
+      operationId: createProject
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RocCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/submit:
+    post:
+      tags:
+      - ROC
+      summary: Submit ROC to Somos
+      operationId: submitRoc
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RocSubmitRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/refresh:
+    post:
+      tags:
+      - ROC
+      summary: Refresh ROC status from Somos
+      operationId: refreshProject
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/loa/upload:
+    post:
+      tags:
+      - ROC
+      summary: Upload LOA file
+      operationId: uploadLoa
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/loa/generate:
+    post:
+      tags:
+      - ROC
+      summary: Generate LOA from Somos
+      operationId: generateLoa
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RocLoaGenerateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/escalate-hdi:
+    post:
+      tags:
+      - ROC
+      summary: Escalate to Somos Help Desk
+      operationId: escalateToHdi
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: loaId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/documents/upload:
+    post:
+      tags:
+      - ROC
+      summary: Upload additional document
+      operationId: uploadDocument
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: fileTitle
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: notes
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}:
+    get:
+      tags:
+      - ROC
+      summary: Get ROC project details
+      operationId: getProject
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/documents:
+    get:
+      tags:
+      - ROC
+      summary: Get documents for ROC project
+      operationId: getProjectDocuments
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/documents/{documentId}/download:
+    get:
+      tags:
+      - ROC
+      summary: Download document
+      operationId: downloadDocument
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/details:
+    get:
+      tags:
+      - ROC
+      summary: Get per-TFN details for ROC project
+      operationId: getProjectDetails
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/roc/projects/{projectId}/audit:
+    get:
+      tags:
+      - ROC
+      summary: Get audit log for ROC project
+      operationId: getProjectAudit
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    RocSubmitRequest:
+      required:
+      - respOrgId
+      type: object
+      properties:
+        respOrgId:
+          type: string
+        contactInformation:
+          type: string
+    TfnActionDto:
+      required:
+      - actionCode
+      - tfn
+      type: object
+      properties:
+        tfn:
+          type: string
+        actionCode:
+          type: string
+        rejectNote:
+          type: string
+    RocLoaGenerateRequest:
+      required:
+      - address1
+      - city
+      - contactName
+      - contactPhone
+      - contactTitle
+      - custName
+      - respOrgId
+      - state
+      - zipCode
+      type: object
+      properties:
+        respOrgId:
+          type: string
+        custName:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: string
+        contactName:
+          type: string
+        contactTitle:
+          type: string
+        contactPhone:
+          type: string
+        email:
+          type: string
+    RocCreateRequest:
+      required:
+      - entityId
+      - newRespOrgId
+      - requestType
+      - tfns
+      type: object
+      properties:
+        entityId:
+          type: string
+        newRespOrgId:
+          pattern: ^[a-zA-Z0-9]{5}$
+          type: string
+        requestType:
+          type: string
+        tfns:
+          type: array
+          items:
+            pattern: ^[0-9]{10}$
+            type: string
+        effectiveDate:
+          type: string
+          format: date
+        notes:
+          maxLength: 1000
+          minLength: 0
+          type: string
+    RocProcessRequest:
+      required:
+      - actions
+      - respOrgId
+      type: object
+      properties:
+        respOrgId:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TfnActionDto'
+    RocSyncRequest:
+      required:
+      - customerId
+      - direction
+      - endDate
+      - respOrgId
+      - startDate
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+        respOrgId:
+          type: string
+        direction:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

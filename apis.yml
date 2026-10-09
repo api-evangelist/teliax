@@ -1,23 +1,2826 @@
 aid: teliax
+
 name: Teliax
-description: 'Teliax is a company surfaced via the API Evangelist harvest backlog (source: spectral-ruleset-github)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: 'Teliax is a wholesale and carrier-grade telecommunications provider that now operates as Ringer Network Solutions: www.teliax.com
+  redirects to ringer.tel, whose homepage lists ''Ringer Network Solutions (formerly Teliax) - Wholesale and carrier-grade services'' alongside
+  Ringer Business (formerly Leap Telecom) and Ringer Mobile. Products include SIP trunking, wholesale voice, toll-free services, access homing
+  tandem, hosted PBX, MS Teams integration, private-label CPaaS and TeliQue telecom data services, with developer documentation for Ringer APIs
+  (TeliQue, TNIQ, WARP) at docs.ringer.tel and the ringer-oapi repository in the Teliax Inc. GitHub organization.'
+
 url: https://raw.githubusercontent.com/api-evangelist/teliax/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:spectral-ruleset-github
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-09 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-09'
+
 modified: '2026-10-09'
+
 tags:
 - Company
-apis: []
+- Telecommunications
+- Voice
+- SIP Trunking
+- Toll-Free
+- Wholesale Carrier
+- CPaaS
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
+image: https://ringer.tel/hs-fs/hubfs/Ringer_Primary-Color.png
+
 common:
+- type: AgenticAccess
+  url: agentic-access/teliax-agentic-access.yml
+- type: RateLimits
+  url: rate-limits/teliax-rate-limits.yml
+- type: Plans
+  url: plans/teliax-plans-pricing.yml
+- type: Spectral
+  url: rules/teliax-rules.yml
+- type: Spectral
+  url: rules/teliax-ringer-oapi-spectral-rules.yml
+- type: JSONLD
+  url: json-ld/teliax-context.jsonld
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Idempotency
+  url: conventions/teliax-conventions.yml
+- type: Conventions
+  url: conventions/teliax-conventions.yml
+- type: OAuthScopes
+  url: scopes/teliax-scopes.yml
+- type: Deprecation
+  url: lifecycle/teliax-lifecycle.yml
+- type: Lifecycle
+  url: lifecycle/teliax-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/teliax-problem-types.yml
+- type: Conformance
+  url: conformance/teliax-conformance.yml
+- type: Overlay
+  url: overlays/teliax-telique-overlay.yaml
+- type: ToolCrosswalk
+  url: mcp/teliax-tool-crosswalk.yml
+- type: MCPServer
+  url: mcp/teliax-mcp.yml
+- type: WellKnown
+  url: well-known/teliax-well-known.yml
+- type: Hosts
+  url: hosts/teliax-hosts.yml
+- type: Vendors
+  url: vendors/teliax-vendors.yml
+- type: SDKs
+  url: packages/teliax-packages.yml
+- type: Packages
+  url: packages/teliax-packages.yml
+- type: Authentication
+  url: authentication/teliax-authentication.yml
+- type: DomainSecurity
+  url: security/teliax-domain-security.yml
 - type: Website
   url: https://www.teliax.com/
+- type: SpectralRules
+  url: https://github.com/teliax/ringer-oapi/blob/5ba0143e6b8246571905b37f17b8719a6e8ceaf2/.spectral.yaml
+- type: Documentation
+  url: https://docs.ringer.tel/
+- type: Blog
+  url: https://ringer.tel/blog
+- type: Pricing
+  url: https://ringer.tel/ringer-business/pricing
+- type: Support
+  url: https://support.teliax.com/support/home
+- type: TermsOfService
+  url: https://ringer.tel/terms-of-service
+- type: PrivacyPolicy
+  url: https://ringer.tel/privacy-policy
+- type: GitHubOrganization
+  url: https://github.com/teliax
+
+apis:
+- aid: teliax:teliax-activity-journal-api
+  name: Teliax Activity Journal API
+  description: Tenant-wide activity journal (read-only)
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Activity Journal
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-activity-journal-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-bulk-operations-api
+  name: Teliax Bulk Operations API
+  description: Submit and track bulk inventory operations (metadata, PIN, CNAM) with order references.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Bulk Operations
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-bulk-operations-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-bulk-port-api
+  name: Teliax Bulk Port API
+  description: Bulk port project management
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Bulk Port
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-bulk-port-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-bulk-port-jobs-api
+  name: Teliax Bulk Port Jobs API
+  description: Background job monitoring and management
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Bulk Port Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-bulk-port-jobs-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-carrier-email-api
+  name: Teliax Carrier Email API
+  description: Carrier coordination email (#336)
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Carrier Email
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-carrier-email-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-cic-reference-data-api
+  name: Teliax CIC Reference Data API
+  description: Authenticated NANPA FGD assignment reference data; not carrier routing configuration
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - CIC Reference Data
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-cic-reference-data-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-cnam-api
+  name: Teliax CNAM API
+  description: Caller Name lookups and Robocall Mitigation scoring via TransUnion TruContact.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - CNAM
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-cnam-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-account-api
+  name: Teliax Customer/Account API
+  description: The Customer/Account API from Teliax — 4 operation(s) for customer/account.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Account
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-account-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-analytics-api
+  name: Teliax Customer/Analytics API
+  description: The Customer/Analytics API from Teliax — 5 operation(s) for customer/analytics.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-apikeys-api
+  name: Teliax Customer/Api Keys API
+  description: The Customer/ApiKeys API from Teliax — 4 operation(s) for customer/apikeys.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/ApiKeys
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-apikeys-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-billing-api
+  name: Teliax Customer/Billing API
+  description: The Customer/Billing API from Teliax — 7 operation(s) for customer/billing.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-billing-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-messaging-api
+  name: Teliax Customer/Messaging API
+  description: The Customer/Messaging API from Teliax — 25 operation(s) for customer/messaging.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Messaging
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-messaging-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-network-api
+  name: Teliax Customer/Network API
+  description: The Customer/Network API from Teliax — 2 operation(s) for customer/network.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Network
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-network-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-numbers-api
+  name: Teliax Customer/Numbers API
+  description: The Customer/Numbers API from Teliax — 21 operation(s) for customer/numbers.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Numbers
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-numbers-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-porting-api
+  name: Teliax Customer/Porting API
+  description: The Customer/Porting API from Teliax — 30 operation(s) for customer/porting.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Porting
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-porting-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-team-api
+  name: Teliax Customer/Team API
+  description: The Customer/Team API from Teliax — 9 operation(s) for customer/team.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Team
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-team-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-customer-trunks-api
+  name: Teliax Customer/Trunks API
+  description: The Customer/Trunks API from Teliax — 14 operation(s) for customer/trunks.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Customer/Trunks
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-customer-trunks-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-dno-api
+  name: Teliax DNO API
+  description: >-
+    Do Not Originate checks — determine whether a phone number is flagged as one that should never appear
+    as a caller ID.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - DNO
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-dno-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-inventory-map-api
+  name: Teliax Inventory Map API
+  description: Geographic inventory visualization data
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Inventory Map
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-inventory-map-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-inventory-reports-api
+  name: Teliax Inventory Reports API
+  description: Generate and download inventory reports
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Inventory Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-inventory-reports-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-job-runs-api
+  name: Teliax Job Runs API
+  description: Operator-facing job run lifecycle (sync history, attempts, warnings)
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Job Runs
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-job-runs-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-lerg-api
+  name: Teliax LERG API
+  description: >-
+    LERG telecom routing data — table metadata, NPA-NXX lookups, switch data, tandem relationships, and
+    complex cross-table queries.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - LERG
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-lerg-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-lerg-graphql-api
+  name: Teliax LERG GraphQL API
+  description: >-
+    GraphQL interface for flexible LERG data queries with field selection, filtering, pagination, nested
+    relationships, and dynamic joins.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - LERG GraphQL
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-lerg-graphql-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-lrn-api
+  name: Teliax LRN API
+  description: >-
+    Local Routing Number lookups — resolve a phone number to the switch that currently serves it, with
+    porting metadata.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - LRN
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-lrn-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-lsms-api
+  name: Teliax LSMS API
+  description: >-
+    LSMS database queries — relationship lookups across phone numbers, LRNs, SPIDs, and service providers
+    via REST or GraphQL.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - LSMS
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-lsms-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-managed-port-processing-api
+  name: Teliax Managed Port Processing API
+  description: Customer-safe TNIQ-managed carrier and NPAC processing
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Managed Port Processing
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-managed-port-processing-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-messaging-brands-api
+  name: Teliax Messaging Brands API
+  description: 10DLC brand registration and management
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Messaging Brands
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-messaging-brands-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-messaging-campaigns-api
+  name: Teliax Messaging Campaigns API
+  description: 10DLC campaign management and phone number assignment
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Messaging Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-messaging-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-messaging-enums-api
+  name: Teliax Messaging Enums API
+  description: 'TCR reference data: use cases, verticals, entity types'
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Messaging Enums
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-messaging-enums-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-messaging-nnid-hold-api
+  name: Teliax Messaging NNID Hold API
+  description: Per-SPID NNID hold policy, collision-safe backfill, and overwrite findings (#245)
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Messaging NNID Hold
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-messaging-nnid-hold-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-messaging-nnid-overwrite-requests-api
+  name: Teliax Messaging NNID Overwrite Requests API
+  description: 'nnSR overwrite-request approval queue: list, approve, reject, LOA attach (#245 W3)'
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Messaging NNID Overwrite Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-messaging-nnid-overwrite-requests-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-messaging-nnids-api
+  name: Teliax Messaging NNIDs API
+  description: NetNumber ID management for SMS provisioning
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Messaging NNIDs
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-messaging-nnids-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-messaging-number-nnid-api
+  name: Teliax Messaging Number NNID API
+  description: Assign or remove NNIDs on phone numbers (nnSR push)
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Messaging Number NNID
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-messaging-number-nnid-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-number-inventory-api
+  name: Teliax Number Inventory API
+  description: Search and query number inventory
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Number Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-number-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-number-inventory-audit-api
+  name: Teliax Number Inventory Audit API
+  description: Three-phase inventory audit operations
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Number Inventory Audit
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-number-inventory-audit-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-number-inventory-query-api
+  name: Teliax Number Inventory Query API
+  description: Query-based inventory search with powerful filter language
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Number Inventory Query
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-number-inventory-query-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-port-out-release-api
+  name: Teliax Port-Out Release API
+  description: Port-out release project management for NPAC releases
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Port-Out Release
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-port-out-release-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-port-project-documents-api
+  name: Teliax Port Project Documents API
+  description: Supporting documents (LOA/BILL/CSR/OTHER) for LNP port-in projects
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Port Project Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-port-project-documents-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-port-protection-rule-controller-api
+  name: Teliax Port Protection Rule Controller API
+  description: >-
+    The port-protection-rule-controller API from Teliax — 3 operation(s) for port-protection-rule-controller.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - port-protection-rule-controller
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-port-protection-rule-controller-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-reports-api
+  name: Teliax Reports API
+  description: Queue async reports that are emailed to the requesting user as CSV/XLSX attachments.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-reports-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-roc-api
+  name: Teliax ROC API
+  description: Resp Org Change workflow management
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - ROC
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-roc-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-routelink-api
+  name: Teliax Route Link API
+  description: Toll-free number routing — CIC lookups, ROR lookups, and CPR inspection.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - RouteLink
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-routelink-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-soa-operations-api
+  name: Teliax SOA Operations API
+  description: Service Order Administration endpoints for Local Number Portability
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - SOA Operations
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-soa-operations-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-tcr-webhooks-api
+  name: Teliax TCR Webhooks API
+  description: TCR webhook event receiver and event history
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - TCR Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-tcr-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-telecom-reference-data-api
+  name: Teliax Telecom Reference Data API
+  description: Authenticated read-only CIC, NNID, Resp Org, and NPAC SPID reference directories
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Telecom Reference Data
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-telecom-reference-data-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-toll-free-api
+  name: Teliax Toll Free API
+  description: Toll-free number management via Somos TFN Registry
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Toll-Free
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-toll-free-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-toll-free-sync-api
+  name: Teliax Toll-Free Sync API
+  description: Toll-free number inventory synchronization
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - Toll-Free Sync
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-toll-free-sync-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+- aid: teliax:teliax-trans-union-cnam-controller-api
+  name: Teliax Trans Union Cnam Controller API
+  description: >-
+    The trans-union-cnam-controller API from Teliax — 3 operation(s) for trans-union-cnam-controller.
+  humanURL: https://telique.ringer.tel/docs
+  baseURL: https://api.telique.ringer.tel
+  tags:
+  - trans-union-cnam-controller
+  properties:
+  - type: OpenAPI
+    url: openapi/teliax-trans-union-cnam-controller-api-openapi.yml
+  - type: Documentation
+    url: https://telique.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-cpr-dump-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-dno-lookup-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-complex-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-tandem-query-response-schema.json
+  - type: Documentation
+    url: https://tniq.ringer.tel/docs
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-port-project-detail-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-soa-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-toll-free-ptr-operation-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-auto-activation-settings-response-schema.json
+  - type: Documentation
+    url: https://warp.ringer.tel/docs
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-with-ips-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-with-usages-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-trunk-update-result-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json
+  - type: JSONSchema
+    url: >-
+      json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-assignment-schema.json
+  - type: JSONSchema
+    url: json-schema/teliax-internal-handlers-bulk-assign-request-schema.json
+x-enrichment:
+  date: '2026-10-09'
+  status: enriched
+  artifacts_added: 56
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=anthropic,regulatory=anthropic
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: 'Enriched 2026-10-09: website and identity verified (verified) from the provider''s own pages; probed URLs below.'
+  evidence:
+  - url: https://www.teliax.com/
+    status: 200
+  - url: https://api.github.com/orgs/teliax
+    status: null

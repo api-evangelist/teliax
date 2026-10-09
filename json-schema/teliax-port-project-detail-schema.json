@@ -1,0 +1,771 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-port-project-detail-schema.json",
+  "title": "PortProjectDetail",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-tniq-openapi.yml#/components/schemas/PortProjectDetail",
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "tn": {
+      "type": "string"
+    },
+    "project": {
+      "$ref": "#/$defs/PortProject"
+    },
+    "lata": {
+      "type": "string"
+    },
+    "currentLataSource": {
+      "type": "string"
+    },
+    "gainingLataSource": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "locality": {
+      "type": "string"
+    },
+    "npacRegion": {
+      "type": "string"
+    },
+    "currentOcn": {
+      "type": "string"
+    },
+    "currentLrn": {
+      "type": "string"
+    },
+    "currentSpid": {
+      "type": "string"
+    },
+    "currentSpidName": {
+      "type": "string"
+    },
+    "currentTandem": {
+      "type": "string"
+    },
+    "currentTandemName": {
+      "type": "string"
+    },
+    "gainingOcn": {
+      "type": "string"
+    },
+    "gainingLrn": {
+      "type": "string"
+    },
+    "gainingSpid": {
+      "type": "string"
+    },
+    "gainingTandem": {
+      "type": "string"
+    },
+    "gainingTandemName": {
+      "type": "string"
+    },
+    "userProvidedLrn": {
+      "type": "string"
+    },
+    "soaStatus": {
+      "type": "string"
+    },
+    "lsrStatus": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "SENDING",
+        "SENT",
+        "EBOND",
+        "FAILED",
+        "SKIPPED",
+        "UNRECOGNIZED"
+      ]
+    },
+    "csrStatus": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "SENT",
+        "EBOND",
+        "MANUAL_APPROVAL"
+      ]
+    },
+    "focDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "VALIDATING",
+        "VALIDATION_ERROR",
+        "READY_FOR_SUBMISSION",
+        "LSR_PENDING",
+        "LSR_SUBMITTED",
+        "CSR_PENDING",
+        "CSR_APPROVED",
+        "CSR_MISMATCH",
+        "SUPPLEMENT_REQUESTED",
+        "PENDING_FOC",
+        "FOC_RECEIVED",
+        "PORT_CONFLICT",
+        "PORT_EXCEPTION",
+        "AWAITING_DUE_DATE",
+        "READY_FOR_ACTIVATION",
+        "ACTIVATING",
+        "ACTIVATED",
+        "INTRASP_PENDING",
+        "INTRASP_TIMEOUT",
+        "INTRASP_COMPLETED",
+        "PORT_OUT_REQUESTED",
+        "PORT_OUT_CSR_ISSUED",
+        "PORT_OUT_PENDING",
+        "PORTED_OUT",
+        "CANCELLED",
+        "FAILED",
+        "LRN_CREATED",
+        "DISCONNECTED"
+      ]
+    },
+    "npac": {
+      "$ref": "#/$defs/NpacStateResponse"
+    },
+    "validationStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "VALIDATING",
+        "VALID",
+        "ERROR"
+      ]
+    },
+    "validationErrors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "notes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "pushedDdd": {
+      "type": "string",
+      "format": "date"
+    },
+    "isPushedRelease": {
+      "type": "boolean"
+    },
+    "pushedReleaseEventId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "detectedCarrierCode": {
+      "type": "string"
+    },
+    "carrierOverride": {
+      "type": "string"
+    },
+    "carrierDetectionSource": {
+      "type": "string"
+    },
+    "endUserName": {
+      "type": "string"
+    },
+    "businessName": {
+      "type": "string"
+    },
+    "serviceAddress": {
+      "type": "string"
+    },
+    "accountNumber": {
+      "type": "string"
+    },
+    "pin": {
+      "type": "string"
+    },
+    "btn": {
+      "type": "string"
+    },
+    "streetNumber": {
+      "type": "string"
+    },
+    "streetName": {
+      "type": "string"
+    },
+    "streetType": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "serviceAddressState": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "lsrSubmittedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lsrSubmissionMethod": {
+      "type": "string"
+    },
+    "lsrConfirmationNumber": {
+      "type": "string"
+    },
+    "lsrMetadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "lsrFailedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lsrFailureReason": {
+      "type": "string"
+    },
+    "lsrFailureCode": {
+      "type": "string"
+    },
+    "lsrFailureInternalDetail": {
+      "type": "string"
+    },
+    "lsrRetryCount": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "lsrLastRetryAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "csrReceivedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "csrSource": {
+      "type": "string"
+    },
+    "csrData": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "csrDocumentUrl": {
+      "type": "string"
+    },
+    "csrValidationStatus": {
+      "type": "string"
+    },
+    "csrMatchConfidence": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "csrMismatchFields": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "csrValidatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "csrValidatedBy": {
+      "type": "string"
+    },
+    "supplementRequestedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "supplementCount": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "csrAccountNumber": {
+      "type": "string"
+    },
+    "csrBtn": {
+      "type": "string"
+    },
+    "csrEndUserName": {
+      "type": "string"
+    },
+    "csrServiceAddress": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lifecycleStatusDisplay": {
+      "$ref": "#/$defs/LifecycleStatusDisplay"
+    },
+    "carrierReleaseRecovery": {
+      "$ref": "#/$defs/CarrierReleaseRecoveryProjection"
+    }
+  },
+  "$defs": {
+    "ApiCustomer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "rateLimit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "lastApiCall": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "metadataDisplayConfig": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MetadataDisplayColumn"
+          }
+        },
+        "respOrgEntityId": {
+          "type": "string"
+        },
+        "respOrgId": {
+          "type": "string"
+        },
+        "tollFreeEnabled": {
+          "type": "boolean"
+        },
+        "tollFreeContactName": {
+          "type": "string"
+        },
+        "tollFreeContactPhone": {
+          "type": "string"
+        },
+        "tollFreeContactEmail": {
+          "type": "string"
+        },
+        "customerSpids": {
+          "uniqueItems": true,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CustomerSpid"
+          }
+        },
+        "activeSpids": {
+          "uniqueItems": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "CarrierReleaseRecoveryProjection": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "QUEUED",
+            "SUBMITTING",
+            "AWAITING_CARRIER",
+            "AWAITING_NPAC_RELEASE",
+            "READY_TO_RESUBMIT",
+            "FAILED",
+            "OUTCOME_UNKNOWN",
+            "VERIFICATION_REQUIRED"
+          ]
+        },
+        "requested_due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "carrier_display_name": {
+          "type": "string"
+        },
+        "carrier_order_id": {
+          "type": "string"
+        },
+        "carrier_foc_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "npac_release_due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "can_request": {
+          "type": "boolean"
+        },
+        "can_resubmit": {
+          "type": "boolean"
+        },
+        "blocker_code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomerSpid": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "customer": {
+          "$ref": "#/$defs/ApiCustomer"
+        },
+        "spid": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "ccna": {
+          "type": "string"
+        },
+        "acna": {
+          "type": "string"
+        },
+        "lsrName": {
+          "type": "string"
+        },
+        "lsrStreet": {
+          "type": "string"
+        },
+        "lsrCity": {
+          "type": "string"
+        },
+        "lsrState": {
+          "type": "string"
+        },
+        "lsrZip": {
+          "type": "string"
+        },
+        "lsrContactPhone": {
+          "type": "string"
+        },
+        "p2pCnpCarrierCode": {
+          "type": "string"
+        },
+        "messagingAccountId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "LifecycleStatusDisplay": {
+      "type": "object",
+      "properties": {
+        "display_text": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "next_action": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "MetadataDisplayColumn": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "NpacStateResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "our_spid": {
+          "type": "string"
+        },
+        "new_spid": {
+          "type": "string"
+        },
+        "old_spid": {
+          "type": "string"
+        },
+        "lrn": {
+          "type": "string"
+        },
+        "new_sp_due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "old_sp_due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "old_sp_authorization": {
+          "type": "string"
+        },
+        "conflict_placed_by": {
+          "type": "string"
+        },
+        "conflict_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "raw_sv_state": {
+          "type": "string"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        },
+        "current_spid": {
+          "type": "string"
+        }
+      }
+    },
+    "PortProject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "customer": {
+          "$ref": "#/$defs/ApiCustomer"
+        },
+        "spid": {
+          "type": "string"
+        },
+        "lastActivityAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isPushedRelease": {
+          "type": "boolean"
+        },
+        "autoActivationMode": {
+          "type": "string",
+          "enum": [
+            "DISABLED",
+            "ASAP",
+            "SCHEDULED"
+          ]
+        },
+        "scheduledActivationAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastAutoActivationAttempt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "autoActivationFailureCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "autoAssignLrn": {
+          "type": "boolean"
+        },
+        "lsrWorkflowEnabled": {
+          "type": "boolean"
+        },
+        "lsrGateMode": {
+          "type": "string",
+          "enum": [
+            "DISABLED",
+            "SOFT_WARNING",
+            "HARD_GATE"
+          ]
+        },
+        "desiredDueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "portDirection": {
+          "type": "string",
+          "enum": [
+            "GAINING",
+            "LOSING"
+          ]
+        },
+        "gainingCarrierSpid": {
+          "type": "string"
+        },
+        "syncNotifyEmail": {
+          "type": "string"
+        },
+        "activeReconciliationJobId": {
+          "type": "string"
+        },
+        "applicationId": {
+          "type": "string"
+        },
+        "applicationMetadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "orderReference": {
+          "type": "string"
+        },
+        "assignmentSetBy": {
+          "type": "string"
+        },
+        "assignmentSetAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "assignmentFrozenAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "snapbackOriginatingInventoryId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "snapbackOriginatingFinalizationId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "snapbackRegisteredBy": {
+          "type": "string"
+        },
+        "snapbackRegisteredAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "billingName": {
+          "type": "string"
+        },
+        "billingStreet": {
+          "type": "string"
+        },
+        "billingFloor": {
+          "type": "string"
+        },
+        "billingRoomMailStop": {
+          "type": "string"
+        },
+        "billingCity": {
+          "type": "string"
+        },
+        "billingState": {
+          "type": "string"
+        },
+        "billingZip": {
+          "type": "string"
+        },
+        "billingAccountNumber": {
+          "type": "string"
+        },
+        "portOutPin": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

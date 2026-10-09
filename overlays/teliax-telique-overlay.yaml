@@ -1,0 +1,47 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for the Telique Telecom API
+  version: 1.0.0
+extends: ../openapi/_original/teliax-telique-openapi.yml
+x-generated: '2026-10-09'
+x-method: generated
+x-source: openapi/teliax-telique-openapi.yml
+x-rationale: >-
+  Records what the spec does not: the official MCP server (remote and stdio) and the
+  tool that backs each operation (mcp/teliax-tool-crosswalk.yml), plus the documented
+  anonymous rate limit. The original spec is not modified.
+actions:
+- target: $
+  description: Link the official Telique MCP server.
+  update:
+    x-mcp-server:
+      endpoint: https://api.telique.ringer.tel/mcp
+      transport: streamable-http
+      auth: oauth2 (PKCE S256, scope telique:read; PRM at /.well-known/oauth-protected-resource)
+      stdio_package: telique-mcp
+      manifest: mcp/teliax-mcp.yml
+- target: $.info
+  update:
+    x-rate-limit-note: Anonymous access (no x-api-token) is rate-limited to 10 requests per minute (from components.securitySchemes.apiToken.description and the Telique quick start).
+    x-provider-brand: Ringer Network Solutions (formerly Teliax)
+- {target: "$.paths['/v1/telique/lrn/{phone_number}'].get", update: {x-mcp-tool: [lrn_lookup, lookup_tn]}}
+- {target: "$.paths['/v1/telique/cnam/{phoneNumber}'].get", update: {x-mcp-tool: [cnam_lookup, lookup_tn]}}
+- {target: "$.paths['/v1/telique/dno/{phone_number}'].get", update: {x-mcp-tool: [dno_check, lookup_tn]}}
+- {target: "$.paths['/v1/telique/lsms/list/phone_number'].get", update: {x-mcp-tool: [lrn_relationship_query]}}
+- {target: "$.paths['/v1/telique/lsms/list/spid'].get", update: {x-mcp-tool: [lrn_relationship_query]}}
+- {target: "$.paths['/v1/telique/lsms/list/lrn'].get", update: {x-mcp-tool: [lrn_relationship_query]}}
+- {target: "$.paths['/v1/telique/lsms/gql'].post", update: {x-mcp-tool: [graphql_query]}}
+- {target: "$.paths['/v1/telique/lerg/graphql'].post", update: {x-mcp-tool: [graphql_query]}}
+- {target: "$.paths['/v1/telique/lerg/tables'].get", update: {x-mcp-tool: [lerg_table_info]}}
+- {target: "$.paths['/v1/telique/lerg/tables/{table_name}'].get", update: {x-mcp-tool: [lerg_table_info]}}
+- {target: "$.paths['/v1/telique/lerg/tables/{table_name}/schema'].get", update: {x-mcp-tool: [lerg_table_info]}}
+- {target: "$.paths['/v1/telique/lerg/{table_name}/{fields}/{query}'].get", update: {x-mcp-tool: [lerg_query]}}
+- {target: "$.paths['/v1/telique/lerg/fast/lerg_6/{fields}/{query}'].get", update: {x-mcp-tool: [lerg_query]}}
+- {target: "$.paths['/v1/telique/lerg/query'].post", update: {x-mcp-tool: [lerg_complex_query]}}
+- {target: "$.paths['/v1/telique/lerg/tandem'].get", update: {x-mcp-tool: [lerg_tandem]}}
+- {target: "$.paths['/v1/telique/cic/{crn}/{ani}/{lata}'].get", update: {x-mcp-tool: [routelink_lookup]}}
+- {target: "$.paths['/v1/telique/cicror/{crn}/{ani}/{lata}'].get", update: {x-mcp-tool: [routelink_lookup]}}
+- {target: "$.paths['/v1/telique/ror/{crn}'].get", update: {x-mcp-tool: [routelink_lookup]}}
+- {target: "$.paths['/v1/telique/ror/{ror}/tfns'].get", update: {x-mcp-tool: [routelink_ror_query]}}
+- {target: "$.paths['/v1/telique/ror/{ror}/cprs'].get", update: {x-mcp-tool: [routelink_ror_query]}}
+- {target: "$.paths['/v1/telique/cpr/{crn}'].get", update: {x-mcp-tool: [routelink_cpr]}}

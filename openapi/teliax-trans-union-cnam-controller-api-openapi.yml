@@ -1,0 +1,156 @@
+openapi: 3.2.0
+info:
+  title: Teliax Trans Union Cnam Controller API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged trans-union-cnam-controller across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: trans-union-cnam-controller
+paths:
+  /v1/cnam/activate:
+    post:
+      tags:
+      - trans-union-cnam-controller
+      operationId: activateCnam
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CnamActivateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+      summary: Activate cnam
+      x-summary-source: derived
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/cnam/query/{telephoneNumber}:
+    get:
+      tags:
+      - trans-union-cnam-controller
+      summary: Query observed CNAM
+      description: Set refresh=true to bypass TNIQ's CNAM cache. Observations come from Telique and do not establish propagation to every carrier.
+      operationId: queryCnam
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          pattern: '[2-9][0-9]{2}[2-9][0-9]{6}'
+          type: string
+      - name: refresh
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/cnam/{telephoneNumber}:
+    delete:
+      tags:
+      - trans-union-cnam-controller
+      operationId: deactivateCnam
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          pattern: '[2-9][0-9]{2}[2-9][0-9]{6}'
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+      summary: Deactivate cnam
+      x-summary-source: derived
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    CnamActivateRequest:
+      required:
+      - cnam
+      - telephoneNumber
+      type: object
+      properties:
+        telephoneNumber:
+          pattern: '[2-9][0-9]{2}[2-9][0-9]{6}'
+          type: string
+        lrn:
+          type: string
+        cnam:
+          maxLength: 15
+          minLength: 1
+          pattern: .*[a-zA-Z].*
+          type: string
+        privacyIndicator:
+          pattern: '[AR]'
+          type: string
+        extendedFirstName:
+          maxLength: 30
+          minLength: 0
+          type: string
+        extendedLastName:
+          maxLength: 30
+          minLength: 0
+          type: string
+        extendedBusinessName:
+          maxLength: 60
+          minLength: 0
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

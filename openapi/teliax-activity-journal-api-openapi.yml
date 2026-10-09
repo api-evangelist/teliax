@@ -1,0 +1,199 @@
+openapi: 3.2.0
+info:
+  title: Teliax Activity Journal API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Activity Journal across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Activity Journal
+  description: Tenant-wide activity journal (read-only)
+paths:
+  /v1/journal:
+    get:
+      tags:
+      - Activity Journal
+      summary: List journal entries (newest first) with filters
+      operationId: list_6
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: actor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tn
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: correlationId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/journal/export:
+    get:
+      tags:
+      - Activity Journal
+      summary: Export journal entries as CSV (same filters as list, capped at 100k rows)
+      operationId: export
+      parameters:
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: actor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tn
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: correlationId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/journal/events:
+    get:
+      tags:
+      - Activity Journal
+      summary: Pollable journal event feed (monotonic cursor)
+      description: Machine-consumable feed over the activity journal (#365-2). Returns events with seq strictly greater than `since`, ascending, capped at `limit` (max 1000). Events younger than ~3s are withheld (commit-visibility grace) — poll again. `nextCursor` is the seq to pass as `since` on the next poll; idempotent by construction. While a long-running batch transaction (e.g. an inventory audit) is in flight, the cutoff is additionally held back to its start (#367) so its rows lag the feed instead of committing behind an already-served cursor; the holdback is capped (~30 min default), so consumers needing absolute completeness should still run a periodic reconciliation. A negative `since` is clamped to 0 and `nextCursor` echoes the clamped value.
+      operationId: events
+      parameters:
+      - name: since
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

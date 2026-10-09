@@ -1,0 +1,1 @@
+{"resource":"https://api.telique.ringer.tel/mcp","authorization_servers":["https://api.telique.ringer.tel"],"scopes_supported":["telique:read"],"bearer_methods_supported":["header"]}

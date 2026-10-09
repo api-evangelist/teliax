@@ -1,0 +1,273 @@
+openapi: 3.2.0
+info:
+  title: Teliax Number Inventory Audit API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Number Inventory Audit across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Number Inventory Audit
+  description: Three-phase inventory audit operations
+paths:
+  /v1/inventory/audit/{auditJobId}/reject:
+    post:
+      tags:
+      - Number Inventory Audit
+      summary: Reject dry-run
+      description: Rejects staging data and cleans up
+      operationId: rejectAudit
+      parameters:
+      - name: auditJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/audit/{auditJobId}/commit:
+    post:
+      tags:
+      - Number Inventory Audit
+      summary: Commit dry-run
+      description: Commits staging data to live inventory tables
+      operationId: commitAudit
+      parameters:
+      - name: auditJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/audit/start:
+    post:
+      tags:
+      - Number Inventory Audit
+      summary: Start inventory audit
+      description: Initiates a three-phase inventory audit for the specified SPID
+      operationId: startAudit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartAuditRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/audit/{auditJobId}:
+    get:
+      tags:
+      - Number Inventory Audit
+      summary: Get audit status
+      description: Retrieves the current status and progress of an audit job
+      operationId: getAuditStatus
+      parameters:
+      - name: auditJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Number Inventory Audit
+      summary: Cancel audit
+      description: Cancels a running audit job
+      operationId: cancelAudit
+      parameters:
+      - name: auditJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/audit/{auditJobId}/diff:
+    get:
+      tags:
+      - Number Inventory Audit
+      summary: Get diff summary
+      description: Returns change summary between staging and live data
+      operationId: getDiffSummary
+      parameters:
+      - name: auditJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/audit/{auditJobId}/diff/download:
+    get:
+      tags:
+      - Number Inventory Audit
+      summary: Download diff report
+      description: Downloads a detailed Excel change report
+      operationId: downloadDiffReport
+      parameters:
+      - name: auditJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/audit/history:
+    get:
+      tags:
+      - Number Inventory Audit
+      summary: Get audit history
+      description: Retrieves recent audit history for a SPID
+      operationId: getAuditHistory
+      parameters:
+      - name: spid
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    StartAuditRequest:
+      required:
+      - spid
+      type: object
+      properties:
+        spid:
+          pattern: ^[A-Z0-9]{4}$
+          type: string
+        phaseSelection:
+          type: string
+          enum:
+          - ALL
+          - PHASE_1_ONLY
+          - PHASE_2_ONLY
+          - PHASE_3_ONLY
+        purgeInventoryFirst:
+          type: boolean
+        includeCnam:
+          type: boolean
+        autoCommit:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

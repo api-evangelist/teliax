@@ -1,0 +1,286 @@
+openapi: 3.2.0
+info:
+  title: Teliax Port Project Documents API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Port Project Documents across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Port Project Documents
+  description: Supporting documents (LOA/BILL/CSR/OTHER) for LNP port-in projects
+paths:
+  /v1/port-projects/projects/{projectId}/documents/upload:
+    post:
+      tags:
+      - Port Project Documents
+      summary: Upload a supporting document to a port-in project
+      operationId: upload
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: documentType
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - LOA
+          - BILL
+          - LSR
+          - CSR
+          - OTHER
+      - name: tn
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: notes
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: signerName
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: signedAt
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: signerIp
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: replacesDocumentId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PortProjectDocumentResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/projects/{projectId}/documents:
+    get:
+      tags:
+      - Port Project Documents
+      summary: List documents for a port-in project
+      operationId: list_4
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: documentType
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - LOA
+          - BILL
+          - LSR
+          - CSR
+          - OTHER
+      - name: tn
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PortProjectDocumentResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/projects/{projectId}/documents/{documentId}/download:
+    get:
+      tags:
+      - Port Project Documents
+      summary: Download a document (authenticated proxy stream; no public URL)
+      operationId: download
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/projects/{projectId}/documents/{documentId}:
+    delete:
+      tags:
+      - Port Project Documents
+      summary: Delete a document
+      operationId: delete_1
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    PortProjectDocumentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        tn:
+          type: string
+        document_type:
+          type: string
+          enum:
+          - LOA
+          - BILL
+          - LSR
+          - CSR
+          - OTHER
+        file_name:
+          type: string
+        content_type:
+          type: string
+        file_size_bytes:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        signer_name:
+          type: string
+        signed_at:
+          type: string
+          format: date-time
+        signer_ip:
+          type: string
+        uploaded_by:
+          type: string
+        uploaded_at:
+          type: string
+          format: date-time
+        replaces_document_id:
+          type: string
+          format: uuid
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-port-project-response-schema.json",
+  "title": "PortProjectResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-tniq-openapi.yml#/components/schemas/PortProjectResponse",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "spid": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "total_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "valid_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "error_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "attention_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "attention_breakdown": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "validated_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "submitted_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "activated_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "cancelled_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "completed_tns": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "progressPercentage": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "currentStage": {
+      "type": "string"
+    },
+    "stageMessage": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "created_by_name": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "derived_status": {
+      "type": "string"
+    },
+    "derived_status_display": {
+      "type": "string"
+    },
+    "derived_status_description": {
+      "type": "string"
+    },
+    "can_submit": {
+      "type": "boolean"
+    },
+    "can_activate": {
+      "type": "boolean"
+    },
+    "can_cancel": {
+      "type": "boolean"
+    },
+    "can_update_due_date": {
+      "type": "boolean"
+    },
+    "submit_blocker_reason": {
+      "type": "string"
+    },
+    "activate_blocker_reason": {
+      "type": "string"
+    },
+    "is_pushed_release": {
+      "type": "boolean"
+    },
+    "auto_activation_mode": {
+      "type": "string"
+    },
+    "scheduled_activation_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_auto_activation_attempt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "auto_activation_failure_count": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "lsr_workflow_enabled": {
+      "type": "boolean"
+    },
+    "lsr_gate_mode": {
+      "type": "string"
+    },
+    "desired_due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "foc_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "billing_name": {
+      "type": "string"
+    },
+    "billing_street": {
+      "type": "string"
+    },
+    "billing_floor": {
+      "type": "string"
+    },
+    "billing_room_mail_stop": {
+      "type": "string"
+    },
+    "billing_city": {
+      "type": "string"
+    },
+    "billing_state": {
+      "type": "string"
+    },
+    "billing_zip": {
+      "type": "string"
+    },
+    "billing_account_number": {
+      "type": "string"
+    },
+    "port_out_pin_set": {
+      "type": "boolean"
+    },
+    "assignment": {
+      "$ref": "#/$defs/ApplicationAssignmentIntentResponse"
+    }
+  },
+  "$defs": {
+    "ApplicationAssignmentIntentResponse": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "orderReference": {
+          "type": "string"
+        },
+        "frozen": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

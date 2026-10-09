@@ -1,0 +1,33 @@
+generated: '2026-10-09'
+method: searched
+source: https://warp.ringer.tel/docs/guides/team-roles-api-keys-security
+docs: https://warp.ringer.tel/docs/guides/getting-started-permissions
+description: WARP API keys (Bearer rk_...) and portal roles carry scopes from a platform scope registry (GET /v1/scopes). These are API-key / RBAC scopes, not OAuth2 scopes; no OAuth2 securityScheme is declared in any of the three contracts. Each scope below is named in a "Required scopes" block on a WARP guide page; the contract tags numbers:read and numbers:write via x-required-scopes. TNIQ docs say tokens "are scoped per-customer and support operation-level restrictions" but publish no scope names. Telique uses a single x-api-token with no scopes.
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  api: WARP Customer API
+  notes: Scopes are selected when a key is created in the portal under Settings → API Keys.
+scopes:
+- {scope: 'team:read', description: View team members and roles., docs: https://warp.ringer.tel/docs/guides/team-roles-api-keys-security}
+- {scope: 'team:write', description: Change a member's role, remove members, create/update/delete/duplicate roles., docs: https://warp.ringer.tel/docs/guides/team-roles-api-keys-security}
+- {scope: 'api_keys:read', description: List keys, view prefixes and inspect audit entries., docs: https://warp.ringer.tel/docs/guides/team-roles-api-keys-security}
+- {scope: 'api_keys:write', description: Create, rotate or revoke keys (step-up verification required)., docs: https://warp.ringer.tel/docs/guides/team-roles-api-keys-security}
+- {scope: 'numbers:read', docs: https://warp.ringer.tel/docs/guides/numbers, contract: x-required-scopes in openapi/teliax-warp-openapi.yml}
+- {scope: 'numbers:write', docs: https://warp.ringer.tel/docs/guides/numbers, contract: x-required-scopes in openapi/teliax-warp-openapi.yml}
+- {scope: 'trunks:read', docs: https://warp.ringer.tel/docs/guides/trunk-setup}
+- {scope: 'trunks:write', docs: https://warp.ringer.tel/docs/guides/trunk-setup}
+- {scope: 'cdrs:read', docs: https://warp.ringer.tel/docs/guides/usage-call-statistics}
+- {scope: 'billing:read', docs: https://warp.ringer.tel/docs/guides/billing}
+- {scope: 'porting:read', docs: https://warp.ringer.tel/docs/guides/porting}
+- {scope: 'porting:write', docs: https://warp.ringer.tel/docs/guides/porting}
+- {scope: 'porting:submit', docs: https://warp.ringer.tel/docs/guides/porting}
+- {scope: 'porting:activate', docs: https://warp.ringer.tel/docs/guides/porting}
+- {scope: 'porting:cancel', docs: https://warp.ringer.tel/docs/guides/porting}
+- {scope: 'porting:supplement', docs: https://warp.ringer.tel/docs/guides/porting}
+- {scope: 'messaging:messages:read', docs: https://warp.ringer.tel/docs/guides/message-delivery-and-troubleshooting}
+- {scope: 'messaging:messages:write', docs: https://warp.ringer.tel/docs/guides/message-delivery-and-troubleshooting}
+- {scope: 'messaging:campaigns:read', docs: https://warp.ringer.tel/docs/guides/messaging-10dlc}
+- {scope: 'messaging:campaigns:write', docs: https://warp.ringer.tel/docs/guides/messaging-10dlc}
+- {scope: 'buzz:use', docs: https://warp.ringer.tel/docs/guides/buzz-assistant-actions}
+- {scope: 'buzz:write', docs: https://warp.ringer.tel/docs/guides/buzz-assistant-actions}

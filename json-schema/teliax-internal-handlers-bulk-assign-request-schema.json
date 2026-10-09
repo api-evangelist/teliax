@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-internal-handlers-bulk-assign-request-schema.json",
+  "title": "internal_handlers.BulkAssignRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-warp-openapi.yml#/components/schemas/internal_handlers.BulkAssignRequest",
+  "type": "object",
+  "properties": {
+    "campaign_id": {
+      "type": "string"
+    },
+    "cnam_display_name": {
+      "type": "string"
+    },
+    "cnam_enabled": {
+      "description": "Optional post-procurement extras, applied per successfully assigned TN\n(best-effort; outcomes in each result's extras map, never failing the\nbatch). CNAMEnabled turns on the inbound caller-name dip (requires the\nTN to be routed to a trunk — trunkless TNs report skipped_no_trunk).\nCNAMDisplayName sets one outbound CNARG listing name (≤15 chars A–Z,\n0–9, spaces; DIDs only) on every TN in the batch.\nCampaignID attaches all assigned TNs to that 10DLC messaging campaign.",
+      "type": "boolean"
+    },
+    "default_trunk_id": {
+      "type": "string"
+    },
+    "forward_preserve_ani": {
+      "type": "boolean"
+    },
+    "forward_to_number": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "per_tn_overrides": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "provider_by_tn": {
+      "description": "ProviderByTN routes each TN to the DID provider that should fulfill it\n(\"TNIQ\" | \"INTELIQUENT\"); missing/empty entries default to TNIQ.\nSourcing is automatic from the cart the customer built via search — a\ncaller-spoofed key is harmless: the wrong vendor simply doesn't have\nthat TN in its own inventory, so the order fails per-TN rather than\nmisattributing cost.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "routing_type": {
+      "description": "RoutingType selects batch-level voice routing: \"trunk\" (default when\ntrunk fields are present), \"forward\", or \"reject\". Voicemail is not\nyet available and 400s. Forward and reject ignore trunk fields.",
+      "type": "string"
+    },
+    "tn_metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/internal_handlers.BulkAssignTNMetadata"
+      }
+    },
+    "tns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "internal_handlers.BulkAssignTNMetadata": {
+      "type": "object",
+      "properties": {
+        "locality": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

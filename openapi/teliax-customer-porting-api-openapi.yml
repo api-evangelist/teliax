@@ -1,0 +1,3146 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Porting API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/Porting across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/Porting
+paths:
+  /v1/porting/preview:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Runs an instant Telique-backed portability preview for a free-form list of TNs and groups them by current SPID. tns accepts a comma/space/newline-separated string or an array of TN strings. No project is created. Errors: NO_ACTIVE_CUSTOMER, INVALID_PAYLOAD, VALIDATION_ERROR, GATEWAY_UNAVAILABLE.'
+      tags:
+      - Customer/Porting
+      summary: Preview a port-in
+      requestBody:
+        $ref: '#/components/requestBodies/internal_handlers.PortingTNsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingPreviewResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingPreview
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the active customer''s port-in requests, most-recent first. Each row includes can_resume, a server-derived capability for unsubmitted drafts. Errors: NO_ACTIVE_CUSTOMER, INTERNAL_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: List port-in requests
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.PortRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequests
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Creates a draft port-in request (TNIQ project + WARP mirror row). `desired_due_date` is required and must clear the losing carrier''s minimum notice window; a date that is too soon returns PORT_WINDOW_VIOLATION with `error.details.earliest_date`. Errors: NO_ACTIVE_CUSTOMER, INVALID_PAYLOAD, PORT_WINDOW_VIOLATION, TNIQ_ERROR, INTERNAL_ERROR, GATEWAY_UNAVAILABLE.'
+      tags:
+      - Customer/Porting
+      summary: Create a port-in draft
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.PortingCreateDraftRequest'
+        description: Draft name + desired due date
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingCreateDraftResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequests
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the mirror row, live TNIQ project, off-net carrier groups, and a server-derived resume descriptor selecting the earliest incomplete wizard step. Reconciles any ACTIVATED TNs into inventory (idempotent). Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, CONFLICT.'
+      tags:
+      - Customer/Porting
+      summary: Get a port-in request
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingDetailResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequestsById
+      x-operation-id-source: derived
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Deletes a pre-submission draft (TNIQ project + WARP mirror row). Gated to states with zero submitted TNs. Requires step-up MFA. Errors: NOT_FOUND, CONFLICT, TNIQ_ERROR, INTERNAL_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Delete a port-in draft
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingDeletedResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1PortingRequestsById
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/actions/{actionId}/respond:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: Completes one current customer action using only its published allowed response. Requires step-up MFA.
+      tags:
+      - Customer/Porting
+      summary: Complete a managed port action
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Managed action UUID
+        name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_porting.ActionResponse'
+        description: Allowed action response
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.ManagedPortResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdActionsByActionIdRespond
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/activate:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Activates numbers that have reached FOC. Gated on the project being activatable. Requires step-up MFA. Errors: NOT_FOUND, CONFLICT, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Activate ported numbers
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/internal_handlers.PortingTNSelectionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.BulkActionResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdActivate
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/auto-activation:
+    put:
+      security:
+      - ApiKeyAuth: []
+      description: 'Updates the project''s auto-activation mode (DISABLED | ASAP | SCHEDULED; scheduled_at required for SCHEDULED). Errors: INVALID_PAYLOAD, NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Set auto-activation policy
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.PortingAutoActivationRequest'
+        description: Auto-activation policy
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingMessageResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: putV1PortingRequestsByIdAutoActivation
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/auto-fix:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Applies TNIQ auto-fixes to the project, optionally scoped to an error group or TN subset. Errors: NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Auto-fix port-in errors
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.PortingAutoFixRequest'
+        description: Optional error-group / TN scope
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingMessageResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdAutoFix
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/cancel:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Cancels the port. An omitted body, `{}`, or an empty `tns` array explicitly selects whole-project cancellation; a non-empty `tns` array cancels only that eligible subset. Gated on the project being cancellable. Requires step-up MFA. Errors: INVALID_PAYLOAD, NOT_FOUND, CONFLICT, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Cancel a port-in request
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.PortingTNSelectionRequest'
+        description: Optional TN subset; omitted or empty means cancel the whole project
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.BulkActionResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdCancel
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/documents:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists the project''s documents, optionally filtered by doc_type or tn. signer_ip is present only for operator callers. Errors: NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: List port documents
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Filter by document type
+        name: doc_type
+        in: query
+        schema:
+          type: string
+      - description: Filter by TN
+        name: tn
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.PortingDocument'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequestsByIdDocuments
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Uploads a supporting document (BILL | CSR | OTHER; max 25MB) to the TNIQ project. LOAs must use the carrier-group LOA route so coverage and replacement history remain typed. Errors: INVALID_PAYLOAD, NOT_FOUND, TNIQ_VALIDATION, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Upload a port document
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                doc_type:
+                  description: 'Document type: BILL | CSR | OTHER'
+                  type: string
+                file:
+                  description: Document file (max 25MB)
+                  type: string
+                  format: binary
+              required:
+              - doc_type
+              - file
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingDocument'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '413':
+          description: Request Entity Too Large
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdDocuments
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/documents/{docId}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Streams the raw document bytes as an attachment (Content-Type mirrors the stored document). Errors (JSON): NOT_FOUND, TNIQ_VALIDATION, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Download a port document
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Document ID
+        name: docId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Document stream
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Not Found
+          content:
+            application/octet-stream:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+            application/pdf:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/octet-stream:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+            application/pdf:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequestsByIdDocumentsByDocId
+      x-operation-id-source: derived
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Deletes a document from the project. Errors: NOT_FOUND, TNIQ_VALIDATION, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Delete a port document
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Document ID
+        name: docId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingDeletedResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1PortingRequestsByIdDocumentsByDocId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/error-groups:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the TNIQ validation/port error groups for the project. Errors: NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Get port-in error groups
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.ErrorGroup'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequestsByIdErrorGroups
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/groups/{spid}/details:
+    put:
+      security:
+      - ApiKeyAuth: []
+      description: 'Applies complete losing-carrier details to every TN in the given SPID group. Required: end_user_name, business_name, btn, service_address in "numeric street, city, ST ZIP" form, and account_number unless credentials already cover the unchanged TN set. losing_carrier_name is optional here but required when generating the LOA. Membership is recomputed from live TNIQ details. Errors: INVALID_PAYLOAD, INVALID_PARAM, NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Apply carrier-group details
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Losing-carrier SPID
+        name: spid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.PortingGroupDetailsRequest'
+        description: Carrier-group details
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingUpdatedResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: putV1PortingRequestsByIdGroupsBySpidDetails
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/groups/{spid}/loa:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Renders a WARP-branded LOA PDF for one off-net SPID group and uploads it as an immutable replacement revision. Available before submission and after submission only when TNIQ publishes a replacement-document action for the affected group. Requires attestation=true, complete signer fields, and step-up MFA. Errors: INVALID_PAYLOAD, INVALID_PARAM, CONFLICT, TNIQ_ERROR, INTERNAL_ERROR, GATEWAY_UNAVAILABLE.'
+      tags:
+      - Customer/Porting
+      summary: Generate a Letter of Authorization
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Losing-carrier SPID
+        name: spid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.loaRequest'
+        description: LOA fields + attestation
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingDocument'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdGroupsBySpidLoa
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/groups/{spid}/loa/upload:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: Uploads a replacement-aware signed LOA for one losing-carrier group. Requires step-up MFA.
+      tags:
+      - Customer/Porting
+      summary: Upload a signed carrier-group LOA
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Losing-carrier SPID
+        name: spid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  description: Signed LOA
+                  type: string
+                  format: binary
+                signer_name:
+                  description: Authorized signer
+                  type: string
+                signed_at:
+                  description: RFC3339 signature time
+                  type: string
+              required:
+              - file
+              - signer_name
+              - signed_at
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingDocument'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdGroupsBySpidLoaUpload
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/history:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the audit timeline for the port request (tenant-scoped, newest-first). Errors: NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Get audit history
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.PortAuditEntry'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequestsByIdHistory
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/notes:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the port request''s notes. Operators see internal notes too; customers see only customer-visibility notes. Errors: NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: List notes
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.Note'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequestsByIdNotes
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Adds a note to the port request. visibility "internal" is operator-only; customers may only post "customer" notes. Errors: INVALID_PAYLOAD, FORBIDDEN, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Add a note
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.PortingNoteRequest'
+        description: Note body + visibility
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingMessageResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdNotes
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/progress:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns live TNIQ progress and repairs only an unsubmitted WARP draft from complete structural counts; managed and terminal rows are never rewritten. Errors: NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Get port-in progress
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.ProjectProgress'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequestsByIdProgress
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/resubmit:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Resubmits the port; valid only from an error/rejection/exception state. Errors: NOT_FOUND, CONFLICT, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Resubmit a port-in request
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/internal_handlers.PortingTNSelectionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.BulkActionResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdResubmit
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/revalidate:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Sends a REVALIDATE bulk action for selected (or all) TNs. Errors: NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Revalidate port-in TNs
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/internal_handlers.PortingTNSelectionRequest'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.BulkActionResult'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdRevalidate
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/statistics:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns live TNIQ statistics and repairs only an unsubmitted WARP draft from complete structural counts. A blank upstream stage preserves the previous raw status; managed and terminal rows are never rewritten. Errors: NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Get port-in statistics
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.ProjectStatistics'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1PortingRequestsByIdStatistics
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/submit:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Starts TNIQ managed processing after WARP verifies the complete paginated TN set, per-carrier details, current LOA coverage, desired due date, and live submit eligibility. Replays use the original durable idempotency key. Requires step-up MFA. A 409 returns a safe WARP reason for preflight blockers or contract-defined idempotency conflicts. Errors: NOT_FOUND, CONFLICT, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Submit a port-in request
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.ManagedPortResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdSubmit
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/supplement:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Changes the desired due date (SUP_DDD); valid only before activation. The new date must clear the losing carrier''s minimum notice window; a date that is too soon returns PORT_WINDOW_VIOLATION with `error.details.earliest_date`. Errors: INVALID_PAYLOAD, PORT_WINDOW_VIOLATION, NOT_FOUND, CONFLICT, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Supplement the due date
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.PortingSupplementRequest'
+        description: New desired due date + optional TN subset
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.BulkActionResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdSupplement
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/tns:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Normalises a free-form TN list and uploads it to the TNIQ project. tns accepts a comma/space/newline-separated string or an array of TN strings. Errors: INVALID_PAYLOAD, VALIDATION_ERROR, NOT_FOUND, TNIQ_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Add TNs to a port-in request
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/internal_handlers.PortingTNsRequest'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingAddTNsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdTns
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/requests/{id}/validate:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Deprecated compatibility endpoint for older WARP clients. TN upload already starts validation; this endpoint acknowledges the request without launching a duplicate validation pass. Use POST /revalidate with a TN selection for an actual revalidation. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, CONFLICT, GATEWAY_UNAVAILABLE, INTERNAL_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Validate a port-in request
+      parameters:
+      - description: Port request UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.PortingMessageResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingRequestsByIdValidate
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/transfer:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Transfers on-net numbers between WARP tenants. Each item authorizes with the owner''s port-out PIN; items succeed or fail independently at HTTP 200. Per-TN reasons: not_in_warp_inventory, already_yours, poi_locked, invalid_pin, pin_locked, lookup_failed, transfer_failed, invalid_tn. Requires step-up MFA. Errors: NO_ACTIVE_CUSTOMER, INVALID_PAYLOAD.'
+      tags:
+      - Customer/Porting
+      summary: Execute an on-net transfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.PortingTransferRequest'
+        description: TN + PIN items
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.transferResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingTransfer
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/porting/transfer/preview:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'For a free-form TN list, reports which numbers are on-net (an active WARP assignment) and eligible for on-net transfer. The owning customer''s BAN is masked. Per-TN reasons: not_in_warp_inventory, already_yours, poi_locked, lookup_failed. Errors: NO_ACTIVE_CUSTOMER, INVALID_PAYLOAD, VALIDATION_ERROR.'
+      tags:
+      - Customer/Porting
+      summary: Preview an on-net transfer
+      requestBody:
+        $ref: '#/components/requestBodies/internal_handlers.PortingTNsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.previewItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1PortingTransferPreview
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/tincomply/lookup-company-details:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Retrieves detailed company information by company name and optional address. Used during the port-in flow. Errors: INVALID_REQUEST, COMPANY_NAME_REQUIRED, TINCOMPLY_ERROR, LOOKUP_FAILED.'
+      tags:
+      - Customer/Porting
+      summary: Lookup company details by name and address
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetailsRequest'
+        description: Company name and address
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetailsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1TincomplyLookupCompanyDetails
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/tincomply/lookup-ein:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Retrieves company information from TinComply by EIN/Tax ID. Used during the port-in flow for entity verification. Errors: EIN_REQUIRED, INVALID_EIN, TINCOMPLY_ERROR, LOOKUP_FAILED.'
+      tags:
+      - Customer/Porting
+      summary: Lookup company by EIN
+      parameters:
+      - description: EIN/Tax ID (9 digits, with or without hyphen)
+        name: ein
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.EINLookupResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TincomplyLookupEin
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/tincomply/validate-ein-format:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Checks whether an EIN is well-formed (9 digits) without calling the external API. Errors: EIN_REQUIRED.'
+      tags:
+      - Customer/Porting
+      summary: Validate EIN format
+      parameters:
+      - description: EIN to validate
+        name: ein
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.EINFormatResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TincomplyValidateEinFormat
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/tincomply/verify-tin-name:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Verifies that a TIN matches the provided company name via IRS TIN-Name matching. Used during the port-in flow. Errors: INVALID_REQUEST, INVALID_TIN, COMPANY_NAME_REQUIRED, TINCOMPLY_ERROR, VERIFICATION_FAILED.'
+      tags:
+      - Customer/Porting
+      summary: Verify TIN and company name match
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchRequest'
+        description: TIN and company name
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1TincomplyVerifyTinName
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    github_com_ringer-warp_api-gateway_internal_porting.PreviewGroup:
+      type: object
+      properties:
+        carrier:
+          type: string
+        on_net:
+          type: boolean
+        portable:
+          type: boolean
+        portable_unknown:
+          type: boolean
+        spid:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    internal_handlers.loaRequest:
+      type: object
+      properties:
+        attestation:
+          type: boolean
+        authorizing_party:
+          type: object
+          properties:
+            address:
+              type: string
+            company:
+              type: string
+            contact:
+              type: string
+        losing_carrier:
+          type: object
+          properties:
+            account_number:
+              type: string
+            btn:
+              type: string
+            name:
+              type: string
+        signer:
+          type: object
+          properties:
+            name:
+              type: string
+            title:
+              type: string
+    internal_handlers.PortingNoteRequest:
+      type: object
+      properties:
+        body:
+          type: string
+        visibility:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.PortProjectDetail:
+      type: object
+      properties:
+        account_number:
+          description: Sensitive — present in TNIQ responses today (ringer-tniq#153); never log.
+          type: string
+        btn:
+          type: string
+        business_name:
+          type: string
+        can_activate:
+          type: boolean
+        current_lrn:
+          type: string
+        current_ocn:
+          type: string
+        current_spid:
+          type: string
+        end_user_name:
+          type: string
+        foc_date:
+          type: string
+        lifecycle_state:
+          type: string
+        lifecycle_state_display:
+          type: string
+        locality:
+          type: string
+        npa:
+          type: string
+        nxx:
+          type: string
+        pin:
+          type: string
+        state:
+          type: string
+        tn:
+          type: string
+        validation_errors:
+          type: object
+          additionalProperties: true
+        validation_status:
+          type: string
+    internal_handlers.transferItemReq:
+      type: object
+      properties:
+        pin:
+          type: string
+        tn:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetails:
+      type: object
+      properties:
+        city:
+          type: string
+        company_name:
+          type: string
+        country:
+          type: string
+        ein:
+          type: string
+        entity_type:
+          type: string
+        incorporated_at:
+          type: string
+        industry:
+          type: string
+        legal_name:
+          type: string
+        match_score:
+          type: number
+        naics_code:
+          type: string
+        phone:
+          type: string
+        sic_code:
+          type: string
+        state:
+          type: string
+        status:
+          type: string
+        street:
+          type: string
+        website:
+          type: string
+        zip_code:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetailsResponse:
+      type: object
+      properties:
+        completed_at:
+          type: string
+        error:
+          type: string
+        original_params:
+          type: object
+          additionalProperties: true
+        request_id:
+          type: string
+        result:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetails'
+        service_type:
+          type: string
+        status:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.PortRequestGroup:
+      type: object
+      properties:
+        btn:
+          type: string
+        business_name:
+          type: string
+        credential_tn_set_hash:
+          type: string
+        details_applied_at:
+          type: string
+        end_user_name:
+          type: string
+        loa_document_id:
+          type: string
+        loa_revision:
+          type: integer
+        loa_signed_at:
+          type: string
+        loa_signer_name:
+          type: string
+        loa_tn_set_hash:
+          type: string
+        losing_carrier_name:
+          type: string
+        losing_spid:
+          type: string
+        masked_account_tail:
+          type: string
+        pin_present:
+          type: boolean
+        service_address:
+          type: string
+        tn_count:
+          type: integer
+        tn_set_hash:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetailsRequest:
+      type: object
+      required:
+      - company_name
+      properties:
+        city:
+          type: string
+        company_name:
+          type: string
+        state:
+          type: string
+        street:
+          type: string
+        zip_code:
+          type: string
+    internal_handlers.PortingUpdatedResponse:
+      type: object
+      properties:
+        updated:
+          type: integer
+    internal_handlers.PortingDetailResponse:
+      type: object
+      properties:
+        customer_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction'
+        group_state:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.PortRequestGroup'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.PortCarrierGroup'
+        project:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.PortProjectResponse'
+        request:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.PortRequest'
+        resume:
+          $ref: '#/components/schemas/internal_handlers.PortingResumeDescriptor'
+    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyNameLookupByEinResult:
+      type: object
+      properties:
+        completed:
+          description: true if lookup completed
+          type: boolean
+        found:
+          description: true if match found
+          type: boolean
+        message:
+          description: '"EIN lookup match found" or "No match found"'
+          type: string
+        name:
+          description: Official registered company name
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.Note:
+      type: object
+      properties:
+        author_id:
+          type: string
+        body:
+          type: string
+        created_at:
+          type: string
+        id:
+          type: string
+        visibility:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchResult:
+      type: object
+      properties:
+        company_name:
+          type: string
+        confidence:
+          description: '"high", "medium", "low"'
+          type: string
+        exact_match:
+          type: boolean
+        fuzzy_match:
+          type: boolean
+        irs_verified:
+          type: boolean
+        match_details:
+          type: string
+        match_score:
+          type: number
+        matched:
+          type: boolean
+        tin:
+          type: string
+    internal_handlers.previewItem:
+      type: object
+      properties:
+        eligible:
+          type: boolean
+        on_net:
+          type: boolean
+        owning_customer_ban:
+          description: MASKED
+          type: string
+        reason:
+          type: string
+        tn:
+          type: string
+    internal_handlers.PortingPreviewResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_porting.PreviewGroup'
+        tn_count:
+          type: integer
+    internal_handlers.PortingTransferRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.transferItemReq'
+    github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchRequest:
+      type: object
+      required:
+      - company_name
+      - tin
+      properties:
+        company_name:
+          type: string
+        tin:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.ProjectProgress:
+      type: object
+      properties:
+        cancelledTns:
+          type: integer
+        errorTns:
+          type: integer
+        isComplete:
+          type: boolean
+        pendingTns:
+          type: integer
+        progressPercentage:
+          type: integer
+        projectId:
+          type: string
+        status:
+          type: string
+        submittedTns:
+          type: integer
+        totalTns:
+          type: integer
+        validTns:
+          type: integer
+    internal_handlers.EINFormatResult:
+      type: object
+      properties:
+        formatted:
+          type: string
+        message:
+          type: string
+        valid:
+          type: boolean
+    internal_handlers.PortingCreateDraftRequest:
+      type: object
+      properties:
+        desired_due_date:
+          type: string
+        name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction:
+      type: object
+      properties:
+        allowed_response:
+          type: string
+        code:
+          type: string
+        group_id:
+          type: string
+        id:
+          type: string
+        message:
+          type: string
+        opened_at:
+          type: string
+        required_document_type:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.PortProjectResponse:
+      type: object
+      properties:
+        activated_tns:
+          type: integer
+        can_activate:
+          type: boolean
+        can_cancel:
+          type: boolean
+        can_submit:
+          type: boolean
+        cancelled_tns:
+          type: integer
+        customer_id:
+          type: string
+        derived_status:
+          type: string
+        derived_status_display:
+          type: string
+        desired_due_date:
+          type: string
+        error_tns:
+          type: integer
+        id:
+          type: string
+        name:
+          type: string
+        spid:
+          type: string
+        status:
+          type: string
+        submit_blocker_reason:
+          type: string
+        submitted_tns:
+          type: integer
+        total_tns:
+          type: integer
+        valid_tns:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    internal_handlers.PortingResumeDescriptor:
+      type: object
+      properties:
+        allowed:
+          type: boolean
+        reason:
+          type: string
+          enum:
+          - project_temporarily_unavailable
+          - project_counts_unavailable
+          - numbers_missing
+          - validation_in_progress
+          - validation_errors
+          - group_details_missing
+          - loa_missing
+          - due_date_missing
+          - ready_to_review
+        step:
+          type: string
+          enum:
+          - NUMBERS
+          - VALIDATION
+          - CARRIER_DETAILS
+          - DOCUMENTS
+          - SCHEDULE
+          - REVIEW
+    internal_handlers.PortingGroupDetailsRequest:
+      type: object
+      required:
+      - btn
+      - business_name
+      - end_user_name
+      - service_address
+      properties:
+        account_number:
+          type: string
+          example: '123456789'
+        btn:
+          type: string
+          example: '2125550100'
+        business_name:
+          type: string
+          example: ACME Corp
+        end_user_name:
+          type: string
+          example: Jane Smith
+        losing_carrier_name:
+          type: string
+          example: Current Carrier LLC
+        pin:
+          type: string
+        service_address:
+          type: string
+          example: 21699 E Quincy Ave, Aurora, CO 80015
+    internal_handlers.PortingDeletedResponse:
+      type: object
+      properties:
+        deleted:
+          type: boolean
+    internal_handlers.PortingMessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    internal_handlers.PortingAutoActivationRequest:
+      type: object
+      properties:
+        mode:
+          type: string
+        scheduled_at:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchResponse:
+      type: object
+      properties:
+        completed_at:
+          type: string
+        error:
+          type: string
+        original_params:
+          type: object
+          additionalProperties: true
+        request_id:
+          type: string
+        result:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchResult'
+        service_type:
+          type: string
+        status:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.TinComplyRequestInfo:
+      type: object
+      properties:
+        enabledServices:
+          type: array
+          items:
+            type: string
+        requestDate:
+          type: string
+        requestedServices:
+          type: string
+        tin:
+          description: Masked as XXXXX9949
+          type: string
+    github_com_ringer-warp_api-gateway_internal_porting.ActionResponse:
+      type: object
+      properties:
+        acknowledged:
+          type: boolean
+        desired_due_date:
+          type: string
+        document_id:
+          type: string
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+        response_type:
+          type: string
+    internal_handlers.ManagedPortResponse:
+      type: object
+      properties:
+        created_at:
+          type: string
+        customer_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction'
+        error_code:
+          type: string
+        message:
+          type: string
+        process_id:
+          type: string
+        project_id:
+          type: string
+        state:
+          type: string
+        updated_at:
+          type: string
+        version:
+          type: integer
+    internal_handlers.PortingTNsRequest:
+      type: object
+      properties:
+        tns:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+    internal_handlers.PortCarrierGroup:
+      type: object
+      properties:
+        spid:
+          type: string
+        tns:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.PortProjectDetail'
+    github_com_ringer-warp_api-gateway_internal_tniq.BulkActionResult:
+      type: object
+      properties:
+        action:
+          type: string
+        failed:
+          type: integer
+        results:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties: true
+        succeeded:
+          type: integer
+        total:
+          type: integer
+    internal_handlers.PortingSupplementRequest:
+      type: object
+      properties:
+        new_ddd:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.ProjectStatistics:
+      type: object
+      properties:
+        cancelledTns:
+          type: integer
+        completedTns:
+          type: integer
+        errorTns:
+          type: integer
+        focReceivedTns:
+          type: integer
+        pendingFocTns:
+          type: integer
+        progressPercentage:
+          type: integer
+        projectId:
+          type: string
+        readyForActivationTns:
+          type: integer
+        stage:
+          type: string
+        stageMessage:
+          type: string
+        submittedTns:
+          type: integer
+        totalTns:
+          type: integer
+        validTns:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_tniq.ErrorGroup:
+      type: object
+      properties:
+        count:
+          type: integer
+        errorGroupId:
+          type: string
+        errorMessage:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    internal_handlers.PortingAutoFixRequest:
+      type: object
+      properties:
+        error_group_id:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    internal_handlers.PortingDocument:
+      type: object
+      properties:
+        content_type:
+          type: string
+        document_type:
+          type: string
+        file_name:
+          type: string
+        file_size_bytes:
+          type: integer
+        id:
+          type: string
+        notes:
+          type: string
+        signed_at:
+          type: string
+        signer_ip:
+          type: string
+        signer_name:
+          type: string
+        tn:
+          type: string
+        uploaded_at:
+          type: string
+    internal_handlers.PortingAddTNsResponse:
+      type: object
+      properties:
+        added:
+          type: integer
+    internal_handlers.PortingTNSelectionRequest:
+      type: object
+      properties:
+        tns:
+          type: array
+          items:
+            type: string
+    internal_handlers.transferResult:
+      type: object
+      properties:
+        reason:
+          type: string
+        tn:
+          type: string
+        transferred:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_repository.PortAuditEntry:
+      type: object
+      properties:
+        action:
+          type: string
+        actor_type:
+          type: string
+        created_at:
+          type: string
+        id:
+          type: string
+        override_reason:
+          type: string
+    internal_handlers.PortingCreateDraftResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        tniq_project_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.EINLookupResponse:
+      type: object
+      properties:
+        companyNameLookupByEinResult:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.CompanyNameLookupByEinResult'
+        id:
+          type: string
+        request:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.TinComplyRequestInfo'
+    github_com_ringer-warp_api-gateway_internal_repository.PortRequest:
+      type: object
+      properties:
+        can_resume:
+          type: boolean
+        created_at:
+          type: string
+        derived_status:
+          type: string
+        desired_due_date:
+          type: string
+        id:
+          type: string
+        last_synced_at:
+          type: string
+        managed_version:
+          type: integer
+        name:
+          type: string
+        next_step:
+          type: string
+        tniq_project_id:
+          type: string
+        tniq_spid:
+          type: string
+        warp_customer_id:
+          type: string
+  requestBodies:
+    internal_handlers.PortingTNSelectionRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/internal_handlers.PortingTNSelectionRequest'
+      description: Optional TN subset
+    internal_handlers.PortingTNsRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/internal_handlers.PortingTNsRequest'
+      description: Free-form TN list
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

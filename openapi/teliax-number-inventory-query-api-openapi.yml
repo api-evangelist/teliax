@@ -1,0 +1,195 @@
+openapi: 3.2.0
+info:
+  title: Teliax Number Inventory Query API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Number Inventory Query across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Number Inventory Query
+  description: Query-based inventory search with powerful filter language
+paths:
+  /v1/inventory/query:
+    post:
+      tags:
+      - Number Inventory Query
+      summary: Query inventory
+      description: Execute a query using the query language syntax
+      operationId: queryInventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/query/validate:
+    post:
+      tags:
+      - Number Inventory Query
+      summary: Validate query
+      description: Validate query syntax without executing it
+      operationId: validateQuery
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/query/export:
+    post:
+      tags:
+      - Number Inventory Query
+      summary: Export inventory to CSV
+      description: Stream inventory query results as CSV. For XLSX, use POST /v1/reports/jobs with reportType=INVENTORY_XLSX.
+      operationId: exportInventoryToCsv
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/aggregate:
+    post:
+      tags:
+      - Number Inventory Query
+      summary: Aggregate inventory
+      description: Get grouped counts of inventory numbers by one or more dimensions
+      operationId: aggregateInventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AggregateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    AggregateRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        spids:
+          type: array
+          items:
+            type: string
+        groupBy:
+          type: array
+          items:
+            type: string
+        limit:
+          type: integer
+          format: int32
+        orderBy:
+          type: string
+    ExportRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        spids:
+          type: array
+          items:
+            type: string
+        sortBy:
+          type: string
+        sortDirection:
+          type: string
+        fields:
+          type: array
+          items:
+            type: string
+    QueryRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        sortBy:
+          type: string
+        sortDirection:
+          type: string
+        spids:
+          type: array
+          items:
+            type: string
+        fields:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

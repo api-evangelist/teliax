@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-identity-request-schema.json",
+  "title": "IdentityRequest",
+  "description": "Request body for the POST identity lookup",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-telique-openapi.yml#/components/schemas/IdentityRequest",
+  "type": "object",
+  "required": [
+    "called_party"
+  ],
+  "properties": {
+    "calling_party": {
+      "type": "string",
+      "description": "Originating phone number — the number whose caller name is looked up. Optional: omitting it yields a less-useful result.",
+      "pattern": "^(\\+?1)?\\d{10}$"
+    },
+    "called_party": {
+      "type": "string",
+      "description": "Destination NANP phone number. Accepts 10 digits, 11 digits with a leading 1, or E.164 with a leading `+1`.",
+      "pattern": "^(\\+?1)?\\d{10}$"
+    },
+    "call_direction": {
+      "type": "string",
+      "description": "Direction of the call",
+      "enum": [
+        "incoming",
+        "outgoing"
+      ]
+    },
+    "txn_id": {
+      "type": "string",
+      "description": "Your transaction ID, echoed back in the response"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Your client identifier (up to 32 alphanumeric characters)",
+      "maxLength": 32
+    },
+    "verstat": {
+      "type": "string",
+      "description": "STIR/SHAKEN verification status"
+    },
+    "attest": {
+      "type": "string",
+      "description": "STIR/SHAKEN attestation level",
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "cv_data": {
+      "type": "object",
+      "description": "STIR/SHAKEN call-validation data (preserved as-is and forwarded to TransUnion)",
+      "properties": {
+        "verstat": {
+          "type": "string"
+        },
+        "attest": {
+          "type": "string"
+        },
+        "ppt": {
+          "type": "string"
+        },
+        "origid": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

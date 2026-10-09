@@ -1,0 +1,157 @@
+openapi: 3.2.0
+info:
+  title: Teliax LERG GraphQL API
+  version: 2026.6.25
+  contact:
+    name: Ringer Support
+    email: support@ringer.com
+    url: https://telique.ringer.tel
+  license:
+    name: Proprietary
+  description: 'Operations tagged LERG GraphQL across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.telique.ringer.tel
+  description: Production
+security:
+- apiToken: []
+tags:
+- name: LERG GraphQL
+  description: GraphQL interface for flexible LERG data queries with field selection, filtering, pagination, nested relationships, and dynamic joins.
+paths:
+  /v1/telique/lerg/graphql:
+    get:
+      operationId: graphqlPlayground
+      tags:
+      - LERG GraphQL
+      summary: GraphiQL interactive playground
+      description: 'Opens the GraphiQL IDE in your browser for interactive query building and
+
+        schema exploration. The playground provides auto-complete, documentation,
+
+        and query history.'
+      security: []
+      responses:
+        '200':
+          description: GraphiQL HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+    post:
+      operationId: graphqlQuery
+      tags:
+      - LERG GraphQL
+      summary: Execute a GraphQL query
+      description: 'Execute GraphQL queries against all 27 LERG tables. Supports field selection,
+
+        filtering, pagination, nested relationships, and dynamic cross-table joins.
+
+
+        ## Available Queries
+
+        One query per LERG table: `lerg1`, `lerg1Con`, `lerg2`, `lerg3`, `lerg4`, `lerg5`,
+
+        `lerg6`, `lerg6Atc`, `lerg6Ins`, `lerg6Odd`, `lerg7`, `lerg7Ins`, `lerg7Sha`,
+
+        `lerg7ShaIns`, `lerg8`, `lerg8Lir`, `lerg8Loc`, `lerg8Pst`, `lerg9`, `lerg9Atc`,
+
+        `lerg10`, `lerg11`, `lerg12`, `lerg12Ins`, `lerg16`, `lerg17`, `lergdate`
+
+
+        Plus `dynamicJoin` for arbitrary cross-table SQL joins.
+
+
+        ## Nested Relationships
+
+        - `lerg6.carrier` -> LERG 1 record (via OCN)
+
+        - `lerg6.switchInfo` -> LERG 7 record (via SWITCH)
+
+        - `lerg6.homingArrangements` -> LERG 7 SHA records (via SWITCH)
+
+        - `lerg7.carrier` -> LERG 1 record (via OCN)
+
+        - `lerg7Sha.tandemSwitch` -> LERG 7 record (via tandem CLLI)
+
+
+        ## Filter Operators
+
+        `EQ`, `NE`, `GT`, `GTE`, `LT`, `LTE`, `LIKE`, `IN`, `IS_NULL`, `IS_NOT_NULL`'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: string
+                  description: GraphQL query string
+                variables:
+                  type: object
+                  description: GraphQL variables
+                  additionalProperties: true
+                operationName:
+                  type: string
+                  description: Name of the operation to execute (if query contains multiple)
+            examples:
+              simpleQuery:
+                summary: Query NPA-NXX data with carrier info
+                value:
+                  query: "{\n  lerg6(\n    filters: [\n      { field: \"npa\", op: EQ, value: \"720\" },\n      { field: \"nxx\", op: EQ, value: \"708\" }\n    ]\n    pagination: { limit: 5 }\n  ) {\n    npa\n    nxx\n    blockId\n    ocn\n    locName\n    locState\n    switch\n    carrier {\n      ocnNum\n      ocnName\n    }\n  }\n}\n"
+              carrierSearch:
+                summary: Search carriers by state
+                value:
+                  query: "{\n  lerg1(\n    filters: [{ field: \"ocnState\", op: EQ, value: \"CO\" }]\n    pagination: { limit: 10 }\n  ) {\n    ocnNum\n    ocnName\n    ocnState\n    category\n  }\n}\n"
+              dynamicJoin:
+                summary: Dynamic join between tables
+                value:
+                  query: "{\n  dynamicJoin(input: {\n    leftTable: \"lerg_6\"\n    rightTable: \"lerg_1\"\n    joinColumns: [{ left: \"ocn\", right: \"ocn_num\" }]\n    selectColumns: [\n      { table: \"lerg_6\", column: \"npa\" },\n      { table: \"lerg_6\", column: \"nxx\" },\n      { table: \"lerg_1\", column: \"ocn_name\" }\n    ]\n    filters: [{ table: \"lerg_6\", column: \"npa\", op: EQ, value: \"720\" }]\n    limit: 10\n  }) {\n    count\n    data\n  }\n}\n"
+      responses:
+        '200':
+          description: GraphQL response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    description: Query result data
+                    additionalProperties: true
+                  errors:
+                    type: array
+                    description: GraphQL errors (if any)
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+              example:
+                data:
+                  lerg6:
+                  - npa: '720'
+                    nxx: '708'
+                    blockId: A
+                    ocn: '7167'
+                    locName: DENVER
+                    locState: CO
+                    switch: DNVRCO93DS0
+                    carrier:
+                      ocnNum: '7167'
+                      ocnName: CELLCO PARTNERSHIP DBA VERIZON WIRELESS
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+components:
+  securitySchemes:
+    apiToken:
+      type: apiKey
+      in: header
+      name: x-api-token
+      description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
+x-refined-from:
+- teliax-telique-openapi.yaml
+- teliax-telique-openapi.yml

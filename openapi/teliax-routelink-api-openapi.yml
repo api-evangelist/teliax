@@ -1,0 +1,724 @@
+openapi: 3.2.0
+info:
+  title: Teliax Route Link API
+  version: 2026.6.25
+  contact:
+    name: Ringer Support
+    email: support@ringer.com
+    url: https://telique.ringer.tel
+  license:
+    name: Proprietary
+  description: 'Operations tagged RouteLink across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.telique.ringer.tel
+  description: Production
+security:
+- apiToken: []
+tags:
+- name: RouteLink
+  description: Toll-free number routing — CIC lookups, ROR lookups, and CPR inspection.
+paths:
+  /v1/telique/cic/{crn}/{ani}/{lata}:
+    get:
+      operationId: lookupCic
+      tags:
+      - RouteLink
+      summary: Look up the Carrier Identification Code for a toll-free call
+      description: 'Interprets the Call Processing Record (CPR) for the given toll-free
+
+        number (CRN) using the caller''s ANI and LATA to walk the decision
+
+        tree, returning the routed carrier and optional Network Management
+
+        Class (NMC).
+
+
+        **Plain text response** (default):
+
+        - When no NMC is present: the 4-digit zero-padded carrier code
+
+        (e.g. `0288`).
+
+        - When an NMC is present: a compact JSON blob with the unpadded
+
+        integer carrier and NMC (e.g. `{"carrier":288,"networkmanagementclass":14}`).
+
+
+        If the CRN is not found, the response is `0000` with HTTP 200 (for
+
+        compatibility with legacy cicdip clients).'
+      parameters:
+      - $ref: '#/components/parameters/crn'
+      - $ref: '#/components/parameters/ani'
+      - $ref: '#/components/parameters/lata'
+      - $ref: '#/components/parameters/format'
+      responses:
+        '200':
+          description: Successful CIC lookup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CicResponse'
+              example:
+                carrier: 0288
+                networkmanagementclass: 14
+                timestamp: 2026-04-04 14:32:15.123456+00:00
+            text/plain:
+              schema:
+                type: string
+              examples:
+                withoutNmc:
+                  summary: No NMC present
+                  value: 0288
+                withNmc:
+                  summary: NMC present (carrier emitted as unpadded integer)
+                  value: '{"carrier":288,"networkmanagementclass":14}'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/cicror/{crn}/{ani}/{lata}:
+    get:
+      operationId: lookupCicRor
+      tags:
+      - RouteLink
+      summary: Look up both the CIC and Responsible Organization for a toll-free call
+      description: 'Combines a CIC lookup (CPR interpretation) with the CRN''s Responsible
+
+        Organization. Useful when the caller needs both routing and ownership
+
+        data in a single request.
+
+
+        **Plain text response** (default): `{carrier};{ror}` (e.g. `0288;ATX01`).
+
+
+        If the CRN is not found, the response is `0000;` with HTTP 200 (for
+
+        compatibility with legacy cicdip clients).'
+      parameters:
+      - $ref: '#/components/parameters/crn'
+      - $ref: '#/components/parameters/ani'
+      - $ref: '#/components/parameters/lata'
+      - $ref: '#/components/parameters/format'
+      responses:
+        '200':
+          description: Successful CIC + ROR lookup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CicRorResponse'
+              example:
+                carrier: 0288
+                ror: ATX01
+                timestamp: 2026-04-04 14:32:15.123456+00:00
+            text/plain:
+              schema:
+                type: string
+              example: 0288;ATX01
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/ror/{crn}:
+    get:
+      operationId: lookupRor
+      tags:
+      - RouteLink
+      summary: Look up the Responsible Organization for a toll-free number
+      description: 'Returns the ROR (Responsible Organization) code assigned to the given
+
+        toll-free number. Does not require ANI or LATA since no CPR
+
+        interpretation is performed.
+
+
+        **Plain text response** (default): the ROR code (e.g. `ATX01`).
+
+
+        If the CRN is not found, the response is an empty string with HTTP 200
+
+        (for compatibility with legacy cicdip clients).'
+      parameters:
+      - name: crn
+        in: path
+        required: true
+        description: 10-digit toll-free number (digits only)
+        schema:
+          type: string
+          pattern: ^\d{10}$
+          example: '8005551234'
+      - $ref: '#/components/parameters/format'
+      responses:
+        '200':
+          description: Successful ROR lookup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RorResponse'
+              example:
+                ror: ATX01
+                timestamp: 2026-04-04 14:32:15.123456+00:00
+            text/plain:
+              schema:
+                type: string
+              example: ATX01
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/ror/{ror}/tfns:
+    get:
+      operationId: lookupTfnsByRor
+      tags:
+      - RouteLink
+      summary: List toll-free numbers assigned to a Responsible Organization
+      description: 'Returns a paginated list of toll-free numbers (CRNs) that belong to
+
+        the given ROR. Results are paginated with `limit` and `offset` query
+
+        parameters.
+
+
+        **Plain text response** (default): header lines followed by one TFN
+
+        per line.'
+      parameters:
+      - $ref: '#/components/parameters/ror'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Successful TFN list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TfnsByRorResponse'
+              example:
+                ror: ATX01
+                total_count: 1814973
+                tfns:
+                - '8002257793'
+                - '8003216540'
+                - '8004417890'
+                - '8005029311'
+                - '8006183472'
+                limit: 5
+                offset: 0
+                timestamp: 2026-04-04 14:32:15.123456+00:00
+            text/plain:
+              schema:
+                type: string
+              example: 'ROR: ATX01
+
+                Total: 1814973
+
+                Showing: 1-5
+
+
+                8002257793
+
+                8003216540
+
+                8004417890
+
+                8005029311
+
+                8006183472
+
+                '
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/ror/{ror}/cprs:
+    get:
+      operationId: lookupCprsByRor
+      tags:
+      - RouteLink
+      summary: List Call Processing Records assigned to a Responsible Organization
+      description: 'Returns a paginated list of template CRN identifiers whose CPRs belong
+
+        to the given ROR. Template CRNs start with leading zeros
+
+        (e.g. `0000350718`). Paginated with `limit` and `offset`.
+
+
+        **Plain text response** (default): header lines followed by one
+
+        template CRN per line.'
+      parameters:
+      - $ref: '#/components/parameters/ror'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Successful CPR list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CprsByRorResponse'
+              example:
+                ror: ATX01
+                total_count: 248132
+                cprs:
+                - 0000350718
+                - 0000350719
+                - '0000350720'
+                limit: 3
+                offset: 0
+                timestamp: 2026-04-04 14:32:15.123456+00:00
+            text/plain:
+              schema:
+                type: string
+              example: 'ROR: ATX01
+
+                Total: 248132
+
+                Showing: 1-3
+
+
+                0000350718
+
+                0000350719
+
+                0000350720
+
+                '
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/cpr/{crn}:
+    get:
+      operationId: dumpCpr
+      tags:
+      - RouteLink
+      summary: Dump the CPR decision tree for a toll-free number or template
+      description: 'Returns the full Call Processing Record for a CRN, including the
+
+        decision tree rendered as human-readable text. Accepts 1–10 digit
+
+        CRNs; shorter values are zero-padded to 10 digits (e.g. `350718` →
+
+        `0000350718`), which is useful for looking up template CPRs directly.
+
+
+        Set `?expand=true` to recursively resolve and inline any referenced
+
+        template decision trees.
+
+
+        **Plain text response** (default): metadata header followed by the
+
+        rendered decision tree. If the CRN has no CPR, the response still
+
+        returns HTTP 200 with `CPR: (none)` in the body.'
+      parameters:
+      - name: crn
+        in: path
+        required: true
+        description: 1–10 digit CRN or template ID (digits only). Values shorter than 10 digits are zero-padded.
+        schema:
+          type: string
+          pattern: ^\d{1,10}$
+          example: '8002211212'
+      - $ref: '#/components/parameters/format'
+      - name: expand
+        in: query
+        required: false
+        description: When true, recursively resolves referenced template CPRs and inlines their decision trees.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Successful CPR dump
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CprDumpResponse'
+              example:
+                crn: '8002211212'
+                ror: ATX01
+                cpr_sha1: f4fbadea1aed0c596ef3a764b364485ad945af92
+                cpr_json:
+                  node:
+                    type: action
+                    values:
+                    - template: 0000350718
+                tree_text: '-> Template 0000350718
+
+                  '
+                timestamp: 2026-04-04 14:32:15.123456+00:00
+            text/plain:
+              schema:
+                type: string
+              example: 'CRN: 8002211212
+
+                ROR: ATX01
+
+                CPR SHA1: f4fbadea1aed0c596ef3a764b364485ad945af92
+
+                Templates: [350718]
+
+                ======= CPR Decision Tree =======
+
+                -> Template 0000350718
+
+                '
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+components:
+  schemas:
+    TfnsByRorResponse:
+      type: object
+      properties:
+        ror:
+          type: string
+          description: Responsible Organization code
+          example: ATX01
+        total_count:
+          type: integer
+          description: Total number of TFNs assigned to this ROR
+          example: 1814973
+        tfns:
+          type: array
+          items:
+            type: string
+          description: List of 10-digit toll-free numbers
+        limit:
+          type: integer
+          description: Requested page size
+          example: 1000
+        offset:
+          type: integer
+          description: Number of results skipped
+          example: 0
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-04-04 14:32:15.123456+00:00
+      required:
+      - ror
+      - total_count
+      - tfns
+      - limit
+      - offset
+      - timestamp
+    CicResponse:
+      type: object
+      properties:
+        carrier:
+          type: string
+          description: 4-digit Carrier Identification Code (zero-padded)
+          example: 0288
+        networkmanagementclass:
+          type: integer
+          description: Network Management Class (present only when the CPR specifies one)
+          example: 14
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-04-04 14:32:15.123456+00:00
+      required:
+      - carrier
+      - timestamp
+    CprsByRorResponse:
+      type: object
+      properties:
+        ror:
+          type: string
+          description: Responsible Organization code
+          example: ATX01
+        total_count:
+          type: integer
+          description: Total number of CPR templates for this ROR
+          example: 248132
+        cprs:
+          type: array
+          items:
+            type: string
+          description: List of 10-digit template CRN identifiers
+        limit:
+          type: integer
+          description: Requested page size
+          example: 1000
+        offset:
+          type: integer
+          description: Number of results skipped
+          example: 0
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-04-04 14:32:15.123456+00:00
+      required:
+      - ror
+      - total_count
+      - cprs
+      - limit
+      - offset
+      - timestamp
+    CicRorResponse:
+      type: object
+      properties:
+        carrier:
+          type: string
+          description: 4-digit Carrier Identification Code (zero-padded)
+          example: 0288
+        ror:
+          type: string
+          description: Responsible Organization code
+          example: ATX01
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-04-04 14:32:15.123456+00:00
+      required:
+      - carrier
+      - ror
+      - timestamp
+    RorResponse:
+      type: object
+      properties:
+        ror:
+          type: string
+          description: Responsible Organization code
+          example: ATX01
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-04-04 14:32:15.123456+00:00
+      required:
+      - ror
+      - timestamp
+    CprDumpResponse:
+      type: object
+      properties:
+        crn:
+          type: string
+          description: 10-digit CRN (zero-padded)
+          example: '8002211212'
+        ror:
+          type:
+          - string
+          - 'null'
+          description: Responsible Organization code, or null if the CRN has no ROR assigned
+          example: ATX01
+        cpr_sha1:
+          type:
+          - string
+          - 'null'
+          description: SHA-1 hash of the CPR content, or null if the CRN has no CPR
+          example: f4fbadea1aed0c596ef3a764b364485ad945af92
+        cpr_json:
+          type:
+          - object
+          - 'null'
+          description: Raw CPR decision tree as JSON. Omitted from the response when the CRN has no CPR.
+        tree_text:
+          type: string
+          description: Human-readable rendering of the CPR decision tree (empty string if the CRN has no CPR)
+          example: '-> Template 0000350718
+
+            '
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-04-04 14:32:15.123456+00:00
+      required:
+      - crn
+      - ror
+      - cpr_sha1
+      - tree_text
+      - timestamp
+    ErrorResponse:
+      type: object
+      description: JSON error envelope returned for all 4xx/5xx responses, including on endpoints whose successful responses default to plain text. Fields mirror the service's error struct.
+      required:
+      - error
+      - message
+      - code
+      - timestamp
+      properties:
+        error:
+          type: string
+          description: Machine-readable error code.
+          example: INVALID_PHONE_NUMBER
+        message:
+          type: string
+          description: Human-readable detail.
+          example: 'Invalid phone number format: Expected 10-digit US number or E.164 format.'
+        code:
+          type: integer
+          description: HTTP status code, repeated in the body.
+          example: 400
+        timestamp:
+          type: string
+          format: date-time
+          description: RFC 3339 timestamp of when the error was generated.
+          example: 2026-04-04 23:04:50.391142+00:00
+        details:
+          type: object
+          description: Optional structured context; omitted when absent.
+          additionalProperties: true
+  parameters:
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: Number of results to skip for pagination
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    format:
+      name: format
+      in: query
+      required: false
+      description: Response format. Defaults to plain text.
+      schema:
+        type: string
+        enum:
+        - plain
+        - json
+        - xml
+        default: plain
+    ani:
+      name: ani
+      in: path
+      required: true
+      description: 10-digit caller number / Automatic Number Identification (digits only)
+      schema:
+        type: string
+        pattern: ^\d{10}$
+        example: '2125551234'
+    lata:
+      name: lata
+      in: path
+      required: true
+      description: 3-digit Local Access Transport Area code
+      schema:
+        type: string
+        pattern: ^\d{3}$
+        example: '820'
+    crn:
+      name: crn
+      in: path
+      required: true
+      description: 10-digit toll-free number (digits only)
+      schema:
+        type: string
+        pattern: ^\d{10}$
+        example: '8005551234'
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of results to return (default 1000, max 10000)
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        default: 1000
+    ror:
+      name: ror
+      in: path
+      required: true
+      description: 1–5 character Responsible Organization code (alphanumeric, case-insensitive)
+      schema:
+        type: string
+        pattern: ^[A-Za-z0-9]{1,5}$
+        example: ATX01
+  responses:
+    BadRequest:
+      description: Invalid request parameters (malformed CRN, ANI, LATA, or ROR)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: true
+            error_code: 400
+            error_type: parse
+            error_desc: 'Invalid CRN format: abc'
+    InternalError:
+      description: CPR interpretation failed (malformed routing tree, missing template, or unexpected interpreter error)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: true
+            error_code: 500
+            error_type: interp
+            error_desc: CPR interpretation failed
+    ServiceUnavailable:
+      description: Data store service is unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: true
+            error_code: 503
+            error_type: unavailable
+            error_desc: Data store unavailable
+    RateLimited:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: true
+            error_code: 429
+            error_type: ratelimit
+            error_desc: Rate limit exceeded
+  securitySchemes:
+    apiToken:
+      type: apiKey
+      in: header
+      name: x-api-token
+      description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
+x-refined-from:
+- teliax-telique-openapi.yaml
+- teliax-telique-openapi.yml

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-cpr-dump-response-schema.json",
+  "title": "CprDumpResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-telique-openapi.yml#/components/schemas/CprDumpResponse",
+  "type": "object",
+  "properties": {
+    "crn": {
+      "type": "string",
+      "description": "10-digit CRN (zero-padded)"
+    },
+    "ror": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Responsible Organization code, or null if the CRN has no ROR assigned"
+    },
+    "cpr_sha1": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "SHA-1 hash of the CPR content, or null if the CRN has no CPR"
+    },
+    "cpr_json": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Raw CPR decision tree as JSON. Omitted from the response when the CRN has no CPR."
+    },
+    "tree_text": {
+      "type": "string",
+      "description": "Human-readable rendering of the CPR decision tree (empty string if the CRN has no CPR)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "crn",
+    "ror",
+    "cpr_sha1",
+    "tree_text",
+    "timestamp"
+  ]
+}

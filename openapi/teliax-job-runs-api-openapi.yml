@@ -1,0 +1,182 @@
+openapi: 3.2.0
+info:
+  title: Teliax Job Runs API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Job Runs across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Job Runs
+  description: Operator-facing job run lifecycle (sync history, attempts, warnings)
+paths:
+  /v1/runs/{id}/ack:
+    post:
+      tags:
+      - Job Runs
+      summary: Acknowledge a run's warnings/failure
+      description: 'Non-admin callers may only acknowledge runs scoped to their own customer(s). Only terminal runs can be acknowledged (409 while still IN_PROGRESS). Ack is first-wins and idempotent: a repeat call returns the original ack (alreadyAcked=true) without overwriting it.'
+      operationId: acknowledge
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/JobRunAckResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/runs:
+    get:
+      tags:
+      - Job Runs
+      summary: List job runs
+      description: Runs visible to the caller's customer scope (null scope = superAdmin wildcard), newest first. kind narrows the listing on its own; kind+subjectRef looks up that specific run's history. subjectRef without kind is ignored (subject refs are only meaningful within a kind). All filters are applied at the query level and remain scope-filtered. internalDetail on attempts is redacted for non-admin callers.
+      operationId: list
+      parameters:
+      - name: kind
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: subjectRef
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobRunDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    JobRunDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+        subjectRef:
+          type: string
+        status:
+          type: string
+        recovering:
+          type: boolean
+        attemptCount:
+          type: integer
+          format: int32
+        maxAttempts:
+          type: integer
+          format: int32
+        nextRetryAt:
+          type: string
+          format: date-time
+        warningCount:
+          type: integer
+          format: int32
+        warningSummary:
+          type: object
+          additionalProperties:
+            type: object
+        ackRequired:
+          type: boolean
+        ackedBy:
+          type: string
+        ackedAt:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+        attempts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttemptDto'
+    AttemptDto:
+      type: object
+      properties:
+        attemptNumber:
+          type: integer
+          format: int32
+        outcome:
+          type: string
+        errorClass:
+          type: string
+        operatorMessage:
+          type: string
+        internalDetail:
+          type: string
+        scheduledBy:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+    JobRunAckResponse:
+      type: object
+      properties:
+        runId:
+          type: string
+          format: uuid
+        ackedBy:
+          type: string
+        ackedAt:
+          type: string
+          format: date-time
+        alreadyAcked:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

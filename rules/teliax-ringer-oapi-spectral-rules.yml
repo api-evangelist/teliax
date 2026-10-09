@@ -1,0 +1,119 @@
+# harvested from https://github.com/teliax/ringer-oapi/blob/5ba0143e6b8246571905b37f17b8719a6e8ceaf2/.spectral.yaml on 2026-10-09 — a Spectral ruleset published in the provider's own GitHub repository (teliax/ringer-oapi); found by GitHub code search, fetched verbatim
+x-method: harvested
+x-stamped: 2026-10-09
+x-source-url: https://github.com/teliax/ringer-oapi/blob/5ba0143e6b8246571905b37f17b8719a6e8ceaf2/.spectral.yaml
+extends: [[spectral:oas, all]]
+
+rules:
+  # Customize severity of built-in rules
+  openapi-tags: error
+  operation-tags: error
+  operation-operationId: error
+  operation-description: error
+  
+  # Operation responses - fixed to correctly identify 200 responses
+  operation-success-response:
+    description: Operation must have at least one 2xx or 3xx response
+    given: $.paths.*.*.responses
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            "200": {}
+            "201": {}
+            "202": {}
+            "203": {}
+            "204": {}
+            "205": {}
+            "206": {}
+            "207": {}
+            "208": {}
+            "226": {}
+            "300": {}
+            "301": {}
+            "302": {}
+            "303": {}
+            "304": {}
+            "305": {}
+            "306": {}
+            "307": {}
+            "308": {}
+          minProperties: 1
+          patternProperties:
+            "^[2-3][0-9][0-9]$": {}
+
+  # Check info object completeness  
+  info-contact:
+    description: Info object should contain a contact object
+    given: $.info
+    severity: error # Changed from warn to error
+    then:
+      field: contact
+      function: truthy
+      
+  info-description:
+    description: Info object should contain a description
+    given: $.info
+    severity: error
+    then:
+      field: description
+      function: truthy 
+      
+  # New rules to match our API standards
+  ringer-contact-email:
+    description: Contact email should use the ringer.tel domain
+    given: $.info.contact.email
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "@ringer\\.tel$"
+        
+  security-schemes-defined:
+    description: API must define security schemes
+    given: $.components
+    severity: error
+    then:
+      field: securitySchemes
+      function: truthy
+      
+  operation-security-defined:
+    description: Each operation should have security defined
+    given: $.paths.*.*
+    severity: warn
+    then:
+      field: security
+      function: truthy
+      
+  schema-examples-provided:
+    description: Schema objects should have examples
+    given: $..schema
+    severity: warn
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ["example"]
+          
+  operation-examples-provided:
+    description: Response content should include examples
+    given: $.paths.*.*.responses.*.content.*
+    severity: warn
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ["example"]
+          
+  required-fields-specified:
+    description: Schema objects should specify required fields
+    given: $.components.schemas.*
+    severity: warn
+    then:
+      field: required
+      function: truthy

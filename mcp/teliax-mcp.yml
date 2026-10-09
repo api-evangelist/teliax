@@ -1,0 +1,82 @@
+generated: '2026-10-09'
+method: probed
+status: published
+name: Telique MCP Server
+description: >-
+  Ringer's (formerly Teliax) official MCP server for Telique telecom data (LRN, CNAM,
+  DNO, LERG, RouteLink toll-free, LSMS/LERG GraphQL). It ships two ways: a hosted
+  OAuth-protected remote endpoint and the `telique-mcp` npm stdio package. The provider's
+  README says to install only one of them, because both expose the same tools.
+source: https://telique.ringer.tel/docs/getting-started
+sources:
+- url: https://telique.ringer.tel/docs/getting-started
+  note: Rendered docs page "Getting Started with Telique MCP". Its "Available Tools" table lists 13 tools.
+- url: https://telique.ringer.tel/docs
+  note: Docs home says Telique is offered "via REST API, GraphQL, or MCP" and shows "npm install -g telique-mcp / telique-mcp setup".
+- url: https://registry.npmjs.org/telique-mcp
+  note: npm package telique-mcp 1.0.32 (published 2026-07-14), maintainer ringer-devs (developer@ringer.tel), repository github.com/Ringer/telique-mcp. The README "What You Get" table gives the snake_case tool names.
+- url: https://api.telique.ringer.tel/.well-known/oauth-protected-resource
+  status: 200
+  note: 'Protected Resource Metadata: resource https://api.telique.ringer.tel/mcp, authorization_servers [https://api.telique.ringer.tel], scopes_supported [telique:read], bearer_methods_supported [header].'
+- url: https://api.telique.ringer.tel/mcp
+  status: 401
+  note: 'An unauthenticated JSON-RPC initialize POST returned 401 {"jsonrpc":"2.0","error":{"code":-32001,"message":"Authentication required"}} with WWW-Authenticate Bearer resource_metadata=https://api.telique.ringer.tel/.well-known/oauth-protected-resource/mcp. The header also exposes Mcp-Session-Id (Streamable HTTP).'
+- url: https://mcp.telique.ringer.tel
+  status: 410
+  note: 'The README names this as the hosted connector URL, but it now returns 410 {"error":"legacy_endpoint_retired","canonical":"https://api.telique.ringer.tel"}. The live endpoint is the PRM resource above.'
+- url: https://api.telique.ringer.tel/.well-known/oauth-authorization-server
+  status: 200
+  note: Authorization server metadata with authorization_endpoint https://app.telique.ringer.tel/oauth/authorize, token_endpoint /oauth/token, registration_endpoint /oauth/register (dynamic client registration), PKCE S256.
+deployment:
+  mode: both
+  endpoint: https://api.telique.ringer.tel/mcp
+  install: npm install -g telique-mcp && telique-mcp setup
+  package: https://www.npmjs.com/package/telique-mcp
+  auth: oauth
+  verified: probed
+  note: >-
+    The remote endpoint uses OAuth (PKCE S256, dynamic registration, scope telique:read).
+    The stdio package stores a long-lived tlq_ API token in ~/.telique/config.json and,
+    according to the docs, works without a token at 10 requests per minute. We never
+    called tools/list because the remote endpoint is gated.
+server:
+  name: telique
+  transport: streamable-http
+  url: https://api.telique.ringer.tel/mcp
+  legacy_url: https://mcp.telique.ringer.tel
+auth:
+  methods: [oauth2, apikey]
+  oauth2:
+    protected_resource_metadata: https://api.telique.ringer.tel/.well-known/oauth-protected-resource
+    authorization_server: https://api.telique.ringer.tel
+    authorization_endpoint: https://app.telique.ringer.tel/oauth/authorize
+    token_endpoint: https://api.telique.ringer.tel/oauth/token
+    registration_endpoint: https://api.telique.ringer.tel/oauth/register
+    scopes_supported: [telique:read]
+    pkce: S256
+  apikey:
+    note: stdio package only; a tlq_ token entered during `telique-mcp setup`.
+supported_clients: [Claude Code, Claude Desktop, Cursor, GitHub Copilot, Codex CLI, ChatGPT Desktop (manual setup)]
+tool_count: 13
+tools_evidence: documented
+tools_note: >-
+  Names and descriptions come from the provider's published tables (docs page and npm
+  README). They were not read from a live tools/list.
+tools:
+- {name: lookup_tn, category: Composite, description: 'Full profile of any phone number (LRN, CNAM, DNO, LERG) in one call.'}
+- {name: lrn_lookup, category: Number Portability, description: Local Routing Number and carrier (SPID) for a phone number.}
+- {name: cnam_lookup, category: Number Intelligence, description: Caller ID name via TransUnion LIDB.}
+- {name: dno_check, category: Number Intelligence, description: Check if a number is on the Do Not Originate list.}
+- {name: lerg_query, category: LERG Reference, description: Query any of 27 LERG tables by field values.}
+- {name: lerg_tandem, category: LERG Reference, description: Tandem switch routing for an NPA-NXX.}
+- {name: lerg_complex_query, category: LERG Reference, description: Multi-table JOIN queries across LERG tables.}
+- {name: lerg_table_info, category: LERG Reference, description: List LERG tables or get metadata/schema for one.}
+- {name: routelink_lookup, category: Toll-Free, description: Carrier (CIC) or Responsible Org (ROR) for a toll-free number.}
+- {name: routelink_ror_query, category: Toll-Free, description: List toll-free numbers or CPRs managed by a Responsible Org.}
+- {name: routelink_cpr, category: Toll-Free, description: Full Call Processing Record decision tree for a toll-free number.}
+- {name: graphql_query, category: Advanced, description: GraphQL queries against LSMS or LERG.}
+- {name: lrn_relationship_query, category: Number Portability, description: 'Query LSMS/NPAC relationships (phone numbers by LRN, SPIDs by phone number, etc.).'}
+other_apis:
+  note: >-
+    No MCP server was found for the TNIQ Customer API or the WARP Customer API. The llms.txt
+    probes on tniq.ringer.tel, warp.ringer.tel and docs.ringer.tel all returned 404.

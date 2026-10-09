@@ -1,0 +1,2492 @@
+{
+  "@context": {
+    "@vocab": "https://teliax.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "teliax": "https://teliax.com/schema#",
+    "LrnLookupResponse": "teliax:LrnLookupResponse",
+    "phone_number": {
+      "@id": "teliax:phone_number",
+      "@type": "xsd:string"
+    },
+    "lrn": {
+      "@id": "teliax:lrn",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "teliax:status",
+      "@type": "xsd:string"
+    },
+    "timestamp": {
+      "@id": "teliax:timestamp",
+      "@type": "xsd:dateTime"
+    },
+    "metadata": {
+      "@id": "teliax:metadata",
+      "@type": "@id"
+    },
+    "LrnMetadata": "teliax:LrnMetadata",
+    "spid": {
+      "@id": "teliax:spid",
+      "@type": "xsd:string"
+    },
+    "lnp_type": {
+      "@id": "teliax:lnp_type",
+      "@type": "xsd:string"
+    },
+    "DnoLookupResponse": "teliax:DnoLookupResponse",
+    "is_dno": {
+      "@id": "teliax:is_dno",
+      "@type": "xsd:boolean"
+    },
+    "source": {
+      "@id": "teliax:source",
+      "@type": "xsd:string"
+    },
+    "created_at": {
+      "@id": "teliax:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "matched_pattern": {
+      "@id": "teliax:matched_pattern",
+      "@type": "xsd:string"
+    },
+    "PhoneNumberListResponse": "teliax:PhoneNumberListResponse",
+    "count": {
+      "@id": "teliax:count",
+      "@type": "xsd:integer"
+    },
+    "phone_numbers": {
+      "@id": "teliax:phone_numbers",
+      "@container": "@list"
+    },
+    "query": {
+      "@id": "teliax:query",
+      "@type": "@id"
+    },
+    "SpidListResponse": "teliax:SpidListResponse",
+    "spids": {
+      "@id": "teliax:spids",
+      "@container": "@list"
+    },
+    "LrnListResponse": "teliax:LrnListResponse",
+    "lrns": {
+      "@id": "teliax:lrns",
+      "@container": "@list"
+    },
+    "LsmsListQuery": "teliax:LsmsListQuery",
+    "ErrorResponse": "teliax:ErrorResponse",
+    "error": {
+      "@id": "teliax:error",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "teliax:message",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "teliax:code",
+      "@type": "xsd:integer"
+    },
+    "details": {
+      "@id": "teliax:details"
+    },
+    "CnamObject": "teliax:CnamObject",
+    "calling_name_status": {
+      "@id": "teliax:calling_name_status",
+      "@type": "xsd:string"
+    },
+    "calling_name": {
+      "@id": "teliax:calling_name",
+      "@type": "xsd:string"
+    },
+    "presentation_indicator": {
+      "@id": "teliax:presentation_indicator",
+      "@type": "xsd:string"
+    },
+    "CallInsight": "teliax:CallInsight",
+    "call_treatment": {
+      "@id": "teliax:call_treatment",
+      "@type": "xsd:string"
+    },
+    "fraud_score": {
+      "@id": "teliax:fraud_score",
+      "@type": "xsd:integer"
+    },
+    "original_calling_name": {
+      "@id": "teliax:original_calling_name",
+      "@type": "xsd:string"
+    },
+    "propensity": {
+      "@id": "teliax:propensity",
+      "@type": "xsd:string"
+    },
+    "category_id": {
+      "@id": "teliax:category_id",
+      "@type": "xsd:string"
+    },
+    "cv_data": {
+      "@id": "teliax:cv_data"
+    },
+    "CnamResponse": "teliax:CnamResponse",
+    "cnam": {
+      "@id": "teliax:cnam",
+      "@type": "@id"
+    },
+    "IdentityResponse": "teliax:IdentityResponse",
+    "call_insight": {
+      "@id": "teliax:call_insight",
+      "@type": "@id"
+    },
+    "addtl_info": {
+      "@id": "teliax:addtl_info"
+    },
+    "IdentityRequest": "teliax:IdentityRequest",
+    "calling_party": {
+      "@id": "teliax:calling_party",
+      "@type": "xsd:string"
+    },
+    "called_party": {
+      "@id": "teliax:called_party",
+      "@type": "xsd:string"
+    },
+    "call_direction": {
+      "@id": "teliax:call_direction",
+      "@type": "xsd:string"
+    },
+    "txn_id": {
+      "@id": "teliax:txn_id",
+      "@type": "xsd:string"
+    },
+    "client_id": {
+      "@id": "teliax:client_id",
+      "@type": "xsd:string"
+    },
+    "verstat": {
+      "@id": "teliax:verstat",
+      "@type": "xsd:string"
+    },
+    "attest": {
+      "@id": "teliax:attest",
+      "@type": "xsd:string"
+    },
+    "CnamErrorResponse": "teliax:CnamErrorResponse",
+    "TableInfo": "teliax:TableInfo",
+    "name": {
+      "@id": "teliax:name",
+      "@type": "xsd:string"
+    },
+    "display_name": {
+      "@id": "teliax:display_name",
+      "@type": "xsd:string"
+    },
+    "record_count": {
+      "@id": "teliax:record_count",
+      "@type": "xsd:integer"
+    },
+    "fields": {
+      "@id": "teliax:fields",
+      "@container": "@list"
+    },
+    "TableSchemaResponse": "teliax:TableSchemaResponse",
+    "table": {
+      "@id": "teliax:table",
+      "@type": "xsd:string"
+    },
+    "FieldInfo": "teliax:FieldInfo",
+    "data_type": {
+      "@id": "teliax:data_type",
+      "@type": "xsd:string"
+    },
+    "nullable": {
+      "@id": "teliax:nullable",
+      "@type": "xsd:boolean"
+    },
+    "QueryResponse": "teliax:QueryResponse",
+    "total_unique": {
+      "@id": "teliax:total_unique",
+      "@type": "xsd:integer"
+    },
+    "offset": {
+      "@id": "teliax:offset",
+      "@type": "xsd:integer"
+    },
+    "limit": {
+      "@id": "teliax:limit",
+      "@type": "xsd:integer"
+    },
+    "data": {
+      "@id": "teliax:data",
+      "@container": "@list"
+    },
+    "joined_with": {
+      "@id": "teliax:joined_with",
+      "@type": "xsd:string"
+    },
+    "ComplexQueryRequest": "teliax:ComplexQueryRequest",
+    "filters": {
+      "@id": "teliax:filters",
+      "@container": "@list"
+    },
+    "join": {
+      "@id": "teliax:join",
+      "@type": "@id"
+    },
+    "FilterCondition": "teliax:FilterCondition",
+    "field": {
+      "@id": "teliax:field",
+      "@type": "xsd:string"
+    },
+    "operator": {
+      "@id": "teliax:operator",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "teliax:value"
+    },
+    "JoinClause": "teliax:JoinClause",
+    "true": {
+      "@id": "teliax:True",
+      "@container": "@list"
+    },
+    "join_type": {
+      "@id": "teliax:join_type",
+      "@type": "xsd:string"
+    },
+    "JoinCondition": "teliax:JoinCondition",
+    "left_field": {
+      "@id": "teliax:left_field",
+      "@type": "xsd:string"
+    },
+    "right_field": {
+      "@id": "teliax:right_field",
+      "@type": "xsd:string"
+    },
+    "TandemQueryResponse": "teliax:TandemQueryResponse",
+    "records": {
+      "@id": "teliax:records",
+      "@container": "@list"
+    },
+    "TandemRecord": "teliax:TandemRecord",
+    "npa": {
+      "@id": "teliax:npa",
+      "@type": "xsd:string"
+    },
+    "nxx": {
+      "@id": "teliax:nxx",
+      "@type": "xsd:string"
+    },
+    "ocn_name": {
+      "@id": "teliax:ocn_name",
+      "@type": "xsd:string"
+    },
+    "ocn": {
+      "@id": "teliax:ocn",
+      "@type": "xsd:string"
+    },
+    "lata": {
+      "@id": "teliax:lata",
+      "@type": "xsd:string"
+    },
+    "lata_name": {
+      "@id": "teliax:lata_name",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "teliax:state",
+      "@type": "xsd:string"
+    },
+    "switch": {
+      "@id": "teliax:switch",
+      "@type": "xsd:string"
+    },
+    "tandem": {
+      "@id": "teliax:tandem",
+      "@type": "xsd:string"
+    },
+    "tandem_ocn": {
+      "@id": "teliax:tandem_ocn",
+      "@type": "xsd:string"
+    },
+    "tandem_ocn_name": {
+      "@id": "teliax:tandem_ocn_name",
+      "@type": "xsd:string"
+    },
+    "LergErrorResponse": "teliax:LergErrorResponse",
+    "RoutelinkErrorResponse": "teliax:RoutelinkErrorResponse",
+    "error_code": {
+      "@id": "teliax:error_code",
+      "@type": "xsd:integer"
+    },
+    "error_type": {
+      "@id": "teliax:error_type",
+      "@type": "xsd:string"
+    },
+    "error_desc": {
+      "@id": "teliax:error_desc",
+      "@type": "xsd:string"
+    },
+    "CicResponse": "teliax:CicResponse",
+    "carrier": {
+      "@id": "teliax:carrier",
+      "@type": "xsd:string"
+    },
+    "networkmanagementclass": {
+      "@id": "teliax:networkmanagementclass",
+      "@type": "xsd:integer"
+    },
+    "CicRorResponse": "teliax:CicRorResponse",
+    "ror": {
+      "@id": "teliax:ror",
+      "@type": "xsd:string"
+    },
+    "RorResponse": "teliax:RorResponse",
+    "TfnsByRorResponse": "teliax:TfnsByRorResponse",
+    "total_count": {
+      "@id": "teliax:total_count",
+      "@type": "xsd:integer"
+    },
+    "tfns": {
+      "@id": "teliax:tfns",
+      "@container": "@list"
+    },
+    "CprsByRorResponse": "teliax:CprsByRorResponse",
+    "cprs": {
+      "@id": "teliax:cprs",
+      "@container": "@list"
+    },
+    "CprDumpResponse": "teliax:CprDumpResponse",
+    "crn": {
+      "@id": "teliax:crn",
+      "@type": "xsd:string"
+    },
+    "cpr_sha1": {
+      "@id": "teliax:cpr_sha1",
+      "@type": "xsd:string"
+    },
+    "cpr_json": {
+      "@id": "teliax:cpr_json"
+    },
+    "tree_text": {
+      "@id": "teliax:tree_text",
+      "@type": "xsd:string"
+    },
+    "TemplateUpdateRequest": "teliax:TemplateUpdateRequest",
+    "tmplName": {
+      "@id": "teliax:tmplName",
+      "@type": "xsd:string"
+    },
+    "effDtTm": {
+      "@id": "teliax:effDtTm",
+      "@type": "xsd:string"
+    },
+    "tmplDesc": {
+      "@id": "teliax:tmplDesc",
+      "@type": "xsd:string"
+    },
+    "cmd": {
+      "@id": "teliax:cmd",
+      "@type": "xsd:string"
+    },
+    "timezone": {
+      "@id": "teliax:timezone",
+      "@type": "xsd:string"
+    },
+    "dayLightSavings": {
+      "@id": "teliax:dayLightSavings",
+      "@type": "xsd:string"
+    },
+    "priInterLT": {
+      "@id": "teliax:priInterLT",
+      "@type": "xsd:string"
+    },
+    "priIntraLT": {
+      "@id": "teliax:priIntraLT",
+      "@type": "xsd:string"
+    },
+    "interLATACarrier": {
+      "@id": "teliax:interLATACarrier",
+      "@container": "@list"
+    },
+    "intraLATACarrier": {
+      "@id": "teliax:intraLATACarrier",
+      "@container": "@list"
+    },
+    "numTermLine": {
+      "@id": "teliax:numTermLine",
+      "@type": "xsd:integer"
+    },
+    "conName": {
+      "@id": "teliax:conName",
+      "@type": "xsd:string"
+    },
+    "conTel": {
+      "@id": "teliax:conTel",
+      "@type": "xsd:string"
+    },
+    "notes": {
+      "@id": "teliax:notes",
+      "@type": "xsd:string"
+    },
+    "aos": {
+      "@id": "teliax:aos"
+    },
+    "cprSectName": {
+      "@id": "teliax:cprSectName",
+      "@container": "@list"
+    },
+    "lbl": {
+      "@id": "teliax:lbl",
+      "@container": "@list"
+    },
+    "recVersionId": {
+      "@id": "teliax:recVersionId",
+      "@type": "xsd:string"
+    },
+    "tmplRecCompPart": {
+      "@id": "teliax:tmplRecCompPart",
+      "@type": "xsd:string"
+    },
+    "RocProcessRequest": "teliax:RocProcessRequest",
+    "respOrgId": {
+      "@id": "teliax:respOrgId",
+      "@type": "xsd:string"
+    },
+    "actions": {
+      "@id": "teliax:actions",
+      "@container": "@list"
+    },
+    "TfnActionDto": "teliax:TfnActionDto",
+    "tfn": {
+      "@id": "teliax:tfn",
+      "@type": "xsd:string"
+    },
+    "actionCode": {
+      "@id": "teliax:actionCode",
+      "@type": "xsd:string"
+    },
+    "rejectNote": {
+      "@id": "teliax:rejectNote",
+      "@type": "xsd:string"
+    },
+    "UpdateRuleRequest": "teliax:UpdateRuleRequest",
+    "action": {
+      "@id": "teliax:action",
+      "@type": "xsd:string"
+    },
+    "holdPeriodHours": {
+      "@id": "teliax:holdPeriodHours",
+      "@type": "xsd:integer"
+    },
+    "reason": {
+      "@id": "teliax:reason",
+      "@type": "xsd:string"
+    },
+    "expiresAt": {
+      "@id": "teliax:expiresAt",
+      "@type": "xsd:dateTime"
+    },
+    "PortProtectionRuleResponse": "teliax:PortProtectionRuleResponse",
+    "id": {
+      "@id": "teliax:id",
+      "@type": "xsd:string"
+    },
+    "customerId": {
+      "@id": "teliax:customerId",
+      "@type": "xsd:string"
+    },
+    "scope": {
+      "@id": "teliax:scope",
+      "@type": "xsd:string"
+    },
+    "target": {
+      "@id": "teliax:target",
+      "@type": "xsd:string"
+    },
+    "createdByUserId": {
+      "@id": "teliax:createdByUserId",
+      "@type": "xsd:string"
+    },
+    "createdBy": {
+      "@id": "teliax:createdBy",
+      "@type": "xsd:string"
+    },
+    "createdAt": {
+      "@id": "teliax:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "updatedAt": {
+      "@id": "teliax:updatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "systemManaged": {
+      "@id": "teliax:systemManaged",
+      "@type": "xsd:boolean"
+    },
+    "ApplicationAssignmentIntentRequest": "teliax:ApplicationAssignmentIntentRequest",
+    "applicationId": {
+      "@id": "teliax:applicationId",
+      "@type": "xsd:string"
+    },
+    "orderReference": {
+      "@id": "teliax:orderReference",
+      "@type": "xsd:string"
+    },
+    "PortProjectUpdateRequest": "teliax:PortProjectUpdateRequest",
+    "gaining_lrn": {
+      "@id": "teliax:gaining_lrn",
+      "@type": "xsd:string"
+    },
+    "validation_errors": {
+      "@id": "teliax:validation_errors"
+    },
+    "pin": {
+      "@id": "teliax:pin",
+      "@type": "xsd:string"
+    },
+    "accountNumber": {
+      "@id": "teliax:accountNumber",
+      "@type": "xsd:string"
+    },
+    "btn": {
+      "@id": "teliax:btn",
+      "@type": "xsd:string"
+    },
+    "endUserName": {
+      "@id": "teliax:endUserName",
+      "@type": "xsd:string"
+    },
+    "businessName": {
+      "@id": "teliax:businessName",
+      "@type": "xsd:string"
+    },
+    "serviceAddress": {
+      "@id": "teliax:serviceAddress",
+      "@type": "xsd:string"
+    },
+    "streetNumber": {
+      "@id": "teliax:streetNumber",
+      "@type": "xsd:string"
+    },
+    "streetName": {
+      "@id": "teliax:streetName",
+      "@type": "xsd:string"
+    },
+    "streetType": {
+      "@id": "teliax:streetType",
+      "@type": "xsd:string"
+    },
+    "unit": {
+      "@id": "teliax:unit",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "teliax:city",
+      "@type": "xsd:string"
+    },
+    "serviceAddressState": {
+      "@id": "teliax:serviceAddressState",
+      "@type": "xsd:string"
+    },
+    "postalCode": {
+      "@id": "teliax:postalCode",
+      "@type": "xsd:string"
+    },
+    "billing_name": {
+      "@id": "teliax:billing_name",
+      "@type": "xsd:string"
+    },
+    "billing_street": {
+      "@id": "teliax:billing_street",
+      "@type": "xsd:string"
+    },
+    "billing_floor": {
+      "@id": "teliax:billing_floor",
+      "@type": "xsd:string"
+    },
+    "billing_room_mail_stop": {
+      "@id": "teliax:billing_room_mail_stop",
+      "@type": "xsd:string"
+    },
+    "billing_city": {
+      "@id": "teliax:billing_city",
+      "@type": "xsd:string"
+    },
+    "billing_state": {
+      "@id": "teliax:billing_state",
+      "@type": "xsd:string"
+    },
+    "billing_zip": {
+      "@id": "teliax:billing_zip",
+      "@type": "xsd:string"
+    },
+    "billing_account_number": {
+      "@id": "teliax:billing_account_number",
+      "@type": "xsd:string"
+    },
+    "port_out_pin": {
+      "@id": "teliax:port_out_pin",
+      "@type": "xsd:string"
+    },
+    "lsr_workflow_enabled": {
+      "@id": "teliax:lsr_workflow_enabled",
+      "@type": "xsd:boolean"
+    },
+    "lsr_gate_mode": {
+      "@id": "teliax:lsr_gate_mode",
+      "@type": "xsd:string"
+    },
+    "assignment": {
+      "@id": "teliax:assignment",
+      "@type": "@id"
+    },
+    "ApplicationAssignmentIntentResponse": "teliax:ApplicationAssignmentIntentResponse",
+    "frozen": {
+      "@id": "teliax:frozen",
+      "@type": "xsd:boolean"
+    },
+    "PortProjectResponse": "teliax:PortProjectResponse",
+    "customer_id": {
+      "@id": "teliax:customer_id",
+      "@type": "xsd:string"
+    },
+    "customer_name": {
+      "@id": "teliax:customer_name",
+      "@type": "xsd:string"
+    },
+    "total_tns": {
+      "@id": "teliax:total_tns",
+      "@type": "xsd:integer"
+    },
+    "valid_tns": {
+      "@id": "teliax:valid_tns",
+      "@type": "xsd:integer"
+    },
+    "error_tns": {
+      "@id": "teliax:error_tns",
+      "@type": "xsd:integer"
+    },
+    "attention_tns": {
+      "@id": "teliax:attention_tns",
+      "@type": "xsd:integer"
+    },
+    "attention_breakdown": {
+      "@id": "teliax:attention_breakdown"
+    },
+    "validated_tns": {
+      "@id": "teliax:validated_tns",
+      "@type": "xsd:integer"
+    },
+    "submitted_tns": {
+      "@id": "teliax:submitted_tns",
+      "@type": "xsd:integer"
+    },
+    "activated_tns": {
+      "@id": "teliax:activated_tns",
+      "@type": "xsd:integer"
+    },
+    "cancelled_tns": {
+      "@id": "teliax:cancelled_tns",
+      "@type": "xsd:integer"
+    },
+    "completed_tns": {
+      "@id": "teliax:completed_tns",
+      "@type": "xsd:integer"
+    },
+    "progressPercentage": {
+      "@id": "teliax:progressPercentage",
+      "@type": "xsd:integer"
+    },
+    "currentStage": {
+      "@id": "teliax:currentStage",
+      "@type": "xsd:string"
+    },
+    "stageMessage": {
+      "@id": "teliax:stageMessage",
+      "@type": "xsd:string"
+    },
+    "created_by": {
+      "@id": "teliax:created_by",
+      "@type": "xsd:string"
+    },
+    "created_by_name": {
+      "@id": "teliax:created_by_name",
+      "@type": "xsd:string"
+    },
+    "updated_at": {
+      "@id": "teliax:updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "derived_status": {
+      "@id": "teliax:derived_status",
+      "@type": "xsd:string"
+    },
+    "derived_status_display": {
+      "@id": "teliax:derived_status_display",
+      "@type": "xsd:string"
+    },
+    "derived_status_description": {
+      "@id": "teliax:derived_status_description",
+      "@type": "xsd:string"
+    },
+    "can_submit": {
+      "@id": "teliax:can_submit",
+      "@type": "xsd:boolean"
+    },
+    "can_activate": {
+      "@id": "teliax:can_activate",
+      "@type": "xsd:boolean"
+    },
+    "can_cancel": {
+      "@id": "teliax:can_cancel",
+      "@type": "xsd:boolean"
+    },
+    "can_update_due_date": {
+      "@id": "teliax:can_update_due_date",
+      "@type": "xsd:boolean"
+    },
+    "submit_blocker_reason": {
+      "@id": "teliax:submit_blocker_reason",
+      "@type": "xsd:string"
+    },
+    "activate_blocker_reason": {
+      "@id": "teliax:activate_blocker_reason",
+      "@type": "xsd:string"
+    },
+    "is_pushed_release": {
+      "@id": "teliax:is_pushed_release",
+      "@type": "xsd:boolean"
+    },
+    "auto_activation_mode": {
+      "@id": "teliax:auto_activation_mode",
+      "@type": "xsd:string"
+    },
+    "scheduled_activation_at": {
+      "@id": "teliax:scheduled_activation_at",
+      "@type": "xsd:dateTime"
+    },
+    "last_auto_activation_attempt": {
+      "@id": "teliax:last_auto_activation_attempt",
+      "@type": "xsd:dateTime"
+    },
+    "auto_activation_failure_count": {
+      "@id": "teliax:auto_activation_failure_count",
+      "@type": "xsd:integer"
+    },
+    "desired_due_date": {
+      "@id": "teliax:desired_due_date",
+      "@type": "xsd:date"
+    },
+    "foc_date": {
+      "@id": "teliax:foc_date",
+      "@type": "xsd:date"
+    },
+    "port_out_pin_set": {
+      "@id": "teliax:port_out_pin_set",
+      "@type": "xsd:boolean"
+    },
+    "CarrierReleaseRecoveryProjection": "teliax:CarrierReleaseRecoveryProjection",
+    "requested_due_date": {
+      "@id": "teliax:requested_due_date",
+      "@type": "xsd:date"
+    },
+    "carrier_display_name": {
+      "@id": "teliax:carrier_display_name",
+      "@type": "xsd:string"
+    },
+    "carrier_order_id": {
+      "@id": "teliax:carrier_order_id",
+      "@type": "xsd:string"
+    },
+    "carrier_foc_date": {
+      "@id": "teliax:carrier_foc_date",
+      "@type": "xsd:date"
+    },
+    "npac_release_due_date": {
+      "@id": "teliax:npac_release_due_date",
+      "@type": "xsd:date"
+    },
+    "can_request": {
+      "@id": "teliax:can_request",
+      "@type": "xsd:boolean"
+    },
+    "can_resubmit": {
+      "@id": "teliax:can_resubmit",
+      "@type": "xsd:boolean"
+    },
+    "blocker_code": {
+      "@id": "teliax:blocker_code",
+      "@type": "xsd:string"
+    },
+    "LifecycleStatusDisplay": "teliax:LifecycleStatusDisplay",
+    "display_text": {
+      "@id": "teliax:display_text",
+      "@type": "xsd:string"
+    },
+    "color": {
+      "@id": "teliax:color",
+      "@type": "xsd:string"
+    },
+    "icon": {
+      "@id": "teliax:icon",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "teliax:description",
+      "@type": "xsd:string"
+    },
+    "next_action": {
+      "@id": "teliax:next_action",
+      "@type": "xsd:string"
+    },
+    "NpacStateResponse": "teliax:NpacStateResponse",
+    "role": {
+      "@id": "teliax:role",
+      "@type": "xsd:string"
+    },
+    "our_spid": {
+      "@id": "teliax:our_spid",
+      "@type": "xsd:string"
+    },
+    "new_spid": {
+      "@id": "teliax:new_spid",
+      "@type": "xsd:string"
+    },
+    "old_spid": {
+      "@id": "teliax:old_spid",
+      "@type": "xsd:string"
+    },
+    "new_sp_due_date": {
+      "@id": "teliax:new_sp_due_date",
+      "@type": "xsd:date"
+    },
+    "old_sp_due_date": {
+      "@id": "teliax:old_sp_due_date",
+      "@type": "xsd:date"
+    },
+    "old_sp_authorization": {
+      "@id": "teliax:old_sp_authorization",
+      "@type": "xsd:string"
+    },
+    "conflict_placed_by": {
+      "@id": "teliax:conflict_placed_by",
+      "@type": "xsd:string"
+    },
+    "conflict_at": {
+      "@id": "teliax:conflict_at",
+      "@type": "xsd:dateTime"
+    },
+    "raw_sv_state": {
+      "@id": "teliax:raw_sv_state",
+      "@type": "xsd:string"
+    },
+    "observed_at": {
+      "@id": "teliax:observed_at",
+      "@type": "xsd:dateTime"
+    },
+    "current_spid": {
+      "@id": "teliax:current_spid",
+      "@type": "xsd:string"
+    },
+    "PortProjectDetailResponse": "teliax:PortProjectDetailResponse",
+    "project_id": {
+      "@id": "teliax:project_id",
+      "@type": "xsd:string"
+    },
+    "tn": {
+      "@id": "teliax:tn",
+      "@type": "xsd:string"
+    },
+    "current_lata_source": {
+      "@id": "teliax:current_lata_source",
+      "@type": "xsd:string"
+    },
+    "gaining_lata_source": {
+      "@id": "teliax:gaining_lata_source",
+      "@type": "xsd:string"
+    },
+    "locality": {
+      "@id": "teliax:locality",
+      "@type": "xsd:string"
+    },
+    "npac_region": {
+      "@id": "teliax:npac_region",
+      "@type": "xsd:string"
+    },
+    "current_ocn": {
+      "@id": "teliax:current_ocn",
+      "@type": "xsd:string"
+    },
+    "current_lrn": {
+      "@id": "teliax:current_lrn",
+      "@type": "xsd:string"
+    },
+    "current_tandem": {
+      "@id": "teliax:current_tandem",
+      "@type": "xsd:string"
+    },
+    "current_tandem_name": {
+      "@id": "teliax:current_tandem_name",
+      "@type": "xsd:string"
+    },
+    "gaining_ocn": {
+      "@id": "teliax:gaining_ocn",
+      "@type": "xsd:string"
+    },
+    "gaining_spid": {
+      "@id": "teliax:gaining_spid",
+      "@type": "xsd:string"
+    },
+    "gaining_tandem": {
+      "@id": "teliax:gaining_tandem",
+      "@type": "xsd:string"
+    },
+    "gaining_tandem_name": {
+      "@id": "teliax:gaining_tandem_name",
+      "@type": "xsd:string"
+    },
+    "user_provided_lrn": {
+      "@id": "teliax:user_provided_lrn",
+      "@type": "xsd:string"
+    },
+    "soa_status": {
+      "@id": "teliax:soa_status",
+      "@type": "xsd:string"
+    },
+    "lsr_status": {
+      "@id": "teliax:lsr_status",
+      "@type": "xsd:string"
+    },
+    "csr_status": {
+      "@id": "teliax:csr_status",
+      "@type": "xsd:string"
+    },
+    "lsr_submitted_at": {
+      "@id": "teliax:lsr_submitted_at",
+      "@type": "xsd:dateTime"
+    },
+    "lifecycle_state": {
+      "@id": "teliax:lifecycle_state",
+      "@type": "xsd:string"
+    },
+    "lifecycle_state_display": {
+      "@id": "teliax:lifecycle_state_display",
+      "@type": "xsd:string"
+    },
+    "lifecycle_status_display": {
+      "@id": "teliax:lifecycle_status_display",
+      "@type": "@id"
+    },
+    "can_activate_early": {
+      "@id": "teliax:can_activate_early",
+      "@type": "xsd:boolean"
+    },
+    "activation_blocker": {
+      "@id": "teliax:activation_blocker",
+      "@type": "xsd:string"
+    },
+    "reconciliation_source": {
+      "@id": "teliax:reconciliation_source",
+      "@type": "xsd:string"
+    },
+    "reconciliation_validation_status": {
+      "@id": "teliax:reconciliation_validation_status",
+      "@type": "xsd:string"
+    },
+    "failure_reason": {
+      "@id": "teliax:failure_reason",
+      "@type": "xsd:string"
+    },
+    "validation_status": {
+      "@id": "teliax:validation_status",
+      "@type": "xsd:string"
+    },
+    "pushed_ddd": {
+      "@id": "teliax:pushed_ddd",
+      "@type": "xsd:date"
+    },
+    "pushed_release_event_id": {
+      "@id": "teliax:pushed_release_event_id",
+      "@type": "xsd:string"
+    },
+    "carrier_release_recovery": {
+      "@id": "teliax:carrier_release_recovery",
+      "@type": "@id"
+    },
+    "npac": {
+      "@id": "teliax:npac",
+      "@type": "@id"
+    },
+    "AutoActivationSettingsRequest": "teliax:AutoActivationSettingsRequest",
+    "reset_failure_count": {
+      "@id": "teliax:reset_failure_count",
+      "@type": "xsd:boolean"
+    },
+    "ApiCustomer": "teliax:ApiCustomer",
+    "customerName": {
+      "@id": "teliax:customerName",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "teliax:email",
+      "@type": "xsd:string"
+    },
+    "company": {
+      "@id": "teliax:company",
+      "@type": "xsd:string"
+    },
+    "isActive": {
+      "@id": "teliax:isActive",
+      "@type": "xsd:boolean"
+    },
+    "rateLimit": {
+      "@id": "teliax:rateLimit",
+      "@type": "xsd:integer"
+    },
+    "lastApiCall": {
+      "@id": "teliax:lastApiCall",
+      "@type": "xsd:dateTime"
+    },
+    "metadataDisplayConfig": {
+      "@id": "teliax:metadataDisplayConfig",
+      "@container": "@list"
+    },
+    "respOrgEntityId": {
+      "@id": "teliax:respOrgEntityId",
+      "@type": "xsd:string"
+    },
+    "tollFreeEnabled": {
+      "@id": "teliax:tollFreeEnabled",
+      "@type": "xsd:boolean"
+    },
+    "tollFreeContactName": {
+      "@id": "teliax:tollFreeContactName",
+      "@type": "xsd:string"
+    },
+    "tollFreeContactPhone": {
+      "@id": "teliax:tollFreeContactPhone",
+      "@type": "xsd:string"
+    },
+    "tollFreeContactEmail": {
+      "@id": "teliax:tollFreeContactEmail",
+      "@type": "xsd:string"
+    },
+    "customerSpids": {
+      "@id": "teliax:customerSpids",
+      "@container": "@list"
+    },
+    "activeSpids": {
+      "@id": "teliax:activeSpids",
+      "@container": "@list"
+    },
+    "CustomerSpid": "teliax:CustomerSpid",
+    "customer": {
+      "@id": "teliax:customer",
+      "@type": "@id"
+    },
+    "ccna": {
+      "@id": "teliax:ccna",
+      "@type": "xsd:string"
+    },
+    "acna": {
+      "@id": "teliax:acna",
+      "@type": "xsd:string"
+    },
+    "lsrName": {
+      "@id": "teliax:lsrName",
+      "@type": "xsd:string"
+    },
+    "lsrStreet": {
+      "@id": "teliax:lsrStreet",
+      "@type": "xsd:string"
+    },
+    "lsrCity": {
+      "@id": "teliax:lsrCity",
+      "@type": "xsd:string"
+    },
+    "lsrState": {
+      "@id": "teliax:lsrState",
+      "@type": "xsd:string"
+    },
+    "lsrZip": {
+      "@id": "teliax:lsrZip",
+      "@type": "xsd:string"
+    },
+    "lsrContactPhone": {
+      "@id": "teliax:lsrContactPhone",
+      "@type": "xsd:string"
+    },
+    "p2pCnpCarrierCode": {
+      "@id": "teliax:p2pCnpCarrierCode",
+      "@type": "xsd:string"
+    },
+    "messagingAccountId": {
+      "@id": "teliax:messagingAccountId",
+      "@type": "xsd:string"
+    },
+    "MetadataDisplayColumn": "teliax:MetadataDisplayColumn",
+    "key": {
+      "@id": "teliax:key",
+      "@type": "xsd:string"
+    },
+    "label": {
+      "@id": "teliax:label",
+      "@type": "xsd:string"
+    },
+    "PortProject": "teliax:PortProject",
+    "lastActivityAt": {
+      "@id": "teliax:lastActivityAt",
+      "@type": "xsd:dateTime"
+    },
+    "isPushedRelease": {
+      "@id": "teliax:isPushedRelease",
+      "@type": "xsd:boolean"
+    },
+    "autoActivationMode": {
+      "@id": "teliax:autoActivationMode",
+      "@type": "xsd:string"
+    },
+    "scheduledActivationAt": {
+      "@id": "teliax:scheduledActivationAt",
+      "@type": "xsd:dateTime"
+    },
+    "lastAutoActivationAttempt": {
+      "@id": "teliax:lastAutoActivationAttempt",
+      "@type": "xsd:dateTime"
+    },
+    "autoActivationFailureCount": {
+      "@id": "teliax:autoActivationFailureCount",
+      "@type": "xsd:integer"
+    },
+    "autoAssignLrn": {
+      "@id": "teliax:autoAssignLrn",
+      "@type": "xsd:boolean"
+    },
+    "lsrWorkflowEnabled": {
+      "@id": "teliax:lsrWorkflowEnabled",
+      "@type": "xsd:boolean"
+    },
+    "lsrGateMode": {
+      "@id": "teliax:lsrGateMode",
+      "@type": "xsd:string"
+    },
+    "desiredDueDate": {
+      "@id": "teliax:desiredDueDate",
+      "@type": "xsd:date"
+    },
+    "portDirection": {
+      "@id": "teliax:portDirection",
+      "@type": "xsd:string"
+    },
+    "gainingCarrierSpid": {
+      "@id": "teliax:gainingCarrierSpid",
+      "@type": "xsd:string"
+    },
+    "syncNotifyEmail": {
+      "@id": "teliax:syncNotifyEmail",
+      "@type": "xsd:string"
+    },
+    "activeReconciliationJobId": {
+      "@id": "teliax:activeReconciliationJobId",
+      "@type": "xsd:string"
+    },
+    "applicationMetadata": {
+      "@id": "teliax:applicationMetadata"
+    },
+    "assignmentSetBy": {
+      "@id": "teliax:assignmentSetBy",
+      "@type": "xsd:string"
+    },
+    "assignmentSetAt": {
+      "@id": "teliax:assignmentSetAt",
+      "@type": "xsd:dateTime"
+    },
+    "assignmentFrozenAt": {
+      "@id": "teliax:assignmentFrozenAt",
+      "@type": "xsd:dateTime"
+    },
+    "snapbackOriginatingInventoryId": {
+      "@id": "teliax:snapbackOriginatingInventoryId",
+      "@type": "xsd:string"
+    },
+    "snapbackOriginatingFinalizationId": {
+      "@id": "teliax:snapbackOriginatingFinalizationId",
+      "@type": "xsd:string"
+    },
+    "snapbackRegisteredBy": {
+      "@id": "teliax:snapbackRegisteredBy",
+      "@type": "xsd:string"
+    },
+    "snapbackRegisteredAt": {
+      "@id": "teliax:snapbackRegisteredAt",
+      "@type": "xsd:dateTime"
+    },
+    "billingName": {
+      "@id": "teliax:billingName",
+      "@type": "xsd:string"
+    },
+    "billingStreet": {
+      "@id": "teliax:billingStreet",
+      "@type": "xsd:string"
+    },
+    "billingFloor": {
+      "@id": "teliax:billingFloor",
+      "@type": "xsd:string"
+    },
+    "billingRoomMailStop": {
+      "@id": "teliax:billingRoomMailStop",
+      "@type": "xsd:string"
+    },
+    "billingCity": {
+      "@id": "teliax:billingCity",
+      "@type": "xsd:string"
+    },
+    "billingState": {
+      "@id": "teliax:billingState",
+      "@type": "xsd:string"
+    },
+    "billingZip": {
+      "@id": "teliax:billingZip",
+      "@type": "xsd:string"
+    },
+    "billingAccountNumber": {
+      "@id": "teliax:billingAccountNumber",
+      "@type": "xsd:string"
+    },
+    "portOutPin": {
+      "@id": "teliax:portOutPin",
+      "@type": "xsd:string"
+    },
+    "PortProjectDetail": "teliax:PortProjectDetail",
+    "projectId": {
+      "@id": "teliax:projectId",
+      "@type": "xsd:string"
+    },
+    "project": {
+      "@id": "teliax:project",
+      "@type": "@id"
+    },
+    "currentLataSource": {
+      "@id": "teliax:currentLataSource",
+      "@type": "xsd:string"
+    },
+    "gainingLataSource": {
+      "@id": "teliax:gainingLataSource",
+      "@type": "xsd:string"
+    },
+    "npacRegion": {
+      "@id": "teliax:npacRegion",
+      "@type": "xsd:string"
+    },
+    "currentOcn": {
+      "@id": "teliax:currentOcn",
+      "@type": "xsd:string"
+    },
+    "currentLrn": {
+      "@id": "teliax:currentLrn",
+      "@type": "xsd:string"
+    },
+    "currentSpid": {
+      "@id": "teliax:currentSpid",
+      "@type": "xsd:string"
+    },
+    "currentSpidName": {
+      "@id": "teliax:currentSpidName",
+      "@type": "xsd:string"
+    },
+    "currentTandem": {
+      "@id": "teliax:currentTandem",
+      "@type": "xsd:string"
+    },
+    "currentTandemName": {
+      "@id": "teliax:currentTandemName",
+      "@type": "xsd:string"
+    },
+    "gainingOcn": {
+      "@id": "teliax:gainingOcn",
+      "@type": "xsd:string"
+    },
+    "gainingLrn": {
+      "@id": "teliax:gainingLrn",
+      "@type": "xsd:string"
+    },
+    "gainingSpid": {
+      "@id": "teliax:gainingSpid",
+      "@type": "xsd:string"
+    },
+    "gainingTandem": {
+      "@id": "teliax:gainingTandem",
+      "@type": "xsd:string"
+    },
+    "gainingTandemName": {
+      "@id": "teliax:gainingTandemName",
+      "@type": "xsd:string"
+    },
+    "userProvidedLrn": {
+      "@id": "teliax:userProvidedLrn",
+      "@type": "xsd:string"
+    },
+    "soaStatus": {
+      "@id": "teliax:soaStatus",
+      "@type": "xsd:string"
+    },
+    "lsrStatus": {
+      "@id": "teliax:lsrStatus",
+      "@type": "xsd:string"
+    },
+    "csrStatus": {
+      "@id": "teliax:csrStatus",
+      "@type": "xsd:string"
+    },
+    "focDate": {
+      "@id": "teliax:focDate",
+      "@type": "xsd:date"
+    },
+    "lifecycleState": {
+      "@id": "teliax:lifecycleState",
+      "@type": "xsd:string"
+    },
+    "validationStatus": {
+      "@id": "teliax:validationStatus",
+      "@type": "xsd:string"
+    },
+    "validationErrors": {
+      "@id": "teliax:validationErrors"
+    },
+    "pushedDdd": {
+      "@id": "teliax:pushedDdd",
+      "@type": "xsd:date"
+    },
+    "pushedReleaseEventId": {
+      "@id": "teliax:pushedReleaseEventId",
+      "@type": "xsd:string"
+    },
+    "detectedCarrierCode": {
+      "@id": "teliax:detectedCarrierCode",
+      "@type": "xsd:string"
+    },
+    "carrierOverride": {
+      "@id": "teliax:carrierOverride",
+      "@type": "xsd:string"
+    },
+    "carrierDetectionSource": {
+      "@id": "teliax:carrierDetectionSource",
+      "@type": "xsd:string"
+    },
+    "lsrSubmittedAt": {
+      "@id": "teliax:lsrSubmittedAt",
+      "@type": "xsd:dateTime"
+    },
+    "lsrSubmissionMethod": {
+      "@id": "teliax:lsrSubmissionMethod",
+      "@type": "xsd:string"
+    },
+    "lsrConfirmationNumber": {
+      "@id": "teliax:lsrConfirmationNumber",
+      "@type": "xsd:string"
+    },
+    "lsrMetadata": {
+      "@id": "teliax:lsrMetadata"
+    },
+    "lsrFailedAt": {
+      "@id": "teliax:lsrFailedAt",
+      "@type": "xsd:dateTime"
+    },
+    "lsrFailureReason": {
+      "@id": "teliax:lsrFailureReason",
+      "@type": "xsd:string"
+    },
+    "lsrFailureCode": {
+      "@id": "teliax:lsrFailureCode",
+      "@type": "xsd:string"
+    },
+    "lsrFailureInternalDetail": {
+      "@id": "teliax:lsrFailureInternalDetail",
+      "@type": "xsd:string"
+    },
+    "lsrRetryCount": {
+      "@id": "teliax:lsrRetryCount",
+      "@type": "xsd:integer"
+    },
+    "lsrLastRetryAt": {
+      "@id": "teliax:lsrLastRetryAt",
+      "@type": "xsd:dateTime"
+    },
+    "csrReceivedAt": {
+      "@id": "teliax:csrReceivedAt",
+      "@type": "xsd:dateTime"
+    },
+    "csrSource": {
+      "@id": "teliax:csrSource",
+      "@type": "xsd:string"
+    },
+    "csrData": {
+      "@id": "teliax:csrData"
+    },
+    "csrDocumentUrl": {
+      "@id": "teliax:csrDocumentUrl",
+      "@type": "xsd:string"
+    },
+    "csrValidationStatus": {
+      "@id": "teliax:csrValidationStatus",
+      "@type": "xsd:string"
+    },
+    "csrMatchConfidence": {
+      "@id": "teliax:csrMatchConfidence",
+      "@type": "xsd:integer"
+    },
+    "csrMismatchFields": {
+      "@id": "teliax:csrMismatchFields"
+    },
+    "csrValidatedAt": {
+      "@id": "teliax:csrValidatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "csrValidatedBy": {
+      "@id": "teliax:csrValidatedBy",
+      "@type": "xsd:string"
+    },
+    "supplementRequestedAt": {
+      "@id": "teliax:supplementRequestedAt",
+      "@type": "xsd:dateTime"
+    },
+    "supplementCount": {
+      "@id": "teliax:supplementCount",
+      "@type": "xsd:integer"
+    },
+    "csrAccountNumber": {
+      "@id": "teliax:csrAccountNumber",
+      "@type": "xsd:string"
+    },
+    "csrBtn": {
+      "@id": "teliax:csrBtn",
+      "@type": "xsd:string"
+    },
+    "csrEndUserName": {
+      "@id": "teliax:csrEndUserName",
+      "@type": "xsd:string"
+    },
+    "csrServiceAddress": {
+      "@id": "teliax:csrServiceAddress",
+      "@type": "xsd:string"
+    },
+    "lifecycleStatusDisplay": {
+      "@id": "teliax:lifecycleStatusDisplay",
+      "@type": "@id"
+    },
+    "carrierReleaseRecovery": {
+      "@id": "teliax:carrierReleaseRecovery",
+      "@type": "@id"
+    },
+    "CreateNnidRequest": "teliax:CreateNnidRequest",
+    "nnid": {
+      "@id": "teliax:nnid",
+      "@type": "xsd:string"
+    },
+    "carrierCode": {
+      "@id": "teliax:carrierCode",
+      "@type": "xsd:string"
+    },
+    "isDefault": {
+      "@id": "teliax:isDefault",
+      "@type": "xsd:boolean"
+    },
+    "NnidHoldPolicyRequest": "teliax:NnidHoldPolicyRequest",
+    "enabled": {
+      "@id": "teliax:enabled",
+      "@type": "xsd:boolean"
+    },
+    "holdNnid": {
+      "@id": "teliax:holdNnid",
+      "@type": "xsd:string"
+    },
+    "CreateCampaignRequest": "teliax:CreateCampaignRequest",
+    "brandId": {
+      "@id": "teliax:brandId",
+      "@type": "xsd:string"
+    },
+    "useCase": {
+      "@id": "teliax:useCase",
+      "@type": "xsd:string"
+    },
+    "messageFlow": {
+      "@id": "teliax:messageFlow",
+      "@type": "xsd:string"
+    },
+    "sampleMessages": {
+      "@id": "teliax:sampleMessages",
+      "@container": "@list"
+    },
+    "subUseCases": {
+      "@id": "teliax:subUseCases",
+      "@container": "@list"
+    },
+    "resellerId": {
+      "@id": "teliax:resellerId",
+      "@type": "xsd:string"
+    },
+    "subscriberOptin": {
+      "@id": "teliax:subscriberOptin",
+      "@type": "xsd:boolean"
+    },
+    "subscriberOptout": {
+      "@id": "teliax:subscriberOptout",
+      "@type": "xsd:boolean"
+    },
+    "subscriberHelp": {
+      "@id": "teliax:subscriberHelp",
+      "@type": "xsd:boolean"
+    },
+    "optinKeywords": {
+      "@id": "teliax:optinKeywords",
+      "@type": "xsd:string"
+    },
+    "optinMessage": {
+      "@id": "teliax:optinMessage",
+      "@type": "xsd:string"
+    },
+    "optoutKeywords": {
+      "@id": "teliax:optoutKeywords",
+      "@type": "xsd:string"
+    },
+    "optoutMessage": {
+      "@id": "teliax:optoutMessage",
+      "@type": "xsd:string"
+    },
+    "helpKeywords": {
+      "@id": "teliax:helpKeywords",
+      "@type": "xsd:string"
+    },
+    "helpMessage": {
+      "@id": "teliax:helpMessage",
+      "@type": "xsd:string"
+    },
+    "embeddedLink": {
+      "@id": "teliax:embeddedLink",
+      "@type": "xsd:boolean"
+    },
+    "embeddedPhone": {
+      "@id": "teliax:embeddedPhone",
+      "@type": "xsd:boolean"
+    },
+    "numberPool": {
+      "@id": "teliax:numberPool",
+      "@type": "xsd:boolean"
+    },
+    "ageGated": {
+      "@id": "teliax:ageGated",
+      "@type": "xsd:boolean"
+    },
+    "directLending": {
+      "@id": "teliax:directLending",
+      "@type": "xsd:boolean"
+    },
+    "affiliateMarketing": {
+      "@id": "teliax:affiliateMarketing",
+      "@type": "xsd:boolean"
+    },
+    "privacyPolicyUrl": {
+      "@id": "teliax:privacyPolicyUrl",
+      "@type": "xsd:string"
+    },
+    "termsUrl": {
+      "@id": "teliax:termsUrl",
+      "@type": "xsd:string"
+    },
+    "autoRenewal": {
+      "@id": "teliax:autoRenewal",
+      "@type": "xsd:boolean"
+    },
+    "BindApplicationRequest": "teliax:BindApplicationRequest",
+    "CreateBrandRequest": "teliax:CreateBrandRequest",
+    "displayName": {
+      "@id": "teliax:displayName",
+      "@type": "xsd:string"
+    },
+    "legalName": {
+      "@id": "teliax:legalName",
+      "@type": "xsd:string"
+    },
+    "companyName": {
+      "@id": "teliax:companyName",
+      "@type": "xsd:string"
+    },
+    "entityType": {
+      "@id": "teliax:entityType",
+      "@type": "xsd:string"
+    },
+    "taxId": {
+      "@id": "teliax:taxId",
+      "@type": "xsd:string"
+    },
+    "vertical": {
+      "@id": "teliax:vertical",
+      "@type": "xsd:string"
+    },
+    "website": {
+      "@id": "teliax:website",
+      "@type": "xsd:string"
+    },
+    "brandRelationship": {
+      "@id": "teliax:brandRelationship",
+      "@type": "xsd:string"
+    },
+    "country": {
+      "@id": "teliax:country",
+      "@type": "xsd:string"
+    },
+    "street": {
+      "@id": "teliax:street",
+      "@type": "xsd:string"
+    },
+    "primaryContactName": {
+      "@id": "teliax:primaryContactName",
+      "@type": "xsd:string"
+    },
+    "primaryContactEmail": {
+      "@id": "teliax:primaryContactEmail",
+      "@type": "xsd:string"
+    },
+    "primaryContactPhone": {
+      "@id": "teliax:primaryContactPhone",
+      "@type": "xsd:string"
+    },
+    "stockExchange": {
+      "@id": "teliax:stockExchange",
+      "@type": "xsd:string"
+    },
+    "stockSymbol": {
+      "@id": "teliax:stockSymbol",
+      "@type": "xsd:string"
+    },
+    "altBusinessId": {
+      "@id": "teliax:altBusinessId",
+      "@type": "xsd:string"
+    },
+    "altBusinessIdType": {
+      "@id": "teliax:altBusinessIdType",
+      "@type": "xsd:string"
+    },
+    "TemplateCreateRequest": "teliax:TemplateCreateRequest",
+    "TemplateDraftDto": "teliax:TemplateDraftDto",
+    "cprData": {
+      "@id": "teliax:cprData"
+    },
+    "updatedBy": {
+      "@id": "teliax:updatedBy",
+      "@type": "xsd:string"
+    },
+    "somosRecVersionId": {
+      "@id": "teliax:somosRecVersionId",
+      "@type": "xsd:string"
+    },
+    "TemplateCopyRequest": "teliax:TemplateCopyRequest",
+    "srcTmplName": {
+      "@id": "teliax:srcTmplName",
+      "@type": "xsd:string"
+    },
+    "srcEffDtTm": {
+      "@id": "teliax:srcEffDtTm",
+      "@type": "xsd:string"
+    },
+    "tgtTmplName": {
+      "@id": "teliax:tgtTmplName",
+      "@type": "xsd:string"
+    },
+    "tgtEffDtTm": {
+      "@id": "teliax:tgtEffDtTm",
+      "@type": "xsd:string"
+    },
+    "RejectRequest": "teliax:RejectRequest",
+    "StartSyncRequest": "teliax:StartSyncRequest",
+    "autoCommit": {
+      "@id": "teliax:autoCommit",
+      "@type": "xsd:boolean"
+    },
+    "SpareSearchRequest": "teliax:SpareSearchRequest",
+    "pattern": {
+      "@id": "teliax:pattern",
+      "@type": "xsd:string"
+    },
+    "quantity": {
+      "@id": "teliax:quantity",
+      "@type": "xsd:integer"
+    },
+    "ReserveRequest": "teliax:ReserveRequest",
+    "numbers": {
+      "@id": "teliax:numbers",
+      "@container": "@list"
+    },
+    "TollFreePtrOperationDto": "teliax:TollFreePtrOperationDto",
+    "telephoneNumber": {
+      "@id": "teliax:telephoneNumber",
+      "@type": "xsd:string"
+    },
+    "operationType": {
+      "@id": "teliax:operationType",
+      "@type": "xsd:string"
+    },
+    "actingRespOrgId": {
+      "@id": "teliax:actingRespOrgId",
+      "@type": "xsd:string"
+    },
+    "srcTemplateName": {
+      "@id": "teliax:srcTemplateName",
+      "@type": "xsd:string"
+    },
+    "srcTemplateCrn": {
+      "@id": "teliax:srcTemplateCrn",
+      "@type": "xsd:string"
+    },
+    "srcRecVersionId": {
+      "@id": "teliax:srcRecVersionId",
+      "@type": "xsd:string"
+    },
+    "targetTemplateName": {
+      "@id": "teliax:targetTemplateName",
+      "@type": "xsd:string"
+    },
+    "targetTemplateCrn": {
+      "@id": "teliax:targetTemplateCrn",
+      "@type": "xsd:string"
+    },
+    "targetEffDtTm": {
+      "@id": "teliax:targetEffDtTm",
+      "@type": "xsd:string"
+    },
+    "targetRespOrgId": {
+      "@id": "teliax:targetRespOrgId",
+      "@type": "xsd:string"
+    },
+    "svcOrderNum": {
+      "@id": "teliax:svcOrderNum",
+      "@type": "xsd:string"
+    },
+    "errorCode": {
+      "@id": "teliax:errorCode",
+      "@type": "xsd:string"
+    },
+    "errorMessage": {
+      "@id": "teliax:errorMessage",
+      "@type": "xsd:string"
+    },
+    "pollAttempts": {
+      "@id": "teliax:pollAttempts",
+      "@type": "xsd:integer"
+    },
+    "nextPollAt": {
+      "@id": "teliax:nextPollAt",
+      "@type": "xsd:dateTime"
+    },
+    "timeoutAt": {
+      "@id": "teliax:timeoutAt",
+      "@type": "xsd:dateTime"
+    },
+    "submittedAt": {
+      "@id": "teliax:submittedAt",
+      "@type": "xsd:dateTime"
+    },
+    "appliedAt": {
+      "@id": "teliax:appliedAt",
+      "@type": "xsd:dateTime"
+    },
+    "failedAt": {
+      "@id": "teliax:failedAt",
+      "@type": "xsd:dateTime"
+    },
+    "timedOutAt": {
+      "@id": "teliax:timedOutAt",
+      "@type": "xsd:dateTime"
+    },
+    "parentOperationId": {
+      "@id": "teliax:parentOperationId",
+      "@type": "xsd:string"
+    },
+    "ActivateRequest": "teliax:ActivateRequest",
+    "ActivateBatchResponse": "teliax:ActivateBatchResponse",
+    "results": {
+      "@id": "teliax:results",
+      "@container": "@list"
+    },
+    "successCount": {
+      "@id": "teliax:successCount",
+      "@type": "xsd:integer"
+    },
+    "failureCount": {
+      "@id": "teliax:failureCount",
+      "@type": "xsd:integer"
+    },
+    "ActivationResultDto": "teliax:ActivationResultDto",
+    "num": {
+      "@id": "teliax:num",
+      "@type": "xsd:string"
+    },
+    "success": {
+      "@id": "teliax:success",
+      "@type": "xsd:boolean"
+    },
+    "operationId": {
+      "@id": "teliax:operationId",
+      "@type": "xsd:string"
+    },
+    "inventoryId": {
+      "@id": "teliax:inventoryId",
+      "@type": "xsd:string"
+    },
+    "JobRunAckResponse": "teliax:JobRunAckResponse",
+    "runId": {
+      "@id": "teliax:runId",
+      "@type": "xsd:string"
+    },
+    "ackedBy": {
+      "@id": "teliax:ackedBy",
+      "@type": "xsd:string"
+    },
+    "ackedAt": {
+      "@id": "teliax:ackedAt",
+      "@type": "xsd:dateTime"
+    },
+    "alreadyAcked": {
+      "@id": "teliax:alreadyAcked",
+      "@type": "xsd:boolean"
+    },
+    "RocSyncRequest": "teliax:RocSyncRequest",
+    "direction": {
+      "@id": "teliax:direction",
+      "@type": "xsd:string"
+    },
+    "startDate": {
+      "@id": "teliax:startDate",
+      "@type": "xsd:string"
+    },
+    "endDate": {
+      "@id": "teliax:endDate",
+      "@type": "xsd:string"
+    },
+    "RocCreateRequest": "teliax:RocCreateRequest",
+    "entityId": {
+      "@id": "teliax:entityId",
+      "@type": "xsd:string"
+    },
+    "newRespOrgId": {
+      "@id": "teliax:newRespOrgId",
+      "@type": "xsd:string"
+    },
+    "requestType": {
+      "@id": "teliax:requestType",
+      "@type": "xsd:string"
+    },
+    "effectiveDate": {
+      "@id": "teliax:effectiveDate",
+      "@type": "xsd:date"
+    },
+    "RocSubmitRequest": "teliax:RocSubmitRequest",
+    "contactInformation": {
+      "@id": "teliax:contactInformation",
+      "@type": "xsd:string"
+    },
+    "RocLoaGenerateRequest": "teliax:RocLoaGenerateRequest",
+    "custName": {
+      "@id": "teliax:custName",
+      "@type": "xsd:string"
+    },
+    "address1": {
+      "@id": "teliax:address1",
+      "@type": "xsd:string"
+    },
+    "address2": {
+      "@id": "teliax:address2",
+      "@type": "xsd:string"
+    },
+    "zipCode": {
+      "@id": "teliax:zipCode",
+      "@type": "xsd:string"
+    },
+    "contactName": {
+      "@id": "teliax:contactName",
+      "@type": "xsd:string"
+    },
+    "contactTitle": {
+      "@id": "teliax:contactTitle",
+      "@type": "xsd:string"
+    },
+    "contactPhone": {
+      "@id": "teliax:contactPhone",
+      "@type": "xsd:string"
+    },
+    "CreateReportJobRequest": "teliax:CreateReportJobRequest",
+    "reportType": {
+      "@id": "teliax:reportType",
+      "@type": "xsd:string"
+    },
+    "params": {
+      "@id": "teliax:params"
+    },
+    "SpidResolveRequest": "teliax:SpidResolveRequest",
+    "NpacSpidDatasetFreshnessDto": "teliax:NpacSpidDatasetFreshnessDto",
+    "sourceName": {
+      "@id": "teliax:sourceName",
+      "@type": "xsd:string"
+    },
+    "sourceAsOf": {
+      "@id": "teliax:sourceAsOf",
+      "@type": "xsd:dateTime"
+    },
+    "retrievedAt": {
+      "@id": "teliax:retrievedAt",
+      "@type": "xsd:dateTime"
+    },
+    "freshness": {
+      "@id": "teliax:freshness",
+      "@type": "xsd:string"
+    },
+    "SpidResolutionDto": "teliax:SpidResolutionDto",
+    "found": {
+      "@id": "teliax:found",
+      "@type": "xsd:boolean"
+    },
+    "regionalCustomerNames": {
+      "@id": "teliax:regionalCustomerNames",
+      "@container": "@list"
+    },
+    "customerTypes": {
+      "@id": "teliax:customerTypes",
+      "@container": "@list"
+    },
+    "regions": {
+      "@id": "teliax:regions",
+      "@container": "@list"
+    },
+    "contactCount": {
+      "@id": "teliax:contactCount",
+      "@type": "xsd:integer"
+    },
+    "retired": {
+      "@id": "teliax:retired",
+      "@type": "xsd:boolean"
+    },
+    "SpidResolveResponse": "teliax:SpidResolveResponse",
+    "dataset": {
+      "@id": "teliax:dataset",
+      "@type": "@id"
+    },
+    "RespOrgResolveRequest": "teliax:RespOrgResolveRequest",
+    "respOrgIds": {
+      "@id": "teliax:respOrgIds",
+      "@container": "@list"
+    },
+    "RespOrgDatasetFreshnessDto": "teliax:RespOrgDatasetFreshnessDto",
+    "RespOrgResolutionDto": "teliax:RespOrgResolutionDto",
+    "RespOrgResolveResponse": "teliax:RespOrgResolveResponse",
+    "NnidResolveRequest": "teliax:NnidResolveRequest",
+    "nnids": {
+      "@id": "teliax:nnids",
+      "@container": "@list"
+    },
+    "NnidDatasetFreshnessDto": "teliax:NnidDatasetFreshnessDto",
+    "NnidResolutionDto": "teliax:NnidResolutionDto",
+    "brandName": {
+      "@id": "teliax:brandName",
+      "@type": "xsd:string"
+    },
+    "serviceType": {
+      "@id": "teliax:serviceType",
+      "@type": "xsd:string"
+    },
+    "countryIso2": {
+      "@id": "teliax:countryIso2",
+      "@type": "xsd:string"
+    },
+    "NnidResolveResponse": "teliax:NnidResolveResponse",
+    "CicResolveRequest": "teliax:CicResolveRequest",
+    "cics": {
+      "@id": "teliax:cics",
+      "@container": "@list"
+    },
+    "CicDatasetFreshnessDto": "teliax:CicDatasetFreshnessDto",
+    "CicResolutionDto": "teliax:CicResolutionDto",
+    "cic": {
+      "@id": "teliax:cic",
+      "@type": "xsd:string"
+    },
+    "assigneeName": {
+      "@id": "teliax:assigneeName",
+      "@type": "xsd:string"
+    },
+    "recordStatus": {
+      "@id": "teliax:recordStatus",
+      "@type": "xsd:string"
+    },
+    "CicResolveResponse": "teliax:CicResolveResponse",
+    "CreateRuleRequest": "teliax:CreateRuleRequest",
+    "PortProjectCreateRequest": "teliax:PortProjectCreateRequest",
+    "PortProjectUploadResponse": "teliax:PortProjectUploadResponse",
+    "totalTns": {
+      "@id": "teliax:totalTns",
+      "@type": "xsd:integer"
+    },
+    "duplicatesRemoved": {
+      "@id": "teliax:duplicatesRemoved",
+      "@type": "xsd:integer"
+    },
+    "lrnsFiltered": {
+      "@id": "teliax:lrnsFiltered",
+      "@type": "xsd:integer"
+    },
+    "AddTnsRequest": "teliax:AddTnsRequest",
+    "tns": {
+      "@id": "teliax:tns",
+      "@container": "@list"
+    },
+    "auto_assign_lrn": {
+      "@id": "teliax:auto_assign_lrn",
+      "@type": "xsd:boolean"
+    },
+    "TnEntry": "teliax:TnEntry",
+    "ResubmitFailedRequest": "teliax:ResubmitFailedRequest",
+    "new_ddd": {
+      "@id": "teliax:new_ddd",
+      "@type": "xsd:string"
+    },
+    "Change": "teliax:Change",
+    "validationStatusBefore": {
+      "@id": "teliax:validationStatusBefore",
+      "@type": "xsd:string"
+    },
+    "validationStatusAfter": {
+      "@id": "teliax:validationStatusAfter",
+      "@type": "xsd:string"
+    },
+    "oldLata": {
+      "@id": "teliax:oldLata",
+      "@type": "xsd:string"
+    },
+    "newLata": {
+      "@id": "teliax:newLata",
+      "@type": "xsd:string"
+    },
+    "ProjectLrnRepairResult": "teliax:ProjectLrnRepairResult",
+    "dryRun": {
+      "@id": "teliax:dryRun",
+      "@type": "xsd:boolean"
+    },
+    "inspected": {
+      "@id": "teliax:inspected",
+      "@type": "xsd:integer"
+    },
+    "changed": {
+      "@id": "teliax:changed",
+      "@type": "xsd:integer"
+    },
+    "validationStatusesRestored": {
+      "@id": "teliax:validationStatusesRestored",
+      "@type": "xsd:integer"
+    },
+    "changes": {
+      "@id": "teliax:changes",
+      "@container": "@list"
+    },
+    "PortProjectProgressRequest": "teliax:PortProjectProgressRequest",
+    "include_events": {
+      "@id": "teliax:include_events",
+      "@type": "xsd:boolean"
+    },
+    "event_limit": {
+      "@id": "teliax:event_limit",
+      "@type": "xsd:integer"
+    },
+    "include_statistics": {
+      "@id": "teliax:include_statistics",
+      "@type": "xsd:boolean"
+    },
+    "BatchOperationStatus": "teliax:BatchOperationStatus",
+    "operation_id": {
+      "@id": "teliax:operation_id",
+      "@type": "xsd:string"
+    },
+    "operation_type": {
+      "@id": "teliax:operation_type",
+      "@type": "xsd:string"
+    },
+    "total_items": {
+      "@id": "teliax:total_items",
+      "@type": "xsd:integer"
+    },
+    "processed_items": {
+      "@id": "teliax:processed_items",
+      "@type": "xsd:integer"
+    },
+    "successful_items": {
+      "@id": "teliax:successful_items",
+      "@type": "xsd:integer"
+    },
+    "failed_items": {
+      "@id": "teliax:failed_items",
+      "@type": "xsd:integer"
+    },
+    "started_at": {
+      "@id": "teliax:started_at",
+      "@type": "xsd:dateTime"
+    },
+    "completed_at": {
+      "@id": "teliax:completed_at",
+      "@type": "xsd:dateTime"
+    },
+    "ErrorGroup": "teliax:ErrorGroup",
+    "error_message": {
+      "@id": "teliax:error_message",
+      "@type": "xsd:string"
+    },
+    "sample_tns": {
+      "@id": "teliax:sample_tns",
+      "@container": "@list"
+    },
+    "auto_fix_available": {
+      "@id": "teliax:auto_fix_available",
+      "@type": "xsd:boolean"
+    },
+    "suggested_action": {
+      "@id": "teliax:suggested_action",
+      "@type": "xsd:string"
+    },
+    "PortProjectProgressResponse": "teliax:PortProjectProgressResponse",
+    "project_name": {
+      "@id": "teliax:project_name",
+      "@type": "xsd:string"
+    },
+    "current_stage": {
+      "@id": "teliax:current_stage",
+      "@type": "xsd:string"
+    },
+    "progress_percentage": {
+      "@id": "teliax:progress_percentage",
+      "@type": "xsd:integer"
+    },
+    "stage_message": {
+      "@id": "teliax:stage_message",
+      "@type": "xsd:string"
+    },
+    "statistics": {
+      "@id": "teliax:statistics",
+      "@type": "@id"
+    },
+    "estimated_completion_time": {
+      "@id": "teliax:estimated_completion_time",
+      "@type": "xsd:dateTime"
+    },
+    "recent_events": {
+      "@id": "teliax:recent_events",
+      "@container": "@list"
+    },
+    "error_summary": {
+      "@id": "teliax:error_summary"
+    },
+    "batch_operations": {
+      "@id": "teliax:batch_operations",
+      "@container": "@list"
+    },
+    "ProgressEvent": "teliax:ProgressEvent",
+    "event_type": {
+      "@id": "teliax:event_type",
+      "@type": "xsd:string"
+    },
+    "severity": {
+      "@id": "teliax:severity",
+      "@type": "xsd:string"
+    },
+    "event_data": {
+      "@id": "teliax:event_data"
+    },
+    "acknowledged": {
+      "@id": "teliax:acknowledged",
+      "@type": "xsd:boolean"
+    },
+    "ProgressStatistics": "teliax:ProgressStatistics",
+    "processed_tns": {
+      "@id": "teliax:processed_tns",
+      "@type": "xsd:integer"
+    },
+    "pending_tns": {
+      "@id": "teliax:pending_tns",
+      "@type": "xsd:integer"
+    },
+    "processing_rate": {
+      "@id": "teliax:processing_rate",
+      "@type": "xsd:decimal"
+    },
+    "success_rate": {
+      "@id": "teliax:success_rate",
+      "@type": "xsd:decimal"
+    },
+    "SubmitManagedProcessingRequest": "teliax:SubmitManagedProcessingRequest",
+    "ActionScope": "teliax:ActionScope",
+    "groupId": {
+      "@id": "teliax:groupId",
+      "@type": "xsd:string"
+    },
+    "CustomerActionResponse": "teliax:CustomerActionResponse",
+    "allowedResponse": {
+      "@id": "teliax:allowedResponse",
+      "@type": "xsd:string"
+    },
+    "requiredDocumentType": {
+      "@id": "teliax:requiredDocumentType",
+      "@type": "xsd:string"
+    },
+    "openedAt": {
+      "@id": "teliax:openedAt",
+      "@type": "xsd:dateTime"
+    },
+    "ManagedProcessingResponse": "teliax:ManagedProcessingResponse",
+    "processId": {
+      "@id": "teliax:processId",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "teliax:version",
+      "@type": "xsd:integer"
+    },
+    "customerActions": {
+      "@id": "teliax:customerActions",
+      "@container": "@list"
+    },
+    "SatisfyActionRequest": "teliax:SatisfyActionRequest",
+    "responseType": {
+      "@id": "teliax:responseType",
+      "@type": "xsd:string"
+    },
+    "documentId": {
+      "@id": "teliax:documentId",
+      "@type": "xsd:string"
+    },
+    "CarrierEmailSendRequest": "teliax:CarrierEmailSendRequest",
+    "losingSpid": {
+      "@id": "teliax:losingSpid",
+      "@type": "xsd:string"
+    },
+    "to": {
+      "@id": "teliax:to",
+      "@container": "@list"
+    },
+    "cc": {
+      "@id": "teliax:cc",
+      "@container": "@list"
+    },
+    "subject": {
+      "@id": "teliax:subject",
+      "@type": "xsd:string"
+    },
+    "body": {
+      "@id": "teliax:body",
+      "@type": "xsd:string"
+    },
+    "generateLsrForm": {
+      "@id": "teliax:generateLsrForm",
+      "@type": "xsd:boolean"
+    },
+    "saveContact": {
+      "@id": "teliax:saveContact",
+      "@type": "xsd:boolean"
+    },
+    "AttachmentDto": "teliax:AttachmentDto",
+    "filename": {
+      "@id": "teliax:filename",
+      "@type": "xsd:string"
+    },
+    "size": {
+      "@id": "teliax:size",
+      "@type": "xsd:integer"
+    },
+    "mimeType": {
+      "@id": "teliax:mimeType",
+      "@type": "xsd:string"
+    },
+    "CarrierEmailDto": "teliax:CarrierEmailDto",
+    "purpose": {
+      "@id": "teliax:purpose",
+      "@type": "xsd:string"
+    },
+    "messageId": {
+      "@id": "teliax:messageId",
+      "@type": "xsd:string"
+    },
+    "fromIdentity": {
+      "@id": "teliax:fromIdentity",
+      "@type": "xsd:string"
+    },
+    "replyTo": {
+      "@id": "teliax:replyTo",
+      "@type": "xsd:string"
+    },
+    "toRecipients": {
+      "@id": "teliax:toRecipients",
+      "@container": "@list"
+    },
+    "ccRecipients": {
+      "@id": "teliax:ccRecipients",
+      "@container": "@list"
+    },
+    "attachments": {
+      "@id": "teliax:attachments",
+      "@container": "@list"
+    },
+    "carrierName": {
+      "@id": "teliax:carrierName",
+      "@type": "xsd:string"
+    },
+    "failureReason": {
+      "@id": "teliax:failureReason",
+      "@type": "xsd:string"
+    },
+    "LsrPreviewRequest": "teliax:LsrPreviewRequest",
+    "LsrPreviewResponse": "teliax:LsrPreviewResponse",
+    "html": {
+      "@id": "teliax:html",
+      "@type": "xsd:string"
+    },
+    "warnings": {
+      "@id": "teliax:warnings",
+      "@container": "@list"
+    },
+    "PortProjectDocumentResponse": "teliax:PortProjectDocumentResponse",
+    "document_type": {
+      "@id": "teliax:document_type",
+      "@type": "xsd:string"
+    },
+    "file_name": {
+      "@id": "teliax:file_name",
+      "@type": "xsd:string"
+    },
+    "content_type": {
+      "@id": "teliax:content_type",
+      "@type": "xsd:string"
+    },
+    "file_size_bytes": {
+      "@id": "teliax:file_size_bytes",
+      "@type": "xsd:integer"
+    },
+    "signer_name": {
+      "@id": "teliax:signer_name",
+      "@type": "xsd:string"
+    },
+    "signed_at": {
+      "@id": "teliax:signed_at",
+      "@type": "xsd:dateTime"
+    },
+    "signer_ip": {
+      "@id": "teliax:signer_ip",
+      "@type": "xsd:string"
+    },
+    "uploaded_by": {
+      "@id": "teliax:uploaded_by",
+      "@type": "xsd:string"
+    },
+    "uploaded_at": {
+      "@id": "teliax:uploaded_at",
+      "@type": "xsd:dateTime"
+    },
+    "replaces_document_id": {
+      "@id": "teliax:replaces_document_id",
+      "@type": "xsd:string"
+    },
+    "CancelProjectResult": "teliax:CancelProjectResult",
+    "cancelledCount": {
+      "@id": "teliax:cancelledCount",
+      "@type": "xsd:integer"
+    },
+    "alreadyTerminalCount": {
+      "@id": "teliax:alreadyTerminalCount",
+      "@type": "xsd:integer"
+    },
+    "failedToCancelCount": {
+      "@id": "teliax:failedToCancelCount",
+      "@type": "xsd:integer"
+    },
+    "failedTns": {
+      "@id": "teliax:failedTns",
+      "@container": "@list"
+    },
+    "projectCancelled": {
+      "@id": "teliax:projectCancelled",
+      "@type": "xsd:boolean"
+    },
+    "Fields": "teliax:Fields",
+    "ProjectAmendmentRequest": "teliax:ProjectAmendmentRequest",
+    "AmendmentResult": "teliax:AmendmentResult",
+    "perTn": {
+      "@id": "teliax:perTn"
+    },
+    "amendedCount": {
+      "@id": "teliax:amendedCount",
+      "@type": "xsd:integer"
+    },
+    "lockedLsrCount": {
+      "@id": "teliax:lockedLsrCount",
+      "@type": "xsd:integer"
+    },
+    "terminalCount": {
+      "@id": "teliax:terminalCount",
+      "@type": "xsd:integer"
+    },
+    "notFoundCount": {
+      "@id": "teliax:notFoundCount",
+      "@type": "xsd:integer"
+    },
+    "LsrData": "teliax:LsrData",
+    "end_user_name": {
+      "@id": "teliax:end_user_name",
+      "@type": "xsd:string"
+    },
+    "business_name": {
+      "@id": "teliax:business_name",
+      "@type": "xsd:string"
+    },
+    "service_address": {
+      "@id": "teliax:service_address",
+      "@type": "xsd:string"
+    },
+    "street_number": {
+      "@id": "teliax:street_number",
+      "@type": "xsd:string"
+    },
+    "street_name": {
+      "@id": "teliax:street_name",
+      "@type": "xsd:string"
+    },
+    "street_type": {
+      "@id": "teliax:street_type",
+      "@type": "xsd:string"
+    },
+    "service_address_state": {
+      "@id": "teliax:service_address_state",
+      "@type": "xsd:string"
+    },
+    "postal_code": {
+      "@id": "teliax:postal_code",
+      "@type": "xsd:string"
+    },
+    "account_number": {
+      "@id": "teliax:account_number",
+      "@type": "xsd:string"
+    },
+    "PortProjectActionRequest": "teliax:PortProjectActionRequest",
+    "override_due_date": {
+      "@id": "teliax:override_due_date",
+      "@type": "xsd:boolean"
+    },
+    "lsr_data": {
+      "@id": "teliax:lsr_data",
+      "@type": "@id"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Teliax API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Teliax's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-09) from openapi/teliax-telique-openapi.yml, openapi/teliax-tniq-openapi.yml, openapi/teliax-warp-openapi.yml.",
+  "dcterms:created": "2026-10-09",
+  "dcterms:source": [
+    "openapi/teliax-telique-openapi.yml",
+    "openapi/teliax-tniq-openapi.yml",
+    "openapi/teliax-warp-openapi.yml"
+  ]
+}

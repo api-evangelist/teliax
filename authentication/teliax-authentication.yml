@@ -1,0 +1,50 @@
+generated: '2026-10-09'
+method: searched
+source:
+- https://warp.ringer.tel/docs/guides/team-roles-api-keys-security
+- https://tniq.ringer.tel/docs
+- https://telique.ringer.tel/docs/getting-started
+- openapi/teliax-telique-openapi.yml
+- openapi/teliax-tniq-openapi.yml
+- openapi/teliax-warp-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: apiToken
+  type: apiKey
+  in: header
+  parameter: x-api-token
+  description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited
+    to 10 requests per minute.
+  sources:
+  - openapi/teliax-telique-openapi.yml
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer
+    YOUR_TOKEN'
+  sources:
+  - openapi/teliax-tniq-openapi.yml
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the
+    portal under Settings → API Keys.'
+  sources:
+  - openapi/teliax-warp-openapi.yml
+docs: https://warp.ringer.tel/docs/guides/team-roles-api-keys-security
+notes:
+- 'WARP: "API keys are customer-scoped credentials for integrations. They should be treated like passwords. The secret is
+  shown only when created or rotated." Keys carry scopes and an optional IP allowlist; create/rotate/revoke require step-up
+  verification. The rk_test_ prefix is a label only and "a test key acts on real data".'
+- 'TNIQ: "All endpoints require an API token via the Authorization header. Tokens are scoped per-customer and support operation-level
+  restrictions."'
+- 'Telique: API token from a free account in the x-api-token header; "The MCP server works without one at 10 requests per
+  minute."'
+scopes: scopes/teliax-scopes.yml

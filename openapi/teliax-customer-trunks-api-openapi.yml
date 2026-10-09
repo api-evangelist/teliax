@@ -1,0 +1,2463 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Trunks API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/Trunks across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/Trunks
+paths:
+  /v1/trunks:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists the authenticated customer''s trunk groups with their IP ACL entries. Errors: UNAUTHORIZED, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: List my trunks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkGroupWithIPs'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1Trunks
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Creates a trunk on the authenticated customer, enforcing the account''s allowed number-classes and per-direction capacity ceilings. Errors: NO_ACTIVE_CUSTOMER, INVALID_PAYLOAD, VALIDATION_ERROR, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Create a trunk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CreateTrunkGroupRequest'
+        description: Trunk definition
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkGroup'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1Trunks
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns one trunk group (with IP ACL entries) owned by the authenticated customer. Errors: UNAUTHORIZED, INVALID_ID, NOT_FOUND.'
+      tags:
+      - Customer/Trunks
+      summary: Get one of my trunks
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkGroupWithIPs'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkId
+      x-operation-id-source: derived
+    put:
+      security:
+      - ApiKeyAuth: []
+      description: 'Updates an owned trunk. The trunk being updated is excluded from the capacity-sum check. POI assignment is silently ignored (admin-only). Returns 207 with a warning when an options_ping dispatcher re-projection could not be verified (the update itself is still committed). Step-up MFA required. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INVALID_PAYLOAD, VALIDATION_ERROR, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Update a trunk
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkGroup'
+        '207':
+          description: Multi-Status
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.TrunkUpdateResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: putV1TrunksByTrunkId
+      x-operation-id-source: derived
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Deletes an owned trunk. Rejected with CONFLICT when the trunk has live calls (drain first) or is referenced by CDRs (disable instead). Step-up MFA required. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, CONFLICT, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Delete a trunk
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Trunk deleted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1TrunksByTrunkId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/cascade-preview:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns per-trunk cascade-preview counts (src_ips, tns_routed_here, active_calls, cdr_count) for an owned trunk. active_calls is read live from Redis. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Preview a trunk's deletion cascade
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.CustomerTrunkCascade'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkIdCascadePreview
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/credentials:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists SIP Digest credentials for an owned trunk (no HA1, no password), each enriched with live registration_count and active_call_count. Errors: INVALID_ID, NO_ACTIVE_CUSTOMER, TRUNK_UNOWNED, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: List SIP credentials
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.CredentialListItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkIdCredentials
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Creates a SIP Digest credential on an owned trunk (auth_type must be DIGEST, EITHER, or BOTH). The plaintext password is returned exactly once. Step-up MFA required. Errors: INVALID_ID, NO_ACTIVE_CUSTOMER, TRUNK_UNOWNED, VALIDATION_ERROR, INVALID_PAYLOAD, CONFLICT, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Create a SIP credential
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.createCredReq'
+        description: Username for the credential
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.CredentialShowOnce'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1TrunksByTrunkIdCredentials
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/credentials/{cred_id}:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Deletes a credential and cascades removal from Redis + Kamailio usrloc. Idempotent (204 when already gone). Step-up MFA required. Errors: INVALID_ID, NO_ACTIVE_CUSTOMER, TRUNK_UNOWNED, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Delete a SIP credential
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Credential UUID
+        name: cred_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Credential deleted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1TrunksByTrunkIdCredentialsByCredId
+      x-operation-id-source: derived
+    patch:
+      security:
+      - ApiKeyAuth: []
+      description: 'Toggles a credential''s enabled flag. Disable drops the Redis HA1 + AOR and tears down active registrations (dialogs are not terminated); enable restores them. Step-up MFA required. Errors: INVALID_ID, NO_ACTIVE_CUSTOMER, TRUNK_UNOWNED, INVALID_PAYLOAD, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Enable or disable a SIP credential
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Credential UUID
+        name: cred_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.patchCredReq'
+        description: Enabled flag
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.CredentialInfo'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: patchV1TrunksByTrunkIdCredentialsByCredId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/credentials/{cred_id}/calls:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns active SIP dialogs for a credential''s AOR. The dialog-tracking store is not yet live, so this currently returns an empty array. Errors: INVALID_ID, NO_ACTIVE_CUSTOMER, TRUNK_UNOWNED, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: List a credential's active calls
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Credential UUID
+        name: cred_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.CredentialActiveCall'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkIdCredentialsByCredIdCalls
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/credentials/{cred_id}/registrations:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the current Kamailio usrloc bindings for a credential''s AOR. Errors: INVALID_ID, NO_ACTIVE_CUSTOMER, TRUNK_UNOWNED, NOT_FOUND, GATEWAY_UNAVAILABLE.'
+      tags:
+      - Customer/Trunks
+      summary: List a credential's live registrations
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Credential UUID
+        name: cred_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.CredentialRegistration'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkIdCredentialsByCredIdRegistrations
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/credentials/{cred_id}/registrations/{contact_id}:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Evicts one SIP contact binding from Kamailio usrloc for a credential''s AOR. Step-up MFA required. Errors: INVALID_ID, MISSING_ID, NO_ACTIVE_CUSTOMER, TRUNK_UNOWNED, NOT_FOUND, GATEWAY_UNAVAILABLE.'
+      tags:
+      - Customer/Trunks
+      summary: Revoke a single registration
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Credential UUID
+        name: cred_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: usrloc contact ID
+        name: contact_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Registration revoked
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1TrunksByTrunkIdCredentialsByCredIdRegistrationsByContactId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/credentials/{cred_id}/rotate:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Generates a new password + HA1 for a credential (username and realm unchanged). The new plaintext password is returned exactly once. Step-up MFA required. Errors: INVALID_ID, NO_ACTIVE_CUSTOMER, TRUNK_UNOWNED, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Rotate a SIP credential's password
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Credential UUID
+        name: cred_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.CredentialShowOnce'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1TrunksByTrunkIdCredentialsByCredIdRotate
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/endpoints:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists the dispatcher endpoints (SIP destinations) for an owned trunk. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: List trunk endpoints
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkEndpoint'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkIdEndpoints
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Adds a dispatcher endpoint to an owned trunk (structured host/port/transport or a raw_uri). Returns 207 with a warning when the Kamailio sync is deferred. Step-up MFA required. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INVALID_PAYLOAD, VALIDATION_ERROR, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Create a trunk endpoint
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CreateTrunkEndpointRequest'
+        description: Endpoint definition
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.TrunkEndpointResult'
+        '207':
+          description: Multi-Status
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.TrunkEndpointResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1TrunksByTrunkIdEndpoints
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/endpoints/{endpoint_id}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns one dispatcher endpoint for an owned trunk. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Get a trunk endpoint
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Endpoint ID
+        name: endpoint_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkEndpoint'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkIdEndpointsByEndpointId
+      x-operation-id-source: derived
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Removes a dispatcher endpoint from an owned trunk and drops it from Kamailio. Step-up MFA required. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Delete a trunk endpoint
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Endpoint ID
+        name: endpoint_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Endpoint deleted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1TrunksByTrunkIdEndpointsByEndpointId
+      x-operation-id-source: derived
+    patch:
+      security:
+      - ApiKeyAuth: []
+      description: 'Updates a dispatcher endpoint on an owned trunk (structured fields or a raw_uri). Returns 207 with a warning when the Kamailio sync is deferred. Step-up MFA required. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INVALID_PAYLOAD, VALIDATION_ERROR, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Update a trunk endpoint
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Endpoint ID
+        name: endpoint_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkEndpointRequest'
+        description: Fields to update
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.TrunkEndpointResult'
+        '207':
+          description: Multi-Status
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.TrunkEndpointResult'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: patchV1TrunksByTrunkIdEndpointsByEndpointId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/ips:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists all IP ACL entries for an owned trunk. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: List a trunk's IP ACL entries
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.CustomerTrunkIPList'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkIdIps
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Adds an IP/netmask to an owned trunk''s ACL and syncs it to Kamailio. Step-up MFA required. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INVALID_PAYLOAD, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Add an IP ACL entry to a trunk
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/github_com_ringer-warp_api-gateway_internal_models.AddTrunkIPRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkIP'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1TrunksByTrunkIdIps
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/ips/{ip_id}:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Removes an IP ACL entry from an owned trunk. Step-up MFA required. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Delete a trunk IP ACL entry
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: IP ACL entry UUID
+        name: ip_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: IP ACL entry deleted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1TrunksByTrunkIdIpsByIpId
+      x-operation-id-source: derived
+    patch:
+      security:
+      - ApiKeyAuth: []
+      description: 'Updates the description and/or enabled flag of an owned trunk''s IP ACL entry. Step-up MFA required. Errors: NO_ACTIVE_CUSTOMER, INVALID_ID, NOT_FOUND, INVALID_PAYLOAD, INTERNAL_ERROR.'
+      tags:
+      - Customer/Trunks
+      summary: Update a trunk IP ACL entry
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: IP ACL entry UUID
+        name: ip_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.MessageResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: patchV1TrunksByTrunkIdIpsByIpId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/trunks/{trunk_id}/throttle-state:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the configured capacity plus live CPS/channel counters for an owned trunk. On a Redis read failure the counters are null and counters_available is false (still 200). Errors: INVALID_ID, NO_ACTIVE_CUSTOMER, NOT_FOUND.'
+      tags:
+      - Customer/Trunks
+      summary: Get a trunk's live throttle state
+      parameters:
+      - description: Trunk group UUID
+        name: trunk_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.throttleStatePayload'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1TrunksByTrunkIdThrottleState
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    internal_handlers.MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.CustomerTrunkCascade:
+      type: object
+      properties:
+        active_calls:
+          description: handler-populated from Redis
+          type: integer
+        cdr_count:
+          type: integer
+        src_ips:
+          type: integer
+        tns_routed_here:
+          type: integer
+    internal_handlers.CredentialActiveCall:
+      type: object
+    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkEndpointRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        enabled:
+          type: boolean
+        host:
+          type: string
+        port:
+          type: integer
+          maximum: 65535
+          minimum: 1
+        priority:
+          type: integer
+          maximum: 10
+          minimum: 1
+        raw_uri:
+          type: string
+        transport:
+          type: string
+          enum:
+          - UDP
+          - TCP
+          - TLS
+        weight:
+          type: integer
+          maximum: 100
+          minimum: 1
+    internal_handlers.TrunkEndpointResult:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkEndpoint'
+        warning:
+          type: string
+    internal_handlers.TrunkUpdateResult:
+      type: object
+      properties:
+        allowed_number_classes:
+          type: array
+          items:
+            type: string
+        auth_type:
+          description: IP_ACL, DIGEST, BOTH
+          type: string
+        capacity_channels_inbound:
+          type: integer
+        capacity_channels_outbound:
+          type: integer
+        capacity_cps_inbound:
+          description: 'SP10.7.0: split into directional capacity. Inbound = WARP→Customer;
+
+            outbound = Customer→WARP.'
+          type: integer
+        capacity_cps_outbound:
+          type: integer
+        created_at:
+          type: string
+        created_by:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        inbound_dnis_format:
+          default: national
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
+        name:
+          type: string
+        options_ping_enabled:
+          description: 'When true (default), WARP periodically health-checks this trunk''s
+
+            inbound endpoints and skips unhealthy ones. Set false if your SBC does
+
+            not answer SIP OPTIONS, so it stays selectable regardless of probe result.'
+          type: boolean
+        poi_assignment_id:
+          description: 'Trunk-level override for the Place-of-Interconnection fallback caller
+
+            ID. Null means this trunk inherits the customer-level POI. Admin-only.'
+          type: string
+        poi_number:
+          description: Resolved details of the number backing PoiAssignmentID, when set.
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary'
+        sip_config:
+          type: array
+          items:
+            type: integer
+        ss_attest_fallback:
+          type: string
+        ss_existing_header_policy:
+          type: string
+        ss_signing_mode:
+          description: 'STIR/SHAKEN per-trunk signing policy. Admin-only. Null means WARP
+
+            applies its default policy (sign / attest B / validate).'
+          type: string
+        updated_at:
+          type: string
+        warning:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.AddTrunkIPRequest:
+      type: object
+      required:
+      - ip_address
+      properties:
+        description:
+          type: string
+        ip_address:
+          type: string
+        netmask:
+          type: integer
+          maximum: 32
+          minimum: 0
+    github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat:
+      type: string
+      enum:
+      - national
+      - cc_national
+      - e164
+      x-enum-varnames:
+      - InboundDNISNational
+      - InboundDNISCCNational
+      - InboundDNISE164
+    internal_handlers.CustomerTrunkIPList:
+      type: object
+      properties:
+        ips:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkIP'
+        trunk_group_id:
+          type: string
+    internal_handlers.CredentialSipConfig:
+      type: object
+      properties:
+        auth_realm:
+          type: string
+        registrar:
+          type: string
+        sip_domain:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.TrunkGroup:
+      type: object
+      properties:
+        allowed_number_classes:
+          type: array
+          items:
+            type: string
+        auth_type:
+          description: IP_ACL, DIGEST, BOTH
+          type: string
+        capacity_channels_inbound:
+          type: integer
+        capacity_channels_outbound:
+          type: integer
+        capacity_cps_inbound:
+          description: 'SP10.7.0: split into directional capacity. Inbound = WARP→Customer;
+
+            outbound = Customer→WARP.'
+          type: integer
+        capacity_cps_outbound:
+          type: integer
+        created_at:
+          type: string
+        created_by:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        inbound_dnis_format:
+          default: national
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
+        name:
+          type: string
+        options_ping_enabled:
+          description: 'When true (default), WARP periodically health-checks this trunk''s
+
+            inbound endpoints and skips unhealthy ones. Set false if your SBC does
+
+            not answer SIP OPTIONS, so it stays selectable regardless of probe result.'
+          type: boolean
+        poi_assignment_id:
+          description: 'Trunk-level override for the Place-of-Interconnection fallback caller
+
+            ID. Null means this trunk inherits the customer-level POI. Admin-only.'
+          type: string
+        poi_number:
+          description: Resolved details of the number backing PoiAssignmentID, when set.
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary'
+        sip_config:
+          type: array
+          items:
+            type: integer
+        ss_attest_fallback:
+          type: string
+        ss_existing_header_policy:
+          type: string
+        ss_signing_mode:
+          description: 'STIR/SHAKEN per-trunk signing policy. Admin-only. Null means WARP
+
+            applies its default policy (sign / attest B / validate).'
+          type: string
+        updated_at:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.TrunkEndpoint:
+      type: object
+      properties:
+        created_at:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        host:
+          type: string
+        id:
+          type: integer
+        port:
+          type: integer
+        priority:
+          type: integer
+        raw_uri:
+          type: string
+        transport:
+          type: string
+        trunk_group_id:
+          type: string
+        updated_at:
+          type: string
+        weight:
+          type: integer
+    internal_handlers.createCredReq:
+      type: object
+      required:
+      - username
+      properties:
+        username:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.TrunkIP:
+      type: object
+      properties:
+        created_at:
+          type: string
+        created_by:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        ip_address:
+          description: INET type from PostgreSQL
+          type: string
+        netmask:
+          type: integer
+        trunk_group_id:
+          type: string
+        updated_at:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    internal_handlers.patchCredReq:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.CreateTrunkGroupRequest:
+      type: object
+      required:
+      - auth_type
+      - name
+      properties:
+        allowed_number_classes:
+          type: array
+          items:
+            type: string
+        auth_type:
+          type: string
+          enum:
+          - IP_ACL
+          - DIGEST
+          - EITHER
+          - BOTH
+        capacity_channels_inbound:
+          type: integer
+          maximum: 100000
+          minimum: 0
+        capacity_channels_outbound:
+          type: integer
+          maximum: 100000
+          minimum: 0
+        capacity_cps_inbound:
+          description: '0 is a valid value: "direction disabled" semantics. Kamailio''s per-trunk
+
+            runtime gate (warp:tg_cap:<tg_id>:<dir>) treats cap=0 as 503 + Retry-After.
+
+            `required` is dropped because validator/v10''s `required` rejects zero
+
+            values for ints; with this contract a missing field defaults to 0 (a
+
+            disabled direction), which is the desired UX for inbound-only trunks.'
+          type: integer
+          maximum: 10000
+          minimum: 0
+        capacity_cps_outbound:
+          type: integer
+          maximum: 10000
+          minimum: 0
+        description:
+          type: string
+        inbound_dnis_format:
+          description: 'InboundDNISFormat governs presentation to the customer; omitted values
+
+            are normalized to national by the service layer.'
+          default: national
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
+        name:
+          type: string
+          maxLength: 100
+          minLength: 3
+        options_ping_enabled:
+          description: OptionsPingEnabled defaults to true when omitted on create.
+          type: boolean
+        sip_config:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CustomerTrunkSIPConfig'
+    github_com_ringer-warp_api-gateway_internal_models.CustomerTrunkSIPConfig:
+      type: object
+      properties:
+        caller_id_mode:
+          description: passthrough, block, rewrite
+          type: string
+        caller_id_number:
+          description: Override number (if rewrite)
+          type: string
+        codecs:
+          description: Codecs (ordered preference list)
+          type: array
+          items:
+            type: string
+        cps_limit:
+          type: integer
+        custom_headers:
+          description: Additional SIP headers
+          type: object
+          additionalProperties:
+            type: string
+        diversion_header:
+          description: SIP headers
+          type: boolean
+        dtmf_mode:
+          description: rfc2833, inband — empty inherits/system default
+          type: string
+        early_media:
+          description: Allow 183 early media
+          type: boolean
+        fax_mode:
+          description: Media
+          type: string
+        from_mode:
+          description: passthrough, rewrite_caller, rewrite_trunk
+          type: string
+        max_call_duration:
+          description: Limits
+          type: integer
+        max_concurrent_calls:
+          description: Capacity (overrides trunk_groups columns if set)
+          type: integer
+        min_se:
+          description: Min-SE header value (seconds)
+          type: integer
+        p_charge_info:
+          description: Include P-Charge-Info
+          type: boolean
+        pai_mode:
+          description: Header handling
+          type: string
+        recording:
+          description: Enable call recording
+          type: boolean
+        rpid_mode:
+          description: passthrough, strip, generate
+          type: string
+        session_expires:
+          description: Session timers
+          type: integer
+    internal_handlers.CredentialListItem:
+      type: object
+      properties:
+        active_call_count:
+          type: integer
+        created_at:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        last_rotated_at:
+          type: string
+        realm:
+          type: string
+        registration_count:
+          type: integer
+        username:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        enabled:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.TrunkGroupWithIPs:
+      type: object
+      properties:
+        allowed_number_classes:
+          type: array
+          items:
+            type: string
+        auth_type:
+          description: IP_ACL, DIGEST, BOTH
+          type: string
+        capacity_channels_inbound:
+          type: integer
+        capacity_channels_outbound:
+          type: integer
+        capacity_cps_inbound:
+          description: 'SP10.7.0: split into directional capacity. Inbound = WARP→Customer;
+
+            outbound = Customer→WARP.'
+          type: integer
+        capacity_cps_outbound:
+          type: integer
+        created_at:
+          type: string
+        created_by:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        inbound_dnis_format:
+          default: national
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
+        ips:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkIP'
+        name:
+          type: string
+        options_ping_enabled:
+          description: 'When true (default), WARP periodically health-checks this trunk''s
+
+            inbound endpoints and skips unhealthy ones. Set false if your SBC does
+
+            not answer SIP OPTIONS, so it stays selectable regardless of probe result.'
+          type: boolean
+        poi_assignment_id:
+          description: 'Trunk-level override for the Place-of-Interconnection fallback caller
+
+            ID. Null means this trunk inherits the customer-level POI. Admin-only.'
+          type: string
+        poi_number:
+          description: Resolved details of the number backing PoiAssignmentID, when set.
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary'
+        sip_config:
+          type: array
+          items:
+            type: integer
+        ss_attest_fallback:
+          type: string
+        ss_existing_header_policy:
+          type: string
+        ss_signing_mode:
+          description: 'STIR/SHAKEN per-trunk signing policy. Admin-only. Null means WARP
+
+            applies its default policy (sign / attest B / validate).'
+          type: string
+        updated_at:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.CreateTrunkEndpointRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        enabled:
+          type: boolean
+        host:
+          type: string
+        port:
+          type: integer
+          maximum: 65535
+          minimum: 1
+        priority:
+          type: integer
+          maximum: 10
+          minimum: 1
+        raw_uri:
+          type: string
+        transport:
+          type: string
+          enum:
+          - UDP
+          - TCP
+          - TLS
+        weight:
+          type: integer
+          maximum: 100
+          minimum: 1
+    internal_handlers.CredentialRegistration:
+      type: object
+      properties:
+        contact:
+          type: string
+        contact_id:
+          type: string
+        expires_at:
+          type: string
+        last_keepalive:
+          type: string
+        registered_at:
+          type: string
+        source_ip:
+          type: string
+        transport:
+          type: string
+        user_agent:
+          type: string
+    internal_handlers.CredentialShowOnce:
+      type: object
+      properties:
+        credential:
+          $ref: '#/components/schemas/internal_handlers.CredentialInfo'
+        password:
+          type: string
+        sip_config:
+          $ref: '#/components/schemas/internal_handlers.CredentialSipConfig'
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+    internal_handlers.throttleStatePayload:
+      type: object
+      properties:
+        capacity_channels_inbound:
+          type: integer
+        capacity_channels_outbound:
+          type: integer
+        capacity_cps_inbound:
+          type: integer
+        capacity_cps_outbound:
+          type: integer
+        counters_available:
+          type: boolean
+        current_channels_inbound:
+          type: integer
+        current_channels_outbound:
+          type: integer
+        current_cps_inbound:
+          type: integer
+        current_cps_outbound:
+          type: integer
+        fetched_at:
+          type: string
+        trunk_group_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkGroupRequest:
+      type: object
+      properties:
+        allowed_number_classes:
+          type: array
+          items:
+            type: string
+        auth_type:
+          type: string
+          enum:
+          - IP_ACL
+          - DIGEST
+          - EITHER
+          - BOTH
+        capacity_channels_inbound:
+          type: integer
+          maximum: 100000
+          minimum: 0
+        capacity_channels_outbound:
+          type: integer
+          maximum: 100000
+          minimum: 0
+        capacity_cps_inbound:
+          description: 0 = direction disabled. See CreateTrunkGroupRequest for runtime semantics.
+          type: integer
+          maximum: 10000
+          minimum: 0
+        capacity_cps_outbound:
+          type: integer
+          maximum: 10000
+          minimum: 0
+        description:
+          type: string
+        enabled:
+          type: boolean
+        inbound_dnis_format:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
+        name:
+          type: string
+          maxLength: 100
+          minLength: 3
+        options_ping_enabled:
+          description: Omitted means no change. Customer self-service.
+          type: boolean
+        poi_assignment_id:
+          description: 'Trunk-level POI fallback override. Omitted means no change; explicit
+
+            null clears the override back to the customer-level POI.'
+          type: string
+        sip_config:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CustomerTrunkSIPConfig'
+        ss_attest_fallback:
+          type: string
+        ss_existing_header_policy:
+          type: string
+        ss_signing_mode:
+          description: 'STIR/SHAKEN per-trunk signing policy. Admin-only. Allowed values:
+
+            ss_signing_mode ∈ {off,sign}, ss_attest_fallback ∈ {B,C},
+
+            ss_existing_header_policy ∈ {validate,passthrough,override}. Omitted
+
+            means no change.'
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    internal_handlers.CredentialInfo:
+      type: object
+      properties:
+        created_at:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        last_rotated_at:
+          type: string
+        realm:
+          type: string
+        trunk_group_id:
+          type: string
+        username:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary:
+      type: object
+      properties:
+        friendly_name:
+          type: string
+        id:
+          type: string
+        npa:
+          type: string
+        nxx:
+          type: string
+        state:
+          type: string
+        tn:
+          type: string
+  requestBodies:
+    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest'
+      description: Fields to update
+      required: true
+    github_com_ringer-warp_api-gateway_internal_models.AddTrunkIPRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.AddTrunkIPRequest'
+      description: IP ACL entry
+      required: true
+    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkGroupRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkGroupRequest'
+      description: Fields to update
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

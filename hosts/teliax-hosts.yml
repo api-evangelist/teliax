@@ -1,0 +1,161 @@
+generated: '2026-10-09'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 13
+  own: 3
+  other_domain: 9
+  platform: 1
+  roles:
+  - api
+  - docs
+  - marketing
+  - other
+  - source
+  - support
+  - website
+hosts:
+- host: api.ringer.tel
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: ringer.tel
+  role: api
+  relation: other-domain
+- host: api.teliax.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: teliax.com
+  role: api
+  relation: own
+- host: api.telique.ringer.tel
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: ringer.tel
+  role: api
+  relation: other-domain
+- host: api.tniq.ringer.tel
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: ringer.tel
+  role: api
+  relation: other-domain
+- host: api.warp.ringer.tel
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: ringer.tel
+  role: api
+  relation: other-domain
+- host: docs.ringer.tel
+  found_by:
+  - pointer
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Documentation
+  serves:
+  - docs
+  - hosting
+  vendor: vercel
+  registrable_domain: ringer.tel
+  role: docs
+  relation: other-domain
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - SpectralRules
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: ringer.tel
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - Blog
+  - Pricing
+  - TermsOfService
+  - PrivacyPolicy
+  serves: []
+  registrable_domain: ringer.tel
+  role: marketing
+  relation: other-domain
+- host: support.teliax.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Support
+  serves:
+  - support
+  vendor: freshdesk
+  registrable_domain: teliax.com
+  role: support
+  relation: own
+- host: telique.ringer.tel
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - docs
+  registrable_domain: ringer.tel
+  role: other
+  relation: other-domain
+- host: tniq.ringer.tel
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - docs
+  registrable_domain: ringer.tel
+  role: other
+  relation: other-domain
+- host: warp.ringer.tel
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - docs
+  registrable_domain: ringer.tel
+  role: other
+  relation: other-domain
+- host: www.teliax.com
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  - vendor-detect
+  types:
+  - Website
+  serves:
+  - cdn
+  - hosting
+  vendor: cloudflare
+  registrable_domain: teliax.com
+  role: website
+  relation: own

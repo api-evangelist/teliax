@@ -1,0 +1,160 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Network API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/Network across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/Network
+paths:
+  /v1/network/ingress-ips:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Returns the customer-facing SIP edge servers (UDP/TCP/TLS hosts, IPs, and ports) to configure a trunk against.
+      tags:
+      - Customer/Network
+      summary: WARP ingress SIP servers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_networkinfo.IngressInfo'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1NetworkIngressIps
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/network/vendor-ips:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: Returns the WARP egress/origination IPs a customer must whitelist for symmetric SIP signaling.
+      tags:
+      - Customer/Network
+      summary: WARP origination IPs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.VendorOriginationIPsResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1NetworkVendorIps
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    github_com_ringer-warp_api-gateway_internal_networkinfo.IngressServer:
+      type: object
+      properties:
+        hostname:
+          type: string
+        ip:
+          type: string
+        port:
+          type: string
+        primary:
+          type: string
+        protocol:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.VendorOriginationIPsResponse:
+      type: object
+      properties:
+        ips:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+        region:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_networkinfo.IngressInfo:
+      type: object
+      properties:
+        domain:
+          type: string
+        note:
+          type: string
+        region:
+          type: string
+        servers:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_networkinfo.IngressServer'
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

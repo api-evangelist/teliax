@@ -1,0 +1,233 @@
+openapi: 3.2.0
+info:
+  title: Teliax LRN API
+  version: 2026.6.25
+  contact:
+    name: Ringer Support
+    email: support@ringer.com
+    url: https://telique.ringer.tel
+  license:
+    name: Proprietary
+  description: 'Operations tagged LRN across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.telique.ringer.tel
+  description: Production
+security:
+- apiToken: []
+tags:
+- name: LRN
+  description: Local Routing Number lookups — resolve a phone number to the switch that currently serves it, with porting metadata.
+paths:
+  /v1/telique/lrn/{phone_number}:
+    get:
+      operationId: lrnLookupByPath
+      tags:
+      - LRN
+      summary: Look up the LRN for a phone number (GET)
+      description: 'Simple GET-based LRN lookup. Default response is plain text
+
+        `LRN;SPID` (semicolon-separated, **not** pipe) for ported numbers,
+
+        or just the dialed number echoed back as its own LRN for unported
+
+        numbers. Use the `format` query parameter for JSON or XML.
+
+
+        Examples:
+
+        - `/v1/telique/lrn/3036298301` returns `7207081999;567G`
+
+        - `/v1/telique/lrn/3036298301?format=json` returns JSON
+
+
+        **Accepted input — geographic/wireless NANP numbers only.** This
+
+        endpoint resolves numbers carried in LSMS/NPAC porting data. It does
+
+        **not** service toll-free numbers (NPAs 800, 833, 844, 855, 866, 877,
+
+        888, 822) — for toll-free routing use the RouteLink endpoints
+
+        (`/v1/telique/ror/{crn}`, `/v1/telique/cicror/...`).
+
+
+        **Unported, unknown, toll-free, and non-LERG-assigned numbers all
+
+        return the dialed number as its own LRN** (plain text = the number
+
+        itself; JSON `lrn` = the number, `metadata.spid` = null), HTTP `200`.
+
+        The endpoint does **not** validate that the NPA-NXX is LERG-assigned
+
+        and does **not** distinguish "valid unported number" from "toll-free /
+
+        non-routable" — both yield this echo response. Callers should
+
+        pre-filter toll-free and non-geographic NPAs before dipping to avoid
+
+        wasted lookups. A `400 INVALID_PHONE_NUMBER` is returned **only** for
+
+        malformed input (not a 10-digit NANP number after normalization).'
+      parameters:
+      - name: phone_number
+        in: path
+        required: true
+        description: 10-digit US phone number
+        schema:
+          type: string
+          pattern: ^\d{10}$
+          example: '3036298301'
+      - name: format
+        in: query
+        required: false
+        description: Response format (default is plain text)
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          - plain
+          - raw
+          default: plain
+      responses:
+        '200':
+          description: LRN found
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: 7207081999;567G
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LrnLookupResponse'
+              example:
+                phone_number: '3036298301'
+                lrn: '7207081999'
+                status: success
+                timestamp: 2026-04-04 23:04:50.391142+00:00
+                metadata:
+                  spid: 567G
+                  lnp_type: lspp
+        '400':
+          description: Malformed input — the path value is not a 10-digit NANP number after normalization (wrong length, NPA/NXX starting with 0/1, or non-numeric). Returned as a JSON error body even though successful lookups default to plain text. Toll-free and non-LERG numbers do NOT 400 — they return `200` with the number echoed as its own LRN (see the endpoint description).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: INVALID_PHONE_NUMBER
+                message: 'Invalid phone number format: Invalid format: notanumber. Expected 10-digit US number or E.164 format.'
+                code: 400
+                timestamp: 2026-04-04 23:04:50.391142+00:00
+        '404':
+          description: Not returned for well-formed input — an unported/unknown number yields `200` with the number echoed as its own LRN, not a 404. This status is reserved for an explicit data-store "not found" signal that the current implementation does not emit. JSON error body if it ever occurs.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Data store unavailable. JSON error body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: DATA_STORE_UNAVAILABLE
+                message: Data store is temporarily unavailable
+                code: 503
+                timestamp: 2026-04-04 23:04:50.391142+00:00
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+components:
+  schemas:
+    LrnMetadata:
+      type: object
+      description: 'Routing metadata for the LRN response. For authoritative NPAC port-event
+
+        history (activation timestamp, transaction history), use the LSMS GraphQL
+
+        `subscriptionVersion` query — this REST endpoint only carries the routing
+
+        identifiers needed to dial the number.
+
+        '
+      properties:
+        spid:
+          type: string
+          description: Service Provider ID (4 characters)
+          example: 567G
+        lnp_type:
+          type: string
+          description: Local Number Portability type
+          enum:
+          - lspp
+          - lisp
+          - pool
+          example: lspp
+    LrnLookupResponse:
+      type: object
+      required:
+      - phone_number
+      - lrn
+      - status
+      - timestamp
+      properties:
+        phone_number:
+          type: string
+          description: Normalized 10-digit phone number
+          example: '3036298301'
+        lrn:
+          type: string
+          description: Local Routing Number — the switch serving this number
+          example: '7207081999'
+        status:
+          type: string
+          description: Request status
+          example: success
+        timestamp:
+          type: string
+          format: date-time
+          description: Response timestamp (ISO 8601)
+          example: 2026-04-04 23:04:50.391142+00:00
+        metadata:
+          $ref: '#/components/schemas/LrnMetadata'
+    ErrorResponse:
+      type: object
+      description: JSON error envelope returned for all 4xx/5xx responses, including on endpoints whose successful responses default to plain text. Fields mirror the service's error struct.
+      required:
+      - error
+      - message
+      - code
+      - timestamp
+      properties:
+        error:
+          type: string
+          description: Machine-readable error code.
+          example: INVALID_PHONE_NUMBER
+        message:
+          type: string
+          description: Human-readable detail.
+          example: 'Invalid phone number format: Expected 10-digit US number or E.164 format.'
+        code:
+          type: integer
+          description: HTTP status code, repeated in the body.
+          example: 400
+        timestamp:
+          type: string
+          format: date-time
+          description: RFC 3339 timestamp of when the error was generated.
+          example: 2026-04-04 23:04:50.391142+00:00
+        details:
+          type: object
+          description: Optional structured context; omitted when absent.
+          additionalProperties: true
+  securitySchemes:
+    apiToken:
+      type: apiKey
+      in: header
+      name: x-api-token
+      description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
+x-refined-from:
+- teliax-telique-openapi.yaml
+- teliax-telique-openapi.yml

@@ -1,0 +1,1641 @@
+openapi: 3.2.0
+info:
+  title: Teliax Toll Free API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Toll-Free across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Toll-Free
+  description: Toll-free number management via Somos TFN Registry
+paths:
+  /v1/tollfree/templates:
+    get:
+      tags:
+      - Toll-Free
+      summary: List templates
+      description: List available CPR templates for a RespOrg
+      operationId: listTemplates
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - Toll-Free
+      summary: Update template
+      description: Update an existing CPR template on Somos
+      operationId: updateTemplate
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - Toll-Free
+      summary: Create template
+      description: Create a new CPR template on Somos
+      operationId: createTemplate
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/{tmplName}/unlock:
+    put:
+      tags:
+      - Toll-Free
+      summary: Unlock template
+      description: Unlock a template after editing
+      operationId: unlockTemplate
+      parameters:
+      - name: tmplName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: effDtTm
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/{tmplName}/lock:
+    put:
+      tags:
+      - Toll-Free
+      summary: Lock template
+      description: Lock a template for editing
+      operationId: lockTemplate
+      parameters:
+      - name: tmplName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: effDtTm
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/query:
+    put:
+      tags:
+      - Toll-Free
+      summary: Query TFN status
+      description: Query toll-free number status and details from Somos registry
+      operationId: queryNumbers
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/{tmplName}/disconnect:
+    post:
+      tags:
+      - Toll-Free
+      summary: Disconnect template
+      description: Disconnect a template on Somos
+      operationId: disconnectTemplate
+      parameters:
+      - name: tmplName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: effDtTm
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/drafts:
+    get:
+      tags:
+      - Toll-Free
+      summary: List drafts
+      description: List template drafts for a customer
+      operationId: listDrafts
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - Toll-Free
+      summary: Save draft
+      description: Create or update a template draft
+      operationId: saveDraft
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateDraftDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/drafts/{draftId}/push:
+    post:
+      tags:
+      - Toll-Free
+      summary: Push draft to Somos
+      description: Push a template draft to Somos (create or update)
+      operationId: pushDraftToSomos
+      parameters:
+      - name: draftId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/copy:
+    post:
+      tags:
+      - Toll-Free
+      summary: Copy template
+      description: Copy a template to a new name or future effective date
+      operationId: copyTemplate
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateCopyRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/search-spare:
+    post:
+      tags:
+      - Toll-Free
+      summary: Search spare numbers
+      description: Search for available toll-free numbers by wildcard pattern (search only, does not reserve)
+      operationId: searchSpareNumbers
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpareSearchRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/search-and-reserve:
+    post:
+      tags:
+      - Toll-Free
+      summary: Search & reserve
+      description: Search for spare toll-free numbers and reserve them in one operation
+      operationId: searchAndReserve
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpareSearchRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/reserve:
+    post:
+      tags:
+      - Toll-Free
+      summary: Reserve specific numbers
+      description: Reserve specific toll-free numbers by number list
+      operationId: reserveNumbers
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReserveRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/ptr-operations/{id}/retry:
+    post:
+      tags:
+      - Toll-Free
+      summary: Retry a failed/timed-out PTR operation
+      description: Clone target_template_name + svc_order_num from the source op into a fresh op; returns 202 with the new op
+      operationId: retryPtrOperation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TollFreePtrOperationDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/disconnect/{num}:
+    post:
+      tags:
+      - Toll-Free
+      summary: Disconnect TFN
+      description: Disconnect an active toll-free number (WORKING → DISCONNECT)
+      operationId: disconnectNumber
+      parameters:
+      - name: num
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/change-resporg:
+    post:
+      tags:
+      - Toll-Free
+      summary: Change RespOrg
+      description: Transfer toll-free numbers to a different RespOrg within the same entity
+      operationId: changeRespOrg
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/activate:
+    post:
+      tags:
+      - Toll-Free
+      summary: Activate TFNs
+      description: 'Create pointer records to activate reserved toll-free numbers with a CPR template. svcOrderNum: 4-13 alphanumerics, first character alphabetic (no hyphens). effDtTm: ''NOW'' or ISO UTC time; minutes are snapped forward to quarter-hour boundaries (00/15/30/45) and the adjusted time is echoed per item.'
+      operationId: activateNumbers
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivateRequest'
+        required: true
+      responses:
+        '200':
+          description: At least one number activated (check per-item success)
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ActivateBatchResponse'
+        '400':
+          description: Invalid svcOrderNum/effDtTm or template preflight failure
+          content:
+            '*/*':
+              schema:
+                type: object
+        '422':
+          description: Every number in the batch failed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ActivateBatchResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/{tmplName}:
+    get:
+      tags:
+      - Toll-Free
+      summary: Retrieve full template
+      description: Get full template record with CPR data from Somos
+      operationId: getTemplate
+      parameters:
+      - name: tmplName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: effDtTm
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Toll-Free
+      summary: Delete template
+      description: Delete a future-effective template on Somos
+      operationId: deleteTemplate
+      parameters:
+      - name: tmplName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: effDtTm
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: recVersionId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/{tmplName}/history:
+    get:
+      tags:
+      - Toll-Free
+      summary: Template history
+      description: Get change history for a template
+      operationId: getTemplateHistory
+      parameters:
+      - name: tmplName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/{tmplName}/history/{effDtTm}/{activityTimestamp}:
+    get:
+      tags:
+      - Toll-Free
+      summary: Template history version
+      description: Retrieve a specific historical version of a template
+      operationId: getTemplateHistoryVersion
+      parameters:
+      - name: tmplName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: effDtTm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: activityTimestamp
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/templates/drafts/{draftId}:
+    get:
+      tags:
+      - Toll-Free
+      summary: Get draft
+      description: Get a specific template draft
+      operationId: getDraft
+      parameters:
+      - name: draftId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Toll-Free
+      summary: Delete draft
+      description: Delete a template draft
+      operationId: deleteDraft
+      parameters:
+      - name: draftId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/status:
+    get:
+      tags:
+      - Toll-Free
+      summary: Check Somos availability
+      description: Check if Somos integration is active
+      operationId: getSomosStatus
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/reserved-numbers:
+    get:
+      tags:
+      - Toll-Free
+      summary: List reserved numbers
+      description: Get all reserved toll-free numbers for a customer's RespOrg
+      operationId: getReservedNumbers
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/ptr-operations:
+    get:
+      tags:
+      - Toll-Free
+      summary: List PTR operations for a TFN
+      description: Return all toll-free PTR operation records for the given TFN, newest first
+      operationId: listPtrOperations
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: telephoneNumber
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TollFreePtrOperationDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/ptr-operations/{id}:
+    get:
+      tags:
+      - Toll-Free
+      summary: Get a single PTR operation
+      description: Return one toll-free PTR operation record by id, or 404 if not found
+      operationId: getPtrOperation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TollFreePtrOperationDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/pointer-record/{num}:
+    get:
+      tags:
+      - Toll-Free
+      summary: Query pointer record
+      description: Get pointer record details for a TFN
+      operationId: queryPointerRecord
+      parameters:
+      - name: num
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/inventory:
+    get:
+      tags:
+      - Toll-Free
+      summary: Get inventory list
+      description: Paginated list of toll-free numbers from local database
+      operationId: getInventory
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/inventory/summary:
+    get:
+      tags:
+      - Toll-Free
+      summary: Get inventory summary
+      description: Get toll-free inventory counts grouped by RespOrg and status from local database
+      operationId: getInventorySummary
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/history/{tfn}:
+    get:
+      tags:
+      - Toll-Free
+      summary: Get TFN history
+      description: Query Number Admin History for a toll-free number from Somos
+      operationId: getTfnHistory
+      parameters:
+      - name: tfn
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/entities/{entityId}/respOrgs:
+    get:
+      tags:
+      - Toll-Free
+      summary: Get RespOrgs for entity
+      description: List all RespOrgs under a Somos entity
+      operationId: getRespOrgsByEntity
+      parameters:
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/entities/{entityId}/respOrgs/active:
+    get:
+      tags:
+      - Toll-Free
+      summary: Get active RespOrgs
+      description: List only active RespOrgs under a Somos entity
+      operationId: getActiveRespOrgsByEntity
+      parameters:
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/customer-config:
+    get:
+      tags:
+      - Toll-Free
+      summary: Get toll-free config
+      description: Get the toll-free configuration for a customer
+      operationId: getCustomerTollFreeConfig
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/reserve/{tfn}:
+    delete:
+      tags:
+      - Toll-Free
+      summary: Release reservation
+      description: Release a reserved toll-free number back to spare
+      operationId: releaseReservation
+      parameters:
+      - name: tfn
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: respOrgId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    ReserveRequest:
+      required:
+      - numbers
+      type: object
+      properties:
+        numbers:
+          type: array
+          items:
+            type: string
+    TemplateCreateRequest:
+      required:
+      - effDtTm
+      - tmplName
+      type: object
+      properties:
+        tmplName:
+          pattern: ^[*][a-zA-Z0-9]{2}[a-zA-Z0-9\-]{1,12}$
+          type: string
+        effDtTm:
+          type: string
+        tmplDesc:
+          type: string
+        cmd:
+          type: string
+        timezone:
+          type: string
+        dayLightSavings:
+          type: string
+        priInterLT:
+          type: string
+        priIntraLT:
+          type: string
+        interLATACarrier:
+          type: array
+          items:
+            type: string
+        intraLATACarrier:
+          type: array
+          items:
+            type: string
+        numTermLine:
+          type: integer
+          format: int32
+        conName:
+          type: string
+        conTel:
+          type: string
+        notes:
+          type: string
+        aos:
+          type: object
+        cprSectName:
+          type: array
+          items:
+            type: object
+        lbl:
+          type: array
+          items:
+            type: object
+    ActivateRequest:
+      required:
+      - effDtTm
+      - numbers
+      - svcOrderNum
+      - tmplName
+      type: object
+      properties:
+        numbers:
+          type: array
+          items:
+            type: string
+        tmplName:
+          type: string
+        effDtTm:
+          type: string
+        svcOrderNum:
+          type: string
+    TemplateCopyRequest:
+      required:
+      - srcEffDtTm
+      - srcTmplName
+      - tgtEffDtTm
+      - tgtTmplName
+      type: object
+      properties:
+        srcTmplName:
+          type: string
+        srcEffDtTm:
+          type: string
+        tgtTmplName:
+          pattern: ^[*][a-zA-Z0-9]{2}[a-zA-Z0-9\-]{1,12}$
+          type: string
+        tgtEffDtTm:
+          type: string
+    TemplateDraftDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        tmplName:
+          type: string
+        effDtTm:
+          type: string
+        status:
+          type: string
+        cprData:
+          type: object
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        somosRecVersionId:
+          type: string
+    ActivationResultDto:
+      type: object
+      properties:
+        num:
+          type: string
+          description: 10-digit toll-free number
+        success:
+          type: boolean
+          description: Whether the pointer-record submit was accepted — MUST be checked per item
+        tmplName:
+          type: string
+          description: CPR template applied
+        effDtTm:
+          type: string
+          description: Normalized effective date/time actually sent to Somos (quarter-hour aligned)
+        errorMessage:
+          type: string
+          description: 'Failure detail incl. Somos error codes (e.g. ''599049: Service Order: ...'')'
+        operationId:
+          type: string
+          description: tollfree_ptr_operations row id for this attempt
+          format: uuid
+        inventoryId:
+          type: string
+          description: number_inventory row id written through on success
+          format: uuid
+      description: Per-number activation outcomes
+    TollFreePtrOperationDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        telephoneNumber:
+          type: string
+        operationType:
+          type: string
+        actingRespOrgId:
+          type: string
+        srcTemplateName:
+          type: string
+        srcTemplateCrn:
+          type: string
+        srcEffDtTm:
+          type: string
+        srcRecVersionId:
+          type: string
+        targetTemplateName:
+          type: string
+        targetTemplateCrn:
+          type: string
+        targetEffDtTm:
+          type: string
+        targetRespOrgId:
+          type: string
+        svcOrderNum:
+          type: string
+        status:
+          type: string
+          enum:
+          - PENDING_PRECHECK
+          - PENDING_SUBMIT
+          - SUBMITTED
+          - APPLIED
+          - FAILED
+          - TIMEOUT
+          - CANCELLED
+        errorCode:
+          type: string
+          enum:
+          - PRECHECK_TEMPLATE_NOT_FOUND
+          - PRECHECK_TEMPLATE_INACTIVE
+          - PRECHECK_TEMPLATE_LOCKED
+          - PRECHECK_CROSS_RESPORG
+          - OPERATION_ALREADY_PENDING
+          - SUBMIT_REJECTED
+          - APPLY_REJECTED
+          - APPLY_TIMEOUT
+          - SOMOS_UNREACHABLE
+          - UNKNOWN_ERROR
+        errorMessage:
+          type: string
+        pollAttempts:
+          type: integer
+          format: int32
+        nextPollAt:
+          type: string
+          format: date-time
+        timeoutAt:
+          type: string
+          format: date-time
+        submittedAt:
+          type: string
+          format: date-time
+        appliedAt:
+          type: string
+          format: date-time
+        failedAt:
+          type: string
+          format: date-time
+        timedOutAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        parentOperationId:
+          type: string
+          format: uuid
+    TemplateUpdateRequest:
+      required:
+      - effDtTm
+      - recVersionId
+      - tmplName
+      type: object
+      properties:
+        tmplName:
+          pattern: ^[*][a-zA-Z0-9]{2}[a-zA-Z0-9\-]{1,12}$
+          type: string
+        effDtTm:
+          type: string
+        tmplDesc:
+          type: string
+        cmd:
+          type: string
+        timezone:
+          type: string
+        dayLightSavings:
+          type: string
+        priInterLT:
+          type: string
+        priIntraLT:
+          type: string
+        interLATACarrier:
+          type: array
+          items:
+            type: string
+        intraLATACarrier:
+          type: array
+          items:
+            type: string
+        numTermLine:
+          type: integer
+          format: int32
+        conName:
+          type: string
+        conTel:
+          type: string
+        notes:
+          type: string
+        aos:
+          type: object
+        cprSectName:
+          type: array
+          items:
+            type: object
+        lbl:
+          type: array
+          items:
+            type: object
+        recVersionId:
+          type: string
+        tmplRecCompPart:
+          type: string
+    SpareSearchRequest:
+      required:
+      - pattern
+      type: object
+      properties:
+        pattern:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+    ActivateBatchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          description: Per-number activation outcomes
+          items:
+            $ref: '#/components/schemas/ActivationResultDto'
+        successCount:
+          type: integer
+          description: Numbers whose pointer-record submit was accepted by Somos
+          format: int64
+        failureCount:
+          type: integer
+          description: Numbers that failed validation or were rejected by Somos
+          format: int64
+      description: Batch activation result. HTTP 200 = at least one number succeeded; HTTP 422 = every number failed. Always check per-item 'success'.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

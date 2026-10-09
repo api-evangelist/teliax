@@ -1,0 +1,45 @@
+generated: '2026-10-09'
+method: derived
+source: mcp/teliax-mcp.yml
+purpose: >-
+  Binds each documented Telique MCP tool to the Telique REST operation(s) in
+  openapi/teliax-telique-openapi.yml that back it. The live tools/list is gated by
+  OAuth, so bindings were made by tool name and description against operation
+  summaries and paths. Confidence reflects that.
+surfaces:
+  rest_openapi: openapi/teliax-telique-openapi.yml
+  rest_base: https://api.telique.ringer.tel
+  graphql:
+  - endpoint: https://api.telique.ringer.tel/v1/telique/lsms/gql
+    operation: lsmsGraphql
+  - endpoint: https://api.telique.ringer.tel/v1/telique/lerg/graphql
+    operation: graphqlQuery
+  mcp: https://api.telique.ringer.tel/mcp
+  gated: MCP endpoint is OAuth-gated (401 unauthenticated). REST accepts anonymous calls at 10 requests/minute, or an x-api-token header.
+crosswalk:
+- {tool: lrn_lookup, category: Number Portability, rest: [lrnLookupByPath], binding: rest, confidence: high}
+- {tool: cnam_lookup, category: Number Intelligence, rest: [cnamLookup], binding: rest, confidence: high, note: identityLookupGet/identityLookupPost return the fuller CNAM + robocall-mitigation identity.}
+- {tool: dno_check, category: Number Intelligence, rest: [dnoCheck], binding: rest, confidence: high}
+- {tool: lrn_relationship_query, category: Number Portability, rest: [lsmsListPhoneNumbers, lsmsListSpids, lsmsListLrns], binding: rest, confidence: high}
+- {tool: lerg_table_info, category: LERG Reference, rest: [listTables, getTableInfo, getTableSchema], binding: rest, confidence: high}
+- {tool: lerg_query, category: LERG Reference, rest: [queryTable, queryLerg6Fast], binding: rest, confidence: medium, note: queryLerg6Fast is a LERG 6 fast path. Whether the tool uses it is not documented.}
+- {tool: lerg_complex_query, category: LERG Reference, rest: [complexQuery], binding: rest, confidence: high}
+- {tool: lerg_tandem, category: LERG Reference, rest: [queryTandem], binding: rest, confidence: high}
+- {tool: routelink_lookup, category: Toll-Free, rest: [lookupCic, lookupRor, lookupCicRor], binding: rest, confidence: high}
+- {tool: routelink_ror_query, category: Toll-Free, rest: [lookupTfnsByRor, lookupCprsByRor], binding: rest, confidence: high}
+- {tool: routelink_cpr, category: Toll-Free, rest: [dumpCpr], binding: rest, confidence: high}
+- {tool: graphql_query, category: Advanced, rest: [lsmsGraphql, graphqlQuery], binding: graphql, confidence: high, note: One tool covers both the LSMS and LERG GraphQL endpoints.}
+- {tool: lookup_tn, category: Composite, rest: [lrnLookupByPath, cnamLookup, dnoCheck, queryTable], binding: composite, confidence: low, note: 'Documented as LRN + CNAM + DNO + LERG in one call. Which LERG operation it fans out to is not published.'}
+mcp_only: []
+rest_only:
+- {operation: identityLookupGet, reason: No documented tool names the full identity (CNAM + robocall mitigation) lookup.}
+- {operation: identityLookupPost, reason: Same as identityLookupGet; JSON-body variant.}
+- {operation: graphqlPlayground, reason: GraphiQL HTML playground, a human surface.}
+coverage:
+  mcp_tools_named: 13
+  mcp_bound_to_rest: 13
+  mcp_only: 0
+  rest_operations_total: 24
+  rest_operations_with_mcp_tool: 21
+  rest_operations_without_tool: 3
+  out_of_scope: TNIQ (291 ops) and WARP (152 ops) have no MCP server.

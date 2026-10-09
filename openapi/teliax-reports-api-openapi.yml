@@ -1,0 +1,172 @@
+openapi: 3.2.0
+info:
+  title: Teliax Reports API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Reports across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Reports
+  description: Queue async reports that are emailed to the requesting user as CSV/XLSX attachments.
+paths:
+  /v1/reports/jobs:
+    get:
+      tags:
+      - Reports
+      summary: List my recent report jobs
+      description: Returns the requesting user's most recent report jobs, newest first.
+      operationId: listMyJobs
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportJobResponse'
+    post:
+      tags:
+      - Reports
+      summary: Queue a new report job
+      description: Creates a QUEUED report job. The file is emailed to the authenticated user when generation completes.
+      operationId: queueJob
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReportJobRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reports/jobs/{id}:
+    get:
+      tags:
+      - Reports
+      summary: Poll a report job's status
+      description: Returns the status of a single report job. Callers may only access their own jobs unless they are superAdmin.
+      operationId: getJob
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ReportJobResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    ReportJobResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        reportType:
+          type: string
+          enum:
+          - SOA_QUEUE_SNAPSHOT
+          - PORT_OUTS
+          - PORT_INS
+          - INVENTORY_XLSX
+          - INVENTORY_MAP_XLSX
+          - NNID_SMS_IMPACT
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - RUNNING
+          - COMPLETE
+          - FAILED
+        userEmail:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        rowCount:
+          type: integer
+          format: int32
+        sizeBytes:
+          type: integer
+          format: int64
+        errorMessage:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+    CreateReportJobRequest:
+      required:
+      - reportType
+      type: object
+      properties:
+        reportType:
+          type: string
+          enum:
+          - SOA_QUEUE_SNAPSHOT
+          - PORT_OUTS
+          - PORT_INS
+          - INVENTORY_XLSX
+          - INVENTORY_MAP_XLSX
+          - NNID_SMS_IMPACT
+        params:
+          type: object
+          additionalProperties:
+            type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

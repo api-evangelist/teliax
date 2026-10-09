@@ -1,0 +1,339 @@
+openapi: 3.2.0
+info:
+  title: Teliax Bulk Port Jobs API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Bulk Port Jobs across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Bulk Port Jobs
+  description: Background job monitoring and management
+paths:
+  /v1/port-projects/jobs/retry/{jobId}:
+    post:
+      tags:
+      - Bulk Port Jobs
+      summary: Retry a specific failed job
+      operationId: retryFailedJob
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RetryJobResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/jobs/retry/project/{projectId}:
+    post:
+      tags:
+      - Bulk Port Jobs
+      summary: Retry all failed TNs for a project
+      operationId: retryAllFailedForProject
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RetryJobResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/jobs/stats:
+    get:
+      tags:
+      - Bulk Port Jobs
+      summary: Get overall job statistics
+      operationId: getJobStats
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/JobStatsResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/jobs/state/{state}:
+    get:
+      tags:
+      - Bulk Port Jobs
+      summary: Get jobs in a specific state
+      operationId: getJobsByState
+      parameters:
+      - name: state
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/jobs/project/{projectId}/status:
+    get:
+      tags:
+      - Bulk Port Jobs
+      summary: Get job status for a specific project
+      operationId: getProjectJobStatus
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProjectJobStatusResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/jobs/failed:
+    get:
+      tags:
+      - Bulk Port Jobs
+      summary: Get list of failed jobs
+      operationId: getFailedJobs
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FailedJobResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/jobs/{jobId}:
+    delete:
+      tags:
+      - Bulk Port Jobs
+      summary: Cancel/delete a specific job
+      operationId: cancelJob
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    RetryJobResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        success:
+          type: boolean
+        message:
+          type: string
+        retriedCount:
+          type: integer
+          format: int32
+    JobResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        jobName:
+          type: string
+        state:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ProjectJobStatusResponse:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        totalTns:
+          type: integer
+          format: int64
+        pendingTns:
+          type: integer
+          format: int64
+        validatedTns:
+          type: integer
+          format: int64
+        validTns:
+          type: integer
+          format: int64
+        errorTns:
+          type: integer
+          format: int64
+        percentComplete:
+          type: integer
+          format: int32
+    JobStatsResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        awaiting:
+          type: integer
+          format: int64
+        scheduled:
+          type: integer
+          format: int64
+        enqueued:
+          type: integer
+          format: int64
+        processing:
+          type: integer
+          format: int64
+        succeeded:
+          type: integer
+          format: int64
+        failed:
+          type: integer
+          format: int64
+        deleted:
+          type: integer
+          format: int64
+        recurringJobs:
+          type: integer
+          format: int64
+        backgroundJobServers:
+          type: integer
+          format: int32
+    FailedJobResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        jobName:
+          type: string
+        exception:
+          type: string
+        failedAt:
+          type: string
+          format: date-time
+        numberOfRetries:
+          type: integer
+          format: int32
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-dno-lookup-response-schema.json",
+  "title": "DnoLookupResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-telique-openapi.yml#/components/schemas/DnoLookupResponse",
+  "type": "object",
+  "required": [
+    "phone_number",
+    "is_dno",
+    "status",
+    "timestamp"
+  ],
+  "properties": {
+    "phone_number": {
+      "type": "string",
+      "description": "Phone number that was checked"
+    },
+    "is_dno": {
+      "type": "boolean",
+      "description": "Whether the number is on the Do Not Originate list"
+    },
+    "status": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string",
+      "description": "Source of the DNO entry (only present when is_dno is true)"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the DNO entry was created (only present when is_dno is true)"
+    },
+    "matched_pattern": {
+      "type": "string",
+      "description": "The pattern that matched (3, 6, 7, or 10 digits; only present when is_dno is true)"
+    }
+  }
+}

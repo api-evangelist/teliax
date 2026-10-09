@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-complex-query-request-schema.json",
+  "title": "ComplexQueryRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-telique-openapi.yml#/components/schemas/ComplexQueryRequest",
+  "type": "object",
+  "required": [
+    "table"
+  ],
+  "properties": {
+    "table": {
+      "type": "string",
+      "description": "Name of the table to query"
+    },
+    "fields": {
+      "type": "array",
+      "description": "Fields to return (all fields if omitted)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "filters": {
+      "type": "array",
+      "description": "Filter conditions (combined with AND)",
+      "items": {
+        "$ref": "#/$defs/FilterCondition"
+      }
+    },
+    "limit": {
+      "type": "integer",
+      "description": "Maximum number of records to return",
+      "minimum": 1,
+      "maximum": 10000,
+      "default": 100
+    },
+    "offset": {
+      "type": "integer",
+      "description": "Number of records to skip",
+      "minimum": 0,
+      "default": 0
+    },
+    "join": {
+      "$ref": "#/$defs/JoinClause"
+    }
+  },
+  "$defs": {
+    "FilterCondition": {
+      "type": "object",
+      "required": [
+        "field",
+        "operator",
+        "value"
+      ],
+      "properties": {
+        "field": {
+          "type": "string",
+          "description": "Field name to filter on"
+        },
+        "operator": {
+          "type": "string",
+          "description": "Filter operator",
+          "enum": [
+            "eq",
+            "ne",
+            "gt",
+            "gte",
+            "lt",
+            "lte",
+            "like",
+            "in",
+            "notin",
+            "isnull",
+            "isnotnull"
+          ]
+        },
+        "value": {
+          "description": "Value to filter by (type depends on field and operator)",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "JoinClause": {
+      "type": "object",
+      "required": [
+        "table",
+        true
+      ],
+      "properties": {
+        "table": {
+          "type": "string",
+          "description": "Table to join with"
+        },
+        "true": {
+          "type": "array",
+          "description": "Join conditions",
+          "items": {
+            "$ref": "#/$defs/JoinCondition"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "description": "Fields to include from joined table",
+          "items": {
+            "type": "string"
+          }
+        },
+        "join_type": {
+          "type": "string",
+          "description": "Type of join (defaults to inner)",
+          "enum": [
+            "inner",
+            "left",
+            "right"
+          ],
+          "default": "inner"
+        }
+      }
+    },
+    "JoinCondition": {
+      "type": "object",
+      "required": [
+        "left_field",
+        "right_field"
+      ],
+      "properties": {
+        "left_field": {
+          "type": "string",
+          "description": "Field from the main table"
+        },
+        "right_field": {
+          "type": "string",
+          "description": "Field from the joined table"
+        }
+      }
+    }
+  }
+}

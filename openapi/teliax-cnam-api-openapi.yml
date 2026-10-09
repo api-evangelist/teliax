@@ -1,0 +1,565 @@
+openapi: 3.2.0
+info:
+  title: Teliax CNAM API
+  version: 2026.6.25
+  contact:
+    name: Ringer Support
+    email: support@ringer.com
+    url: https://telique.ringer.tel
+  license:
+    name: Proprietary
+  description: 'Operations tagged CNAM across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.telique.ringer.tel
+  description: Production
+security:
+- apiToken: []
+tags:
+- name: CNAM
+  description: Caller Name lookups and Robocall Mitigation scoring via TransUnion TruContact.
+paths:
+  /v1/telique/cnam/{phoneNumber}:
+    get:
+      operationId: cnamLookup
+      tags:
+      - CNAM
+      summary: Simplified CNAM lookup by phone number
+      description: 'Look up the registered caller name for a phone number. This is a convenience
+
+        endpoint that only requires the phone number in the URL path.
+
+
+        Internally, the phone number is used as the `calling_party` and a placeholder
+
+        value is injected for `called_party`. For full control over both parties and
+
+        robocall mitigation scoring, use the `/v1/telique/cnam/identity` endpoint instead.'
+      parameters:
+      - name: phoneNumber
+        in: path
+        required: true
+        description: NANP phone number to look up. Accepts 10 digits (`5714345400`), 11 digits with a leading 1 (`15714345400`), or E.164 with leading `+1` (`+15714345400`). No dashes or spaces.
+        schema:
+          type: string
+          pattern: ^(\+?1)?\d{10}$
+          example: '5714345400'
+      - name: nocache
+        in: query
+        required: false
+        description: 'When present (any value, including empty), bypasses the cache and fetches a fresh result from TransUnion. Successful (`status: ok`) responses are written back to the cache.'
+        schema:
+          type: string
+        allowEmptyValue: true
+      responses:
+        '200':
+          description: Successful CNAM lookup
+          headers:
+            X-Cache:
+              description: Cache status — `HIT` (served from cache), `MISS` (fetched from TransUnion and cached), or `BYPASS` (nocache was used)
+              schema:
+                type: string
+                enum:
+                - HIT
+                - MISS
+                - BYPASS
+            Cache-Control:
+              description: Always `no-store` to prevent CDN and browser caching
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CnamResponse'
+              examples:
+                nameAvailable:
+                  summary: Caller name found
+                  value:
+                    status: ok
+                    cnam:
+                      calling_name_status: available
+                      calling_name: WIRELESS CALLER
+                      presentation_indicator: allowed
+                nameUnavailable:
+                  summary: No caller name on file
+                  value:
+                    status: ok
+                    cnam:
+                      calling_name_status: unavailable
+        '400':
+          description: Invalid phone number format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CnamErrorResponse'
+              example:
+                error: bad request
+                message: invalid phone number
+        '502':
+          description: TransUnion upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CnamErrorResponse'
+              example:
+                error: upstream error
+                message: TransUnion request failed
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/cnam/identity:
+    get:
+      operationId: identityLookupGet
+      tags:
+      - CNAM
+      summary: Full identity lookup (CNAM + Robocall Mitigation) via query parameters
+      description: 'Full CNAM and Robocall Mitigation lookup using query parameters. Both `calling_party`
+
+        and `called_party` are required.
+
+
+        Optionally include STIR/SHAKEN attestation fields (`verstat`, `attest`) to receive
+
+        enhanced robocall risk scoring via TransUnion''s TruContact engine.
+
+
+        For requests that include nested `cv_data`, use the POST variant instead.'
+      parameters:
+      - name: calling_party
+        in: query
+        required: false
+        description: 'Originating phone number — the number whose caller name is looked up. Optional: omitting it yields a less-useful result. Format is validated by the upstream (TransUnion); invalid numbers are returned as a non-ok status.'
+        schema:
+          type: string
+          pattern: ^(\+?1)?\d{10}$
+          example: '5714345400'
+      - name: called_party
+        in: query
+        required: true
+        description: Destination NANP phone number. Accepts 10 digits, 11 digits with a leading 1, or E.164 with a leading `+1`.
+        schema:
+          type: string
+          pattern: ^(\+?1)?\d{10}$
+          example: '3034298788'
+      - name: call_direction
+        in: query
+        required: false
+        description: Direction of the call
+        schema:
+          type: string
+          enum:
+          - incoming
+          - outgoing
+          example: incoming
+      - name: txn_id
+        in: query
+        required: false
+        description: Your transaction ID, echoed back in the response
+        schema:
+          type: string
+          example: txn-20260404-001
+      - name: client_id
+        in: query
+        required: false
+        description: Your client identifier (up to 32 alphanumeric characters)
+        schema:
+          type: string
+          maxLength: 32
+          example: telique-prod
+      - name: verstat
+        in: query
+        required: false
+        description: STIR/SHAKEN verification status
+        schema:
+          type: string
+          example: TN-Validation-Passed
+      - name: attest
+        in: query
+        required: false
+        description: STIR/SHAKEN attestation level
+        schema:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+          example: A
+      - name: nocache
+        in: query
+        required: false
+        description: 'When present (any value, including empty), bypasses the cache and fetches a fresh result from TransUnion. Successful (`status: ok`) responses are written back to the cache.'
+        schema:
+          type: string
+        allowEmptyValue: true
+      responses:
+        '200':
+          description: Successful identity lookup
+          headers:
+            X-Cache:
+              description: Cache status — `HIT`, `MISS`, or `BYPASS`
+              schema:
+                type: string
+                enum:
+                - HIT
+                - MISS
+                - BYPASS
+            Cache-Control:
+              description: Always `no-store`
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityResponse'
+              examples:
+                cnamOnly:
+                  summary: Basic CNAM result
+                  value:
+                    status: ok
+                    cnam:
+                      calling_name_status: available
+                      calling_name: WIRELESS CALLER
+                      presentation_indicator: allowed
+                withRobocallMitigation:
+                  summary: CNAM with robocall risk scoring
+                  value:
+                    status: ok
+                    cnam:
+                      calling_name_status: available
+                      calling_name: ROBO? Marketing
+                      presentation_indicator: allowed
+                    call_insight:
+                      call_treatment: DENY
+                      fraud_score: 100
+                      original_calling_name: Marketing Firm
+                      propensity: very-high
+        '400':
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CnamErrorResponse'
+              example:
+                error: bad request
+                message: called_party is required
+        '502':
+          description: TransUnion upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CnamErrorResponse'
+              example:
+                error: upstream error
+                message: TransUnion request failed
+    post:
+      operationId: identityLookupPost
+      tags:
+      - CNAM
+      summary: Full identity lookup (CNAM + Robocall Mitigation) via JSON body
+      description: 'Full CNAM and Robocall Mitigation lookup using a JSON request body. Supports all
+
+        the same fields as the GET variant, plus nested `cv_data` for STIR/SHAKEN
+
+        call-validation data.
+
+
+        The request body is proxied to TransUnion with the API key injected. The `cv_data`
+
+        object is preserved as-is (not flattened).'
+      parameters:
+      - name: nocache
+        in: query
+        required: false
+        description: 'When present (any value, including empty), bypasses the cache and fetches a fresh result from TransUnion. Successful (`status: ok`) responses are written back to the cache.'
+        schema:
+          type: string
+        allowEmptyValue: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentityRequest'
+            examples:
+              basicLookup:
+                summary: Basic identity lookup
+                value:
+                  calling_party: '5714345400'
+                  called_party: '3034298788'
+                  call_direction: incoming
+              withCvData:
+                summary: Lookup with STIR/SHAKEN call-validation data
+                value:
+                  calling_party: '5714345400'
+                  called_party: '3034298788'
+                  call_direction: incoming
+                  txn_id: txn-20260404-002
+                  client_id: telique-prod
+                  verstat: TN-Validation-Failed
+                  attest: C
+                  cv_data:
+                    verstat: TN-Validation-Failed
+                    attest: C
+                    ppt: shaken
+                    origid: 1db966a6-8f30-11e7-bc77-fa163e70349d
+      responses:
+        '200':
+          description: Successful identity lookup
+          headers:
+            X-Cache:
+              description: Cache status — `HIT`, `MISS`, or `BYPASS`
+              schema:
+                type: string
+                enum:
+                - HIT
+                - MISS
+                - BYPASS
+            Cache-Control:
+              description: Always `no-store`
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityResponse'
+              examples:
+                withCvData:
+                  summary: Response with STIR/SHAKEN cv_data echoed
+                  value:
+                    status: ok
+                    cnam:
+                      calling_name_status: available
+                      calling_name: Fraudulent Call
+                      presentation_indicator: allowed
+                    call_insight:
+                      call_treatment: DENY
+                      fraud_score: 100
+                      original_calling_name: Marketing firm
+                      cv_data:
+                        verstat: TN-Validation-Failed
+                        attest: C
+                        ppt: shaken
+                        origid: 1db966a6-8f30-11e7-bc77-fa163e70349d
+        '400':
+          description: Missing required fields or invalid JSON
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CnamErrorResponse'
+              examples:
+                missingField:
+                  summary: Missing required field
+                  value:
+                    error: bad request
+                    message: called_party is required
+                invalidJson:
+                  summary: Malformed JSON body
+                  value:
+                    error: bad request
+                    message: invalid character 'o' in literal null (expecting 'u')
+        '502':
+          description: TransUnion upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CnamErrorResponse'
+              example:
+                error: upstream error
+                message: TransUnion request failed
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+components:
+  schemas:
+    IdentityResponse:
+      type: object
+      description: Response from the full identity lookup
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: Response status
+          example: ok
+        cnam:
+          $ref: '#/components/schemas/CnamObject'
+        call_insight:
+          $ref: '#/components/schemas/CallInsight'
+        addtl_info:
+          type: object
+          description: Additional metadata about the lookup. Included only when the upstream returns it.
+          properties:
+            cnam_type:
+              type: string
+              description: Source type of CNAM data
+            cnam_source:
+              type: string
+              description: Provider source of CNAM data
+    IdentityRequest:
+      type: object
+      description: Request body for the POST identity lookup
+      required:
+      - called_party
+      properties:
+        calling_party:
+          type: string
+          description: 'Originating phone number — the number whose caller name is looked up. Optional: omitting it yields a less-useful result.'
+          pattern: ^(\+?1)?\d{10}$
+          example: '5714345400'
+        called_party:
+          type: string
+          description: Destination NANP phone number. Accepts 10 digits, 11 digits with a leading 1, or E.164 with a leading `+1`.
+          pattern: ^(\+?1)?\d{10}$
+          example: '3034298788'
+        call_direction:
+          type: string
+          description: Direction of the call
+          enum:
+          - incoming
+          - outgoing
+          example: incoming
+        txn_id:
+          type: string
+          description: Your transaction ID, echoed back in the response
+          example: txn-20260404-002
+        client_id:
+          type: string
+          description: Your client identifier (up to 32 alphanumeric characters)
+          maxLength: 32
+          example: telique-prod
+        verstat:
+          type: string
+          description: STIR/SHAKEN verification status
+          example: TN-Validation-Failed
+        attest:
+          type: string
+          description: STIR/SHAKEN attestation level
+          enum:
+          - A
+          - B
+          - C
+          example: C
+        cv_data:
+          type: object
+          description: STIR/SHAKEN call-validation data (preserved as-is and forwarded to TransUnion)
+          properties:
+            verstat:
+              type: string
+              example: TN-Validation-Failed
+            attest:
+              type: string
+              example: C
+            ppt:
+              type: string
+              example: shaken
+            origid:
+              type: string
+              example: 1db966a6-8f30-11e7-bc77-fa163e70349d
+    CnamObject:
+      type: object
+      description: Caller name data
+      properties:
+        calling_name_status:
+          type: string
+          description: Whether a caller name is available for this number
+          enum:
+          - available
+          - unavailable
+          example: available
+        calling_name:
+          type: string
+          description: The registered caller name (up to 15 characters). Present only when `calling_name_status` is `available`.
+          example: WIRELESS CALLER
+        presentation_indicator:
+          type: string
+          description: Whether the caller name is allowed to be displayed
+          enum:
+          - allowed
+          - restricted
+          example: allowed
+    CnamErrorResponse:
+      type: object
+      description: Error response
+      required:
+      - error
+      - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: bad request
+        message:
+          type: string
+          description: Human-readable error message
+          example: called_party is required
+    CallInsight:
+      type: object
+      description: Robocall Mitigation risk scoring (included when the subscription supports it)
+      properties:
+        call_treatment:
+          type: string
+          description: Recommended call treatment action
+          enum:
+          - ALLOW
+          - DENY
+          - REVIEW
+          example: DENY
+        fraud_score:
+          type: integer
+          description: Risk score from 0 (safe) to 100 (fraudulent)
+          minimum: 0
+          maximum: 100
+          example: 100
+        original_calling_name:
+          type: string
+          description: Original caller name before any modification
+          example: Marketing Firm
+        propensity:
+          type: string
+          description: Likelihood the call is unwanted
+          enum:
+          - very-low
+          - low
+          - medium
+          - high
+          - very-high
+          example: very-high
+        category_id:
+          type: string
+          description: Call category identifier. Included only when the upstream returns it.
+        cv_data:
+          type: object
+          description: STIR/SHAKEN call-validation data (echoed when submitted in the request)
+          properties:
+            verstat:
+              type: string
+              example: TN-Validation-Failed
+            attest:
+              type: string
+              example: C
+            ppt:
+              type: string
+              example: shaken
+            origid:
+              type: string
+              example: 1db966a6-8f30-11e7-bc77-fa163e70349d
+    CnamResponse:
+      type: object
+      description: Response from the simplified CNAM lookup
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: Response status
+          example: ok
+        cnam:
+          $ref: '#/components/schemas/CnamObject'
+  securitySchemes:
+    apiToken:
+      type: apiKey
+      in: header
+      name: x-api-token
+      description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
+x-refined-from:
+- teliax-telique-openapi.yaml
+- teliax-telique-openapi.yml

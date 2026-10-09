@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-github-com-ringer-warp-api-gateway-internal-models-trunk-group-schema.json",
+  "title": "github_com_ringer-warp_api-gateway_internal_models.TrunkGroup",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-warp-openapi.yml#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkGroup",
+  "type": "object",
+  "properties": {
+    "allowed_number_classes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "auth_type": {
+      "description": "IP_ACL, DIGEST, BOTH",
+      "type": "string"
+    },
+    "capacity_channels_inbound": {
+      "type": "integer"
+    },
+    "capacity_channels_outbound": {
+      "type": "integer"
+    },
+    "capacity_cps_inbound": {
+      "description": "SP10.7.0: split into directional capacity. Inbound = WARP→Customer;\noutbound = Customer→WARP.",
+      "type": "integer"
+    },
+    "capacity_cps_outbound": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "string"
+    },
+    "inbound_dnis_format": {
+      "default": "national",
+      "allOf": [
+        {
+          "$ref": "#/$defs/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat"
+        }
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "options_ping_enabled": {
+      "description": "When true (default), WARP periodically health-checks this trunk's\ninbound endpoints and skips unhealthy ones. Set false if your SBC does\nnot answer SIP OPTIONS, so it stays selectable regardless of probe result.",
+      "type": "boolean"
+    },
+    "poi_assignment_id": {
+      "description": "Trunk-level override for the Place-of-Interconnection fallback caller\nID. Null means this trunk inherits the customer-level POI. Admin-only.",
+      "type": "string"
+    },
+    "poi_number": {
+      "description": "Resolved details of the number backing PoiAssignmentID, when set.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary"
+        }
+      ]
+    },
+    "sip_config": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "ss_attest_fallback": {
+      "type": "string"
+    },
+    "ss_existing_header_policy": {
+      "type": "string"
+    },
+    "ss_signing_mode": {
+      "description": "STIR/SHAKEN per-trunk signing policy. Admin-only. Null means WARP\napplies its default policy (sign / attest B / validate).",
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat": {
+      "type": "string",
+      "enum": [
+        "national",
+        "cc_national",
+        "e164"
+      ],
+      "x-enum-varnames": [
+        "InboundDNISNational",
+        "InboundDNISCCNational",
+        "InboundDNISE164"
+      ]
+    },
+    "github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary": {
+      "type": "object",
+      "properties": {
+        "friendly_name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "npa": {
+          "type": "string"
+        },
+        "nxx": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "tn": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

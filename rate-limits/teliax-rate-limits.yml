@@ -1,0 +1,38 @@
+generated: '2026-10-09'
+method: searched
+source: https://telique.ringer.tel/pricing
+name: Ringer API rate limits
+limit_count: 2
+note: Telique pricing page is JavaScript-rendered (read via headless render). WARP documents a per-API-key request limit (429
+  RATE_LIMITED, key field rate_limit_per_min) but publishes no number. TNIQ publishes no limits. contract_limits holds limits
+  stated in the OpenAPI contracts (each with its own source), kept apart from the page-verified rows.
+headers:
+  retry_after: WARP 503 ASSIGNMENT_BUSY responses carry Retry-After (openapi/teliax-warp-openapi.yml)
+  x_ratelimit: none declared
+limits:
+- name: Telique Free tier
+  limit_text: Rate-limited to 10 operations per minute
+  max: 10
+  limit: 10
+  window: minute
+  scope: per account
+  plan: Free
+  status_on_exhaustion: 429
+- name: Telique Paid tier
+  limit_text: Unlimited operations
+  scope: per account
+  plan: Paid
+contract_limits:
+- name: Telique anonymous access
+  limit_text: Anonymous access (no token) is rate-limited to 10 requests per minute.
+  max: 10
+  limit: 10
+  window: minute
+  scope: per IP (no token)
+  source: openapi/teliax-telique-openapi.yml
+  status_on_exhaustion: 429
+- name: WARP per API key
+  limit_text: 'RATE_LIMITED: API key request limit exceeded'
+  scope: per API key
+  source: openapi/teliax-warp-openapi.yml
+  status_on_exhaustion: 429

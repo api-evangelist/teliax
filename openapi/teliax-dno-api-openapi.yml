@@ -1,0 +1,128 @@
+openapi: 3.2.0
+info:
+  title: Teliax DNO API
+  version: 2026.6.25
+  contact:
+    name: Ringer Support
+    email: support@ringer.com
+    url: https://telique.ringer.tel
+  license:
+    name: Proprietary
+  description: 'Operations tagged DNO across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.telique.ringer.tel
+  description: Production
+security:
+- apiToken: []
+tags:
+- name: DNO
+  description: Do Not Originate checks — determine whether a phone number is flagged as one that should never appear as a caller ID.
+paths:
+  /v1/telique/dno/{phone_number}:
+    get:
+      operationId: dnoCheck
+      tags:
+      - DNO
+      summary: Check if a phone number is Do Not Originate
+      description: 'Returns whether the phone number appears on the Do Not Originate list.
+
+        Default response is plain text `true` or `false`. Use the `format`
+
+        query parameter for JSON (which includes match details when DNO).
+
+
+        Supports prefix matching — the DNO list contains 3, 6, 7, and
+
+        10-digit patterns. A 10-digit lookup matches against all prefix lengths.'
+      parameters:
+      - name: phone_number
+        in: path
+        required: true
+        description: 10-digit US phone number
+        schema:
+          type: string
+          pattern: ^\d{10}$
+          example: '8008291040'
+      - name: format
+        in: query
+        required: false
+        description: Response format (default is plain text)
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          - raw
+          default: raw
+      responses:
+        '200':
+          description: DNO check completed
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                - 'true'
+                - 'false'
+              example: 'true'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DnoLookupResponse'
+              example:
+                phone_number: '8008291040'
+                is_dno: true
+                status: success
+                timestamp: 2026-04-04 23:05:01.706505+00:00
+                source: ITG
+                created_at: 2022-10-12 07:44:48+00:00
+                matched_pattern: '8008291040'
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+components:
+  schemas:
+    DnoLookupResponse:
+      type: object
+      required:
+      - phone_number
+      - is_dno
+      - status
+      - timestamp
+      properties:
+        phone_number:
+          type: string
+          description: Phone number that was checked
+          example: '8008291040'
+        is_dno:
+          type: boolean
+          description: Whether the number is on the Do Not Originate list
+          example: true
+        status:
+          type: string
+          example: success
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-04-04 23:05:01.706505+00:00
+        source:
+          type: string
+          description: Source of the DNO entry (only present when is_dno is true)
+          example: ITG
+        created_at:
+          type: string
+          format: date-time
+          description: When the DNO entry was created (only present when is_dno is true)
+          example: 2022-10-12 07:44:48+00:00
+        matched_pattern:
+          type: string
+          description: The pattern that matched (3, 6, 7, or 10 digits; only present when is_dno is true)
+          example: '8008291040'
+  securitySchemes:
+    apiToken:
+      type: apiKey
+      in: header
+      name: x-api-token
+      description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
+x-refined-from:
+- teliax-telique-openapi.yaml
+- teliax-telique-openapi.yml

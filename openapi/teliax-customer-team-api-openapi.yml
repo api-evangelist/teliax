@@ -1,0 +1,1135 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Team API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/Team across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/Team
+paths:
+  /v1/customers/{id}/hubspot-contacts:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Contacts of the customer''s linked HubSpot company, for prefilling team invitations. Returns an empty list when the customer has no HubSpot link or HubSpot integration is not configured — the invite form degrades to free entry. Requires the team:read scope; non-superAdmin callers may only target their own active customer. Errors: INVALID_CUSTOMER_ID, NO_ACTIVE_CUSTOMER, NOT_A_MEMBER, NOT_FOUND.'
+      tags:
+      - Customer/Team
+      summary: List HubSpot contacts for invite autocomplete
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.HubSpotInviteContact'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdHubspotContacts
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/invitations:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists every unaccepted, unexpired invitation for this customer so the team page can show who has been invited. Requires the team:read scope; non-superAdmin callers may only target their own active customer. Errors: INVALID_CUSTOMER_ID, NO_ACTIVE_CUSTOMER, NOT_A_MEMBER, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: List pending team invitations
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/internal_handlers.InvitationSummary'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdInvitations
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/invitations/{invitationId}:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Revokes a pending invitation issued for this customer so its token can no longer be accepted. Requires the team:write scope; non-superAdmin callers may only target their own active customer, and the invitation must belong to it. Errors: INVALID_CUSTOMER_ID, INVALID_ID, NO_ACTIVE_CUSTOMER, NOT_A_MEMBER, NOT_FOUND.'
+      tags:
+      - Customer/Team
+      summary: Revoke a pending team invitation
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Invitation UUID
+        name: invitationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1CustomersByIdInvitationsByInvitationId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/members:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists every user holding a role in this customer, alphabetical by email. Requires the team:read scope. Errors: FORBIDDEN, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: List team members
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.MemberEntry'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdMembers
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/members/{userId}:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Removes a user''s membership (role assignment) from this customer and invalidates their sessions. You cannot remove yourself. Requires the team:write scope. Errors: INVALID_USER_ID, VALIDATION_ERROR, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: Remove a team member
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: User UUID
+        name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1CustomersByIdMembersByUserId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/members/{userId}/role:
+    put:
+      security:
+      - ApiKeyAuth: []
+      description: 'Assigns a role (system or customer-owned, never superadmin) to a member of this customer. The caller must hold every scope the role grants (no privilege escalation). Requires the team:write scope. Errors: INVALID_USER_ID, INVALID_PAYLOAD, NOT_FOUND, ROLE_MISMATCH, SCOPE_NOT_GRANTABLE, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: Set a member's role
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: User UUID
+        name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.setMemberRoleRequest'
+        description: Role to assign
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.MemberRoleSetResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: putV1CustomersByIdMembersByUserIdRole
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/roles:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists the system roles plus this customer''s custom roles. Requires the team:read scope. Errors: FORBIDDEN, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: List roles
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.RoleListItem'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdRoles
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Creates a customer-owned role with the given scope set. Scopes must be in the registry, non-superadmin, and held by the caller (no privilege escalation). Requires the team:write scope. Errors: INVALID_PAYLOAD, SCOPE_NOT_GRANTABLE, CONFLICT, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: Create a custom role
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.createRoleRequest'
+        description: Role definition
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.RoleCreatedResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1CustomersByIdRoles
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/roles/{roleId}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns one role (system or customer-owned) with its scope list. Requires the team:read scope. Errors: INVALID_ID, NOT_FOUND, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: Get a role
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Role UUID
+        name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.RoleWithScopes'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CustomersByIdRolesByRoleId
+      x-operation-id-source: derived
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Deletes a customer-owned role. Fails when the role is still assigned to any user or is a system role. Requires the team:write scope. Errors: INVALID_ID, FORBIDDEN, NOT_FOUND, CONFLICT, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: Delete a custom role
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Role UUID
+        name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1CustomersByIdRolesByRoleId
+      x-operation-id-source: derived
+    patch:
+      security:
+      - ApiKeyAuth: []
+      description: 'Updates display name, description, and/or the scope set of a customer-owned role. System roles are immutable. Scope changes fan out session invalidation to affected users. Requires the team:write scope. Errors: INVALID_ID, INVALID_PAYLOAD, FORBIDDEN, NOT_FOUND, SCOPE_NOT_GRANTABLE, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: Update a custom role
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Role UUID
+        name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.updateRoleRequest'
+        description: Fields to update
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.RoleUpdatedResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: patchV1CustomersByIdRolesByRoleId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/customers/{id}/roles/{roleId}/duplicate:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Creates a new customer-owned role copying the source role''s scope set (source may be a system role). The caller must hold every copied scope. Requires the team:write scope. Errors: INVALID_ID, INVALID_PAYLOAD, NOT_FOUND, SCOPE_NOT_GRANTABLE, CONFLICT, INTERNAL_ERROR.'
+      tags:
+      - Customer/Team
+      summary: Duplicate a role
+      parameters:
+      - description: Customer UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Source role UUID
+        name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.duplicateRoleRequest'
+        description: New role identity
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/internal_handlers.RoleCreatedResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1CustomersByIdRolesByRoleIdDuplicate
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    internal_handlers.duplicateRoleRequest:
+      type: object
+      required:
+      - display_name
+      - name
+      properties:
+        description:
+          type: string
+          maxLength: 512
+        display_name:
+          type: string
+          maxLength: 128
+          minLength: 1
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+    internal_handlers.setMemberRoleRequest:
+      type: object
+      required:
+      - role_id
+      properties:
+        role_id:
+          type: string
+    internal_handlers.RoleUpdatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+    internal_handlers.HubSpotInviteContact:
+      type: object
+      properties:
+        email:
+          type: string
+        first_name:
+          type: string
+        id:
+          type: string
+        jobtitle:
+          type: string
+        last_name:
+          type: string
+        name:
+          type: string
+    internal_handlers.updateRoleRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 512
+        display_name:
+          type: string
+          maxLength: 128
+          minLength: 1
+        scopes:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_models.RoleListItem:
+      type: object
+      properties:
+        created_at:
+          type: string
+        customer_id:
+          description: null for system roles
+          type: string
+        description:
+          type: string
+        display_name:
+          type: string
+        id:
+          type: string
+        is_superadmin:
+          type: boolean
+        is_system:
+          type: boolean
+        member_count:
+          type: integer
+        name:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.RoleWithScopes:
+      type: object
+      properties:
+        created_at:
+          type: string
+        customer_id:
+          description: null for system roles
+          type: string
+        description:
+          type: string
+        display_name:
+          type: string
+        id:
+          type: string
+        is_superadmin:
+          type: boolean
+        is_system:
+          type: boolean
+        name:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: string
+    internal_handlers.createRoleRequest:
+      type: object
+      required:
+      - display_name
+      - name
+      - scopes
+      properties:
+        description:
+          type: string
+          maxLength: 512
+        display_name:
+          type: string
+          maxLength: 128
+          minLength: 1
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+        scopes:
+          type: array
+          minItems: 1
+          items:
+            type: string
+    internal_handlers.MemberRoleSetResponse:
+      type: object
+      properties:
+        customer_id:
+          type: string
+        role_id:
+          type: string
+        user_id:
+          type: string
+    internal_handlers.RoleCreatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.MemberEntry:
+      type: object
+      properties:
+        assigned_at:
+          type: string
+        display_name:
+          type: string
+        email:
+          type: string
+        is_ringer_staff:
+          type: boolean
+        role_display_name:
+          type: string
+        role_id:
+          type: string
+        role_name:
+          type: string
+        user_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+    internal_handlers.InvitationSummary:
+      type: object
+      properties:
+        created_at:
+          type: string
+        email:
+          type: string
+        expires_at:
+          type: string
+        first_name:
+          type: string
+        id:
+          type: string
+        invited_by:
+          type: string
+        last_name:
+          type: string
+        role_display_name:
+          type: string
+        role_id:
+          type: string
+        role_name:
+          type: string
+        status:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

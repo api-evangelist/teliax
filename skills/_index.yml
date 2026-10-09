@@ -1,0 +1,12 @@
+generated: '2026-10-09'
+method: generated
+source: >-
+  Packaged Agent Skills generated from openapi/teliax-*-openapi.yml. Every operationId
+  was checked verbatim in its spec. We searched for provider-published skills and
+  AGENTS.md and found none: telique.ringer.tel/AGENTS.md serves the SPA shell.
+skills:
+- {file: teliax-phone-number-intelligence-lookup.md, name: teliax-phone-number-intelligence-lookup, api: openapi/teliax-telique-openapi.yml, operations: [lrnLookupByPath, cnamLookup, dnoCheck, queryTandem, identityLookupGet]}
+- {file: teliax-toll-free-routing-resolution.md, name: teliax-toll-free-routing-resolution, api: openapi/teliax-telique-openapi.yml, operations: [lookupRor, lookupCicRor, dumpCpr, lookupTfnsByRor, lookupCprsByRor]}
+- {file: teliax-bulk-port-project.md, name: teliax-bulk-port-project, api: openapi/teliax-tniq-openapi.yml, operations: [portWindowCheck, createProject_1, uploadFile, addTns, validateProject, getProjectProgress, getErrorGroups, applyAutoFix, submitProject, getLifecycleSummary, cancelProject]}
+- {file: teliax-10dlc-brand-and-campaign.md, name: teliax-10dlc-brand-and-campaign, api: openapi/teliax-tniq-openapi.yml, operations: [createBrand, getBrand, submitVetting, createCampaign, getCampaign, assignNumbers, listAssignedNumberStatuses, getMnoStatus]}
+- {file: teliax-warp-number-operation.md, name: teliax-warp-number-operation, api: openapi/teliax-warp-openapi.yml, operations: [numberOperationsCapabilities, numberOperationsPreview, numberOperationsSubmit, numberOperationsGet, numberOperationsItems, numberOperationsResultsCSV, numberOperationsRetryPreview]}

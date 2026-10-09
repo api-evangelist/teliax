@@ -1,0 +1,38 @@
+generated: '2026-10-09'
+method: searched
+source:
+- openapi/teliax-warp-openapi.yml
+- openapi/teliax-telique-openapi.yml
+- https://warp.ringer.tel/docs/guides/stir-shaken
+standards:
+- id: stir-shaken
+  conforms: true
+  kind: domain-standard
+  evidence: 'openapi/teliax-warp-openapi.yml components.schemas."github_com_ringer-warp_api-gateway_internal_models.CallDetail" — "STIR/SHAKEN
+    provenance" fields, plus per-trunk STIR/SHAKEN signing policy schemas; openapi/teliax-telique-openapi.yml /v1/telique/cnam/identity accepts
+    STIR/SHAKEN attestation fields (verstat, attest). WARP guide: https://warp.ringer.tel/docs/guides/stir-shaken'
+- id: e164
+  conforms: true
+  kind: domain-standard
+  evidence: openapi/teliax-telique-openapi.yml phone number parameters accept "10-digit US number or E.164 format" (e.g. +15714345400).
+- id: idempotency
+  conforms: partial
+  evidence: Idempotency-Key header on 6 named WARP/TNIQ operations (see conventions/teliax-conventions.yml).
+- id: rfc9457
+  conforms: false
+  evidence: Errors use bespoke envelopes ({success:false, error:{code,message}} on WARP; ErrorResponse on Telique), not application/problem+json.
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securitySchemes in any of the three contracts; API keys / bearer tokens only.
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.0
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.1
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.3
+- id: pagination
+  conforms: true
+  evidence: list operations take cursor, limit, offset, page, per_page, tz_offset_minutes

@@ -1,0 +1,759 @@
+openapi: 3.2.0
+info:
+  title: Teliax Telecom Reference Data API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Telecom Reference Data across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Telecom Reference Data
+  description: Authenticated read-only CIC, NNID, Resp Org, and NPAC SPID reference directories
+paths:
+  /v1/reference-data/spids/resolve:
+    post:
+      tags:
+      - Telecom Reference Data
+      summary: Resolve up to 100 distinct SPIDs to NPAC registration identities in one bounded…
+      operationId: resolveSpids
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpidResolveRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SpidResolveResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reference-data/resp-orgs/resolve:
+    post:
+      tags:
+      - Telecom Reference Data
+      summary: Resolve up to 100 distinct Resp Org IDs to directory identities in one bounded…
+      operationId: resolveRespOrgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RespOrgResolveRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RespOrgResolveResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reference-data/nnids/resolve:
+    post:
+      tags:
+      - Telecom Reference Data
+      summary: Resolve up to 100 distinct NNIDs to GCMR identities in one bounded request
+      operationId: resolveNnids
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NnidResolveRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NnidResolveResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reference-data/spids:
+    get:
+      tags:
+      - Telecom Reference Data
+      summary: Search published NPAC SPID registration identities
+      description: Returns credentialed identity summaries for vetted TNIQ customers with NPAC rights
+      operationId: spids
+      parameters:
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: region
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: active
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: page
+        in: query
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          maximum: 200
+          minimum: 1
+          type: integer
+          format: int32
+          default: 50
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          default: spid,asc
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NpacSpidDirectoryPageDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reference-data/spids/{spid}:
+    get:
+      tags:
+      - Telecom Reference Data
+      summary: Inspect one published NPAC SPID registration record
+      description: Returns published registration contacts for LNP operations; raw source records and database metadata are never returned
+      operationId: spid
+      parameters:
+      - name: spid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NpacSpidDirectoryDetailDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reference-data/resp-orgs:
+    get:
+      tags:
+      - Telecom Reference Data
+      summary: Search published Somos Resp Org identities
+      description: Returns bounded identity summaries; open one Resp Org ID for its complete order-processing contact detail
+      operationId: respOrgs
+      parameters:
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: entityId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: active
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: page
+        in: query
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          maximum: 200
+          minimum: 1
+          type: integer
+          format: int32
+          default: 50
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          default: respOrgId,asc
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RespOrgDirectoryPageDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reference-data/resp-orgs/{respOrgId}:
+    get:
+      tags:
+      - Telecom Reference Data
+      summary: Inspect one published Somos Resp Org record
+      description: Returns the complete published address, primary contact, change contact, and notes; raw source records and database metadata are never returned
+      operationId: respOrg
+      parameters:
+      - name: respOrgId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RespOrgDirectoryReadDetailDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reference-data/nnids:
+    get:
+      tags:
+      - Telecom Reference Data
+      summary: Search the published NetNumber GCMR directory
+      operationId: nnids
+      parameters:
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: serviceType
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: countryIso2
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: active
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: page
+        in: query
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          maximum: 200
+          minimum: 1
+          type: integer
+          format: int32
+          default: 50
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          default: nnid,asc
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NnidDirectoryPageDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/reference-data/nnids/{nnid}:
+    get:
+      tags:
+      - Telecom Reference Data
+      summary: Inspect one published NetNumber GCMR directory record
+      operationId: nnid
+      parameters:
+      - name: nnid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NnidDirectoryDetailDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    NnidDirectoryDetailDto:
+      type: object
+      properties:
+        nnid:
+          type: string
+        companyName:
+          type: string
+        brandName:
+          type: string
+        serviceType:
+          type: string
+        countryName:
+          type: string
+        countryCallingCode:
+          type: string
+        countryIso2:
+          type: string
+        rawMccList:
+          type: string
+        rawMncList:
+          type: string
+        rawMccMncList:
+          type: string
+        mobileNetworks:
+          type: array
+          items:
+            $ref: '#/components/schemas/NnidMobileNetworkDto'
+        retired:
+          type: boolean
+        dataset:
+          $ref: '#/components/schemas/NnidDatasetFreshnessDto'
+    NnidMobileNetworkDto:
+      type: object
+      properties:
+        plmn:
+          type: string
+        mcc:
+          type: string
+        mnc:
+          type: string
+    NnidResolveResponse:
+      type: object
+      properties:
+        results:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NnidResolutionDto'
+        dataset:
+          $ref: '#/components/schemas/NnidDatasetFreshnessDto'
+    SpidResolveRequest:
+      required:
+      - spids
+      type: object
+      properties:
+        spids:
+          maxItems: 500
+          minItems: 0
+          type: array
+          items:
+            type: string
+    RespOrgDirectoryReadDetailDto:
+      type: object
+      properties:
+        respOrgId:
+          type: string
+        entityId:
+          type: string
+        companyName:
+          type: string
+        companyAddress:
+          type: string
+        primaryContact:
+          type: string
+        changeContact:
+          type: string
+        notes:
+          type: string
+        sourceAsOf:
+          type: string
+          format: date-time
+        retired:
+          type: boolean
+        freshness:
+          type: string
+    NnidResolveRequest:
+      required:
+      - nnids
+      type: object
+      properties:
+        nnids:
+          maxItems: 500
+          minItems: 0
+          type: array
+          items:
+            type: string
+    NpacSpidDirectoryDetailDto:
+      type: object
+      properties:
+        spid:
+          type: string
+        regionalCustomerNames:
+          type: array
+          items:
+            type: string
+        customerTypes:
+          type: array
+          items:
+            type: string
+        regions:
+          type: array
+          items:
+            type: string
+        contactCount:
+          type: integer
+          format: int32
+        retired:
+          type: boolean
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpacSpidContactDto'
+        dataset:
+          $ref: '#/components/schemas/NpacSpidDatasetFreshnessDto'
+    RespOrgDatasetFreshnessDto:
+      type: object
+      properties:
+        sourceName:
+          type: string
+        sourceAsOf:
+          type: string
+          format: date-time
+        retrievedAt:
+          type: string
+          format: date-time
+        freshness:
+          type: string
+    NpacSpidContactDto:
+      type: object
+      properties:
+        regionalCustomerName:
+          type: string
+        customerType:
+          type: string
+        contactType:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        primaryPhone:
+          type: string
+        secondaryPhone:
+          type: string
+        regions:
+          type: array
+          items:
+            type: string
+    SpidResolveResponse:
+      type: object
+      properties:
+        results:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SpidResolutionDto'
+        dataset:
+          $ref: '#/components/schemas/NpacSpidDatasetFreshnessDto'
+    RespOrgResolutionDto:
+      type: object
+      properties:
+        respOrgId:
+          type: string
+        found:
+          type: boolean
+        entityId:
+          type: string
+        companyName:
+          type: string
+        retired:
+          type: boolean
+    SpidResolutionDto:
+      type: object
+      properties:
+        spid:
+          type: string
+        found:
+          type: boolean
+        regionalCustomerNames:
+          type: array
+          items:
+            type: string
+        customerTypes:
+          type: array
+          items:
+            type: string
+        regions:
+          type: array
+          items:
+            type: string
+        contactCount:
+          type: integer
+          format: int32
+        retired:
+          type: boolean
+    RespOrgResolveRequest:
+      required:
+      - respOrgIds
+      type: object
+      properties:
+        respOrgIds:
+          maxItems: 500
+          minItems: 0
+          type: array
+          items:
+            type: string
+    NpacSpidDatasetFreshnessDto:
+      type: object
+      properties:
+        sourceName:
+          type: string
+        sourceAsOf:
+          type: string
+          format: date-time
+        retrievedAt:
+          type: string
+          format: date-time
+        freshness:
+          type: string
+    RespOrgDirectoryPageDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/RespOrgDirectorySummaryDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        dataset:
+          $ref: '#/components/schemas/RespOrgDatasetFreshnessDto'
+    RespOrgResolveResponse:
+      type: object
+      properties:
+        results:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RespOrgResolutionDto'
+        dataset:
+          $ref: '#/components/schemas/RespOrgDatasetFreshnessDto'
+    NpacSpidDirectorySummaryDto:
+      type: object
+      properties:
+        spid:
+          type: string
+        regionalCustomerNames:
+          type: array
+          items:
+            type: string
+        customerTypes:
+          type: array
+          items:
+            type: string
+        regions:
+          type: array
+          items:
+            type: string
+        contactCount:
+          type: integer
+          format: int32
+        retired:
+          type: boolean
+    NnidDirectorySummaryDto:
+      type: object
+      properties:
+        nnid:
+          type: string
+        companyName:
+          type: string
+        brandName:
+          type: string
+        serviceType:
+          type: string
+        countryName:
+          type: string
+        countryIso2:
+          type: string
+        retired:
+          type: boolean
+    NnidResolutionDto:
+      type: object
+      properties:
+        nnid:
+          type: string
+        found:
+          type: boolean
+        companyName:
+          type: string
+        brandName:
+          type: string
+        serviceType:
+          type: string
+        countryIso2:
+          type: string
+        retired:
+          type: boolean
+    NpacSpidDirectoryPageDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpacSpidDirectorySummaryDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        dataset:
+          $ref: '#/components/schemas/NpacSpidDatasetFreshnessDto'
+    NnidDatasetFreshnessDto:
+      type: object
+      properties:
+        sourceName:
+          type: string
+        sourceAsOf:
+          type: string
+          format: date-time
+        retrievedAt:
+          type: string
+          format: date-time
+        freshness:
+          type: string
+    NnidDirectoryPageDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/NnidDirectorySummaryDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        dataset:
+          $ref: '#/components/schemas/NnidDatasetFreshnessDto'
+    RespOrgDirectorySummaryDto:
+      type: object
+      properties:
+        respOrgId:
+          type: string
+        entityId:
+          type: string
+        companyName:
+          type: string
+        sourceAsOf:
+          type: string
+          format: date-time
+        retired:
+          type: boolean
+        freshness:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

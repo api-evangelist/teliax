@@ -1,0 +1,1550 @@
+openapi: 3.2.0
+info:
+  title: Teliax SOA Operations API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged SOA Operations across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: SOA Operations
+  description: Service Order Administration endpoints for Local Number Portability
+paths:
+  /v1/lnp/soa/release:
+    post:
+      tags:
+      - SOA Operations
+      summary: Release a port request
+      description: Releases a telephone number from a port request
+      operationId: release
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaReleaseRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaReleaseRequest'
+        required: true
+      responses:
+        '200':
+          description: Release successful
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+        '404':
+          description: Port request not found
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/lrn/remove:
+    post:
+      tags:
+      - SOA Operations
+      summary: Remove an LRN
+      description: Removes an existing Local Routing Number
+      operationId: removeLrn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaLrnRemoveRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaLrnRemoveRequest'
+        required: true
+      responses:
+        '200':
+          description: LRN removed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '404':
+          description: LRN not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/lrn/create:
+    post:
+      tags:
+      - SOA Operations
+      summary: Create an LRN
+      description: Creates a new Local Routing Number
+      operationId: createLrn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaLrnCreateRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaLrnCreateRequest'
+        required: true
+      responses:
+        '201':
+          description: LRN created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '409':
+          description: LRN already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/intrasp:
+    post:
+      tags:
+      - SOA Operations
+      summary: IntraSP transfer
+      description: Performs an intra-service provider number portability transfer, updating the LRN without a full port order
+      operationId: intraSp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaIntraSpRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaIntraSpRequest'
+        required: true
+      responses:
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '200':
+          description: IntraSP transfer successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '400':
+          description: Pre-flight validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/events/{recno}/acknowledge:
+    post:
+      tags:
+      - SOA Operations
+      summary: Acknowledge an event
+      description: Acknowledges a specific SOA event by record number
+      operationId: acknowledgeEvent
+      parameters:
+      - name: recno
+        in: path
+        description: Record number of the event to acknowledge
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Event acknowledged successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/disconnect:
+    post:
+      tags:
+      - SOA Operations
+      summary: Disconnect a number
+      description: Disconnects a telephone number from service
+      operationId: disconnect
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaDisconnectRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaDisconnectRequest'
+        required: true
+      responses:
+        '200':
+          description: Disconnection successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/create:
+    post:
+      tags:
+      - SOA Operations
+      summary: Create a new port request [DEPRECATED]
+      description: 'DEPRECATED: Use Port Orders system instead (POST /v1/port-projects/projects). This endpoint will be removed in v3.0.0.'
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaCreateRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaCreateRequest'
+        required: true
+      responses:
+        '410':
+          description: Gone - Use Port Orders system
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+            application/xml:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+            application/xml:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+            application/xml:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+      deprecated: true
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/conflict/remove:
+    post:
+      tags:
+      - SOA Operations
+      summary: Remove a conflict
+      description: Removes a telephone number from conflict status
+      operationId: removeConflict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaConflictRemoveRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaConflictRemoveRequest'
+        required: true
+      responses:
+        '200':
+          description: Conflict removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/conflict/create:
+    post:
+      tags:
+      - SOA Operations
+      summary: Create a conflict
+      description: Places a telephone number into conflict status
+      operationId: createConflict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaConflictCreateRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaConflictCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: Conflict created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/cancel:
+    post:
+      tags:
+      - SOA Operations
+      summary: Cancel a port request
+      description: Cancels an existing port request for a telephone number
+      operationId: cancel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaCancelRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaCancelRequest'
+        required: true
+      responses:
+        '200':
+          description: Cancellation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '404':
+          description: Port request not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/activate:
+    post:
+      tags:
+      - SOA Operations
+      summary: Activate a ported number
+      description: Activates a telephone number that has been ported
+      operationId: activate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoaActivateRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SoaActivateRequest'
+        required: true
+      responses:
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '200':
+          description: Activation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/status/{tn}:
+    get:
+      tags:
+      - SOA Operations
+      summary: Get number status
+      description: Gets the current status of a telephone number
+      operationId: getStatus
+      parameters:
+      - name: tn
+        in: path
+        description: 10-digit telephone number
+        required: true
+        schema:
+          type: string
+        example: 2125551234
+      responses:
+        '404':
+          description: Number not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaStatusResponse'
+        '200':
+          description: Status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaStatusResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaStatusResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/spid/{tn}:
+    get:
+      tags:
+      - SOA Operations
+      summary: Get SPID for number
+      description: Gets the current SPID information for a telephone number
+      operationId: getSpid
+      parameters:
+      - name: tn
+        in: path
+        description: 10-digit telephone number
+        required: true
+        schema:
+          type: string
+        example: 2125551234
+      responses:
+        '404':
+          description: Number not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaSpidResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaSpidResponse'
+        '200':
+          description: SPID retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaSpidResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaSpidResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaSpidResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaSpidResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/query/{tn}:
+    get:
+      tags:
+      - SOA Operations
+      summary: Query port status
+      description: Queries the current status and details of a telephone number
+      operationId: query
+      parameters:
+      - name: tn
+        in: path
+        description: 10-digit telephone number
+        required: true
+        schema:
+          type: string
+        example: 2125551234
+      - name: newspid
+        in: query
+        description: 4-character SPID
+        required: false
+        schema:
+          type: string
+        example: 1234
+      - name: region
+        in: query
+        description: 4-character region ID
+        required: false
+        schema:
+          type: string
+        example: EAST
+      responses:
+        '404':
+          description: Number not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaQueryResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaQueryResponse'
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaQueryResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaQueryResponse'
+        '200':
+          description: Query successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaQueryResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaQueryResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaQueryResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaQueryResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/events:
+    get:
+      tags:
+      - SOA Operations
+      summary: Get SOA events
+      description: Retrieves unacknowledged SOA events
+      operationId: getEvents
+      responses:
+        '200':
+          description: Events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaEventsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaEventsResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaEventsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaEventsResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/lnp/soa/activation-ready/{newspid}:
+    get:
+      tags:
+      - SOA Operations
+      summary: Get activation-ready numbers
+      description: Gets all numbers ready for activation for a specific SPID
+      operationId: getActivationReady
+      parameters:
+      - name: newspid
+        in: path
+        description: 4-character new SPID
+        required: true
+        schema:
+          type: string
+        example: 1234
+      responses:
+        '403':
+          description: SPID not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaActReadyResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaActReadyResponse'
+        '200':
+          description: Numbers retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaActReadyResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaActReadyResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoaActReadyResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SoaActReadyResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    SoaActReadyResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Operation status
+          example: SUCCESS
+        spid:
+          type: string
+          description: SPID
+          example: 616J
+        readyCount:
+          type: integer
+          description: Number of ports ready for activation
+          format: int32
+        readyNumbers:
+          type: array
+          description: List of telephone numbers ready for activation
+          items:
+            type: string
+            description: List of telephone numbers ready for activation
+        error:
+          type: string
+          description: Error message if status is ERROR
+        readyTns:
+          type: array
+          items:
+            type: string
+        dataSource:
+          type: string
+      description: SOA activation ready response
+    SoaEventsResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Operation status
+          example: SUCCESS
+        events:
+          type: array
+          description: List of events
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              description: List of events
+            description: List of events
+        eventCount:
+          type: integer
+          description: Total number of events
+          format: int32
+        error:
+          type: string
+          description: Error message if status is ERROR
+      description: SOA events response
+    SoaConflictRemoveRequest:
+      required:
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+      description: Request to remove a conflict from a telephone number
+    SoaDisconnectRequest:
+      required:
+      - spid
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+        spid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character current SPID
+          example: '1234'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID (optional)
+          example: EAST
+      description: Request to disconnect a telephone number
+    SoaStatusResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Port status
+          example: PENDING
+        message:
+          type: string
+          description: Response message
+        currentSpid:
+          type: string
+          description: Current SPID
+          example: 567G
+        newSpid:
+          type: string
+          description: New SPID (target)
+          example: 616J
+        oldSpid:
+          type: string
+          description: Old SPID (source)
+          example: 567G
+        lrn:
+          type: string
+          description: Location Routing Number
+          example: '7208441000'
+        dueDate:
+          type: string
+          description: Due date in MM/dd/yyyy format
+          example: 07/02/2025
+        lastAction:
+          type: string
+          description: Last action taken
+          example: CREATE
+        lastActionDate:
+          type: string
+          description: Last action timestamp
+          format: date-time
+        activationDate:
+          type: string
+          description: Activation timestamp if completed
+          format: date-time
+        error:
+          type: string
+          description: Error details if any
+        dataSource:
+          type: string
+        npac:
+          $ref: '#/components/schemas/NpacStateResponse'
+        local_cache:
+          $ref: '#/components/schemas/SoaStatusResponse'
+      description: SOA port status response
+    SoaIntraSpRequest:
+      required:
+      - lrn
+      - newspid
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+        lrn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit LRN
+          example: '2125550000'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID
+          example: '1234'
+        ddd:
+          type: string
+          description: Due date (optional)
+          example: 12/31/2024
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID (optional)
+          example: EAST
+      description: Request for intra-SPID port
+    SoaCancelRequest:
+      required:
+      - newspid
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID
+          example: '1234'
+      description: Request to cancel a port order
+    SoaConflictCreateRequest:
+      required:
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+      description: Request to create a conflict for a telephone number
+    NpacStateResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        role:
+          type: string
+        our_spid:
+          type: string
+        new_spid:
+          type: string
+        old_spid:
+          type: string
+        lrn:
+          type: string
+        new_sp_due_date:
+          type: string
+          format: date
+        old_sp_due_date:
+          type: string
+          format: date
+        old_sp_authorization:
+          type: string
+        conflict_placed_by:
+          type: string
+        conflict_at:
+          type: string
+          format: date-time
+        raw_sv_state:
+          type: string
+        observed_at:
+          type: string
+          format: date-time
+        source:
+          type: string
+        current_spid:
+          type: string
+    SoaQueryResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Operation status
+          example: SUCCESS
+        tn:
+          type: string
+          description: Telephone number
+          example: '3036298301'
+        currentSpid:
+          type: string
+          description: Current SPID
+          example: 567G
+        lrn:
+          type: string
+          description: Location Routing Number
+          example: '7207081999'
+        portStatus:
+          type: string
+          description: Port status
+          example: PENDING
+        subscriptionVersionState:
+          type: string
+          description: AstroSOA subscription-version state
+          example: VSAC
+        newSpDueDate:
+          type: string
+          description: New service provider due date from the subscription version
+        oldSpDueDate:
+          type: string
+          description: Old service provider due date from the subscription version
+        oldSpAuthorization:
+          type: string
+          description: Old service provider authorization
+          example: Released
+        createTimestamp:
+          type: string
+          description: Subscription-version create timestamp
+        lnpType:
+          type: string
+          description: LNP type
+          example: WIRELINE
+        currentSpName:
+          type: string
+          description: Current service provider name
+          example: Verizon
+        currentSpType:
+          type: string
+          description: Current service provider type
+          example: WIRELESS
+        rateCenter:
+          type: string
+          description: Rate center
+          example: DENVER
+        state:
+          type: string
+          description: State
+          example: CO
+        error:
+          type: string
+          description: Error message if status is ERROR
+      description: SOA query response
+    SoaResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Operation status
+          example: SUCCESS
+        message:
+          type: string
+          description: Response message
+          example: Port request created successfully
+        transactionId:
+          type: string
+          description: Transaction ID if applicable
+        error:
+          type: string
+          description: Error details if status is FAILED
+      description: Generic SOA operation response
+    SoaActivateRequest:
+      required:
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number to activate
+          example: '2125551234'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID (optional)
+          example: '1234'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID (optional)
+          example: EAST
+        allowEarly:
+          type: boolean
+          description: Skip the DDD-reached check in the NPAC write guard (operator override)
+          example: false
+      description: Request to activate a ported telephone number
+    SoaLrnRemoveRequest:
+      required:
+      - newspid
+      - region
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit LRN to remove
+          example: '2125550000'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID
+          example: '1234'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID
+          example: EAST
+      description: Request to remove an LRN
+    SoaCreateRequest:
+      required:
+      - lrn
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number to port
+          example: '2125551234'
+        lrn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit Location Routing Number
+          example: '2125550000'
+        newspid:
+          type: string
+          description: 4-character gaining SPID (auto-detected from target LRN if not provided)
+          example: '1234'
+        oldspid:
+          type: string
+          description: 4-character losing SPID (auto-detected from current TN if not provided)
+          example: '5678'
+        ddd:
+          type: string
+          description: Port due date in ISO instant format (auto-set to tomorrow midnight UTC if not provided)
+          example: '2025-11-07T05:00:00.000Z'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID (optional)
+          example: EAST
+      description: Request to create a new port order
+    SoaReleaseRequest:
+      required:
+      - ddd
+      - newspid
+      - oldspid
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+        oldspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character losing SPID
+          example: '5678'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID
+          example: '1234'
+        ddd:
+          type: string
+          description: Due date
+          example: 12/31/2024
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID (optional)
+          example: EAST
+      description: Request to release a telephone number
+    SoaSpidResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Operation status
+          example: SUCCESS
+        tn:
+          type: string
+          description: Telephone number
+          example: '3036298301'
+        spid:
+          type: string
+          description: Current SPID
+          example: 567G
+        lrn:
+          type: string
+          description: Location Routing Number
+          example: '7207081999'
+        spName:
+          type: string
+          description: Service provider name
+          example: Verizon
+        error:
+          type: string
+          description: Error message if status is ERROR
+      description: SOA SPID query response
+    SoaLrnCreateRequest:
+      required:
+      - newspid
+      - region
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit LRN to create
+          example: '2125550000'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID
+          example: '1234'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID
+          example: EAST
+      description: Request to create an LRN
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

@@ -1,0 +1,286 @@
+openapi: 3.2.0
+info:
+  title: Teliax Messaging NNID Overwrite Requests API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Messaging NNID Overwrite Requests across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Messaging NNID Overwrite Requests
+  description: 'nnSR overwrite-request approval queue: list, approve, reject, LOA attach (#245 W3)'
+paths:
+  /v1/messaging/nnid-requests/{id}/reject:
+    post:
+      tags:
+      - Messaging NNID Overwrite Requests
+      summary: Reject an nnSR overwrite request
+      description: Registry-call-first, same semantics as approve.
+      operationId: reject
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NnidOverwriteDecisionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NnidOverwriteRequestResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-requests/{id}/loa:
+    post:
+      tags:
+      - Messaging NNID Overwrite Requests
+      summary: Attach an LOA to a pending overwrite request
+      description: PENDING rows only. Stored at sms-control/loa/{requestId}/{filename}.
+      operationId: uploadLoa_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-requests/{id}/approve:
+    post:
+      tags:
+      - Messaging NNID Overwrite Requests
+      summary: Approve an nnSR overwrite request
+      description: 'Registry-call-first: calls netnumber''s overwrite-request response API before recording the decision locally. A registry failure leaves the row PENDING and propagates the error — no silent local success.'
+      operationId: approve
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NnidOverwriteDecisionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NnidOverwriteRequestResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/nnid-requests:
+    get:
+      tags:
+      - Messaging NNID Overwrite Requests
+      summary: List nnSR overwrite requests
+      description: Customer-scoped to the caller's accessible customers. A NULL customerId row (TN not, or no longer, in our inventory) is visible only to superAdmin (wildcard) callers.
+      operationId: list_5
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          default: PENDING
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageNnidOverwriteRequestResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    PageNnidOverwriteRequestResponse:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/NnidOverwriteRequestResponse'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    NnidOverwriteRequestResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        tn:
+          type: string
+        customerId:
+          type: string
+          format: uuid
+        spid:
+          type: string
+        requesterPid:
+          type: string
+        requestedNnid:
+          type: string
+        registryRequestId:
+          type: string
+        receivedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+        decidedBy:
+          type: string
+        decidedAt:
+          type: string
+          format: date-time
+        decisionReason:
+          type: string
+        loaDocumentPath:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    NnidOverwriteDecisionRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

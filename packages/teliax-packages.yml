@@ -1,0 +1,82 @@
+generated: '2026-10-09'
+method: searched
+source: https://registry.npmjs.org/-/v1/search?text=maintainer:ringer-devs
+description: First-party npm packages published by the ringer-devs npm account (developer@ringer.tel), the Ringer (formerly Teliax) developer org. Versions and dates read from registry.npmjs.org metadata on 2026-10-09. No packages found on PyPI under telique/tniq/warp names.
+packages:
+- name: warp-mcp
+  registry: npm
+  url: https://www.npmjs.com/package/warp-mcp
+  language: JavaScript
+  official: true
+  version: 1.1.0
+  published: '2026-08-27'
+  kind: mcp-server
+  repository: https://github.com/Ringer/warp-mcp
+  docs: https://warp.ringer.tel/docs/mcp
+  note: MCP server for the WARP customer API; docs state "one npm install registers 135 tools with your AI client".
+- name: tniq-mcp
+  registry: npm
+  url: https://www.npmjs.com/package/tniq-mcp
+  language: JavaScript
+  official: true
+  version: 1.2.0
+  published: '2026-07-18'
+  kind: mcp-server
+  repository: https://github.com/Ringer/tniq-mcp
+  docs: https://tniq.ringer.tel/docs
+- name: telique-mcp
+  registry: npm
+  url: https://www.npmjs.com/package/telique-mcp
+  language: JavaScript
+  official: true
+  version: 1.0.32
+  published: '2026-07-14'
+  kind: mcp-server
+  repository: https://github.com/Ringer/telique-mcp
+  docs: https://telique.ringer.tel/docs/getting-started
+- name: '@ringer-tel/telique'
+  registry: npm
+  url: https://www.npmjs.com/package/@ringer-tel/telique
+  language: TypeScript
+  official: true
+  version: 0.1.0
+  published: '2025-07-27'
+  kind: sdk
+  repository: https://github.com/teliax/ringer-redoc
+  note: Registry description "TypeScript SDK for Ringer APIs". Single 0.1.0 release in 2025-07; the Telique contract is versioned 2026.6.25, so the SDK predates the current API.
+- name: '@ringer-tel/ivy'
+  registry: npm
+  url: https://www.npmjs.com/package/@ringer-tel/ivy
+  language: TypeScript
+  official: true
+  version: 0.1.0
+  published: '2025-07-27'
+  kind: sdk
+  repository: https://github.com/teliax/ringer-redoc
+  note: Registry description "TypeScript SDK for Ringer APIs". Single 0.1.0 release; not referenced from the current docs sites.
+- name: '@ringer-tel/ui'
+  registry: npm
+  url: https://www.npmjs.com/package/@ringer-tel/ui
+  language: TypeScript
+  official: true
+  version: 0.3.2
+  published: '2026-08-19'
+  kind: design-system
+  repository: https://github.com/Ringer/aesthetic-rewrite
+  note: Ringer's own React UI component library ("shadcn-style React + Radix"); a design system, not an embeddable API component.
+- name: '@ringer-tel/tokens'
+  registry: npm
+  url: https://www.npmjs.com/package/@ringer-tel/tokens
+  language: JavaScript
+  official: true
+  version: 0.3.2
+  published: '2026-08-19'
+  kind: design-system
+- name: '@ringer-tel/tailwind-preset'
+  registry: npm
+  url: https://www.npmjs.com/package/@ringer-tel/tailwind-preset
+  language: JavaScript
+  official: true
+  version: 0.3.2
+  published: '2026-08-19'
+  kind: design-system

@@ -1,0 +1,95 @@
+generated: '2026-10-09'
+method: searched
+source:
+- https://warp.ringer.tel/docs
+- https://tniq.ringer.tel/docs
+- https://telique.ringer.tel/docs/getting-started
+- openapi/teliax-warp-openapi.yml
+- openapi/teliax-tniq-openapi.yml
+- openapi/teliax-telique-openapi.yml
+description: Cross-cutting semantics for the three Ringer (formerly Teliax) APIs — Telique, TNIQ and WARP. Each is a separate host with its own
+  conventions.
+base_url:
+  telique: https://api.telique.ringer.tel
+  tniq: https://api.tniq.ringer.tel/v1
+  warp: https://api.warp.ringer.tel/v1
+api_style: REST (Telique also offers GraphQL queries against LSMS and LERG)
+authentication:
+  telique: x-api-token header; anonymous access allowed at 10 requests per minute (contract securitySchemes.apiToken).
+  tniq: 'Authorization: Bearer YOUR_TOKEN; "Tokens are scoped per-customer and support operation-level restrictions." (https://tniq.ringer.tel/docs)'
+  warp: 'Authorization: Bearer rk_your_key, minted in the portal under Settings → API Keys; keys carry scopes (see scopes/teliax-scopes.yml).
+    Session cookie also accepted.'
+  docs: authentication/teliax-authentication.yml
+idempotency:
+  supported: true
+  coverage: partial
+  mechanism: request header / body token declared in the OpenAPI
+  scope:
+  - WARP POST /v1/messages (optional; "a repeated request with the same key returns the original message with HTTP 200 instead of creating a duplicate")
+  - WARP numberOperationsInline (POST /v1/number-operations/inline, required, customer-scoped, at most 255 bytes)
+  - WARP numberOperationsSubmit (POST /v1/number-operations/{id}/submit, required)
+  - WARP POST /v1/numbers/bulk-assign (required UUID, reused as procurement_request_id)
+  - TNIQ submit (POST /v1/port-projects/projects/{projectId}/managed-processing, required)
+  - TNIQ satisfy (POST /v1/port-projects/projects/{projectId}/managed-processing/actions/{actionId}/satisfy, required)
+  conflict_behavior: WARP returns 409 IDEMPOTENCY_CONFLICT; 400 INVALID_IDEMPOTENCY_KEY / MISSING_IDEMPOTENCY_KEY.
+  note: 6 of 242 mutating operations across WARP (73) and TNIQ (169) take an Idempotency-Key; several others are described as idempotent by design
+    (e.g. DELETE credential returns 204 when already gone).
+  header: Idempotency-Key
+  evidence: Idempotency-Key on 6 of 246 mutating operations
+  verified: derived
+pagination:
+  style: mixed
+  detail: WARP uses cursor+limit on some lists and page/per_page or page/size on others; TNIQ uses page/size (18 list operations) and a since
+    cursor (nextCursor) for its change feed; Telique LERG queries use limit/offset.
+request_tracing:
+  description: WARP API-key audit entries record a request_id per call (APIKeyAudit schema); no request-id response header is declared in the
+    contracts.
+versioning:
+  scheme: path
+  detail: TNIQ and WARP are path-versioned at /v1; Telique paths are /v1/telique/...; Telique contract info.version 2026.6.25.
+  docs: lifecycle/teliax-lifecycle.yml
+error_envelope:
+  warp: '{success:false, error:{code,message}} — success responses use {success, data}. Operation descriptions list machine error codes (e.g.
+    TN_NOT_OWNED, RATE_LIMITED, IDEMPOTENCY_CONFLICT).'
+  telique: 'JSON error envelope returned for all 4xx/5xx responses (ErrorResponse schema: error, message, code, timestamp); 429 example {"error":
+    true, "error_code": 429, "error_type": "ratelimit", "error_desc": "Rate limit exceeded"}.'
+  rfc9457: false
+rate_limits:
+  signal_status: 429
+  detail: 'WARP 429 "RATE_LIMITED: API key request limit exceeded"; each API key carries rate_limit_per_min. WARP 503 ASSIGNMENT_BUSY responses
+    carry Retry-After. Telique 429 RateLimited response. No X-RateLimit-* headers declared.'
+  docs: rate-limits/teliax-rate-limits.yml
+other_conventions:
+- name: step-up MFA
+  detail: Sensitive WARP actions (API key create/rotate/revoke, port-out PIN changes, credential deletion, port submit) require step-up verification.
+- name: MCP parity
+  detail: '"The MCP tools call the same REST API documented in the API reference — same scopes, same envelope, same per-customer isolation." (https://warp.ringer.tel/docs/mcp)'
+reversibility:
+  status: documented
+  note: Reversal operations exist in the contracts, but no docs page states a time window within which they work, so none is recorded.
+  surfaces:
+  - surface: TNIQ number porting (SOA)
+    reversal: cancel (POST /v1/lnp/soa/cancel), cancelProject (POST /v1/port-projects/projects/{projectId}/cancel), cancelRoc (PUT /v1/roc/projects/{projectId}/cancel)
+    window: null
+  - surface: TNIQ inventory
+    reversal: releaseNumber, releaseNumberById, releaseFromQuarantine, cancel_1 (POST /v1/inventory/bulk/{id}/cancel), releaseReservation (DELETE
+      /v1/tollfree/reserve/{tfn})
+    window: null
+  - surface: TNIQ jobs
+    reversal: cancelJob, cancelSync, cancelAudit, cancelCnpMigration
+    window: null
+  - surface: WARP porting
+    reversal: POST /v1/porting/requests/{id}/cancel (scope porting:cancel)
+    window: null
+    docs: https://warp.ringer.tel/docs/guides/porting
+  - surface: WARP numbers
+    reversal: POST /v1/numbers/{tn}/release — the docs warn "Release a number only when you are done with it. Release returns it to inventory
+      and stops it from belonging to your account." No re-claim path or window is documented.
+    window: null
+    docs: https://warp.ringer.tel/docs/guides/numbers
+  - surface: WARP API keys / team invitations
+    reversal: API key revoke and rotate; DELETE /v1/customers/{id}/invitations/{invitationId}
+    window: null
+dry_run:
+  supported: partial
+  detail: WARP number operations offer previews (POST /v1/number-operations/previews, /{id}/retry-preview) before submit.

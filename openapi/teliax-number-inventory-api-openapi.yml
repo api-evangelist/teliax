@@ -1,0 +1,740 @@
+openapi: 3.2.0
+info:
+  title: Teliax Number Inventory API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Number Inventory across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Number Inventory
+  description: Search and query number inventory
+paths:
+  /v1/inventory/numbers/{telephoneNumber}/pin:
+    put:
+      tags:
+      - Number Inventory
+      summary: Set port-out PIN
+      description: Set or clear the port-out PIN for a telephone number. Send null or empty to clear.
+      operationId: updatePortOutPin
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/metadata:
+    put:
+      tags:
+      - Number Inventory
+      summary: Update metadata
+      description: Update custom metadata for an assigned telephone number
+      operationId: updateMetadata
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/by-id/{id}/metadata:
+    put:
+      tags:
+      - Number Inventory
+      summary: Update metadata by ID
+      description: Update metadata using record ID (avoids duplicate TN issues)
+      operationId: updateMetadataById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/snapback:
+    get:
+      tags:
+      - Number Inventory
+      summary: Snapback eligibility
+      description: 'Whether a recently ported-out number can be snapped back (port-in to original SPID). Window default 72h; reasons: ELIGIBLE, NO_LOCAL_RECORD, NO_ORIGINAL_SPID, WINDOW_EXPIRED.'
+      operationId: snapbackEligibility
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - Number Inventory
+      summary: Initiate snapback
+      description: Creates a port-in project targeting the number's original SPID and queues the TN for validation. The project still requires operator review and submit.
+      operationId: initiateSnapback
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/reserve:
+    post:
+      tags:
+      - Number Inventory
+      summary: Reserve number
+      description: Reserve a telephone number for an application
+      operationId: reserveNumber
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/release:
+    post:
+      tags:
+      - Number Inventory
+      summary: Release number
+      description: 'Release a telephone number back to available pool. #365: if the number is currently assigned (applicationId set), the release is rejected with 409 {code:"ASSIGNED", applicationId} unless force=true or a matching expectedApplicationId is provided (mismatch rejects even with force).'
+      operationId: releaseNumber
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: force
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: expectedApplicationId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/reassign:
+    post:
+      tags:
+      - Number Inventory
+      summary: Atomically reassign number to another application
+      description: '#365-3c: transfers ownership fromApplicationId -> toApplicationId in one transaction; the TN never transits AVAILABLE. 409 {code:"MISMATCH", applicationId} when fromApplicationId is not the current owner; 409 {code:"NOT_ASSIGNED"} when the TN has no owner. No force flag by design — reconcile first (see /v1/journal/events).'
+      operationId: reassignNumber
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReassignRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/quarantine:
+    post:
+      tags:
+      - Number Inventory
+      summary: Enter quarantine
+      description: 'Place an IN_USE/RESERVED number into the aging hold. Body: reason (DISCONNECT|NPAC_INITIATED|MANUAL|MIGRATION, default MANUAL), and either expiresAt (ISO-8601) or days (default 90).'
+      operationId: enterQuarantine
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: spid
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Number Inventory
+      summary: Release from quarantine
+      description: Transition a quarantined number immediately back to AVAILABLE.
+      operationId: releaseFromQuarantine
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: spid
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: reason
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    patch:
+      tags:
+      - Number Inventory
+      summary: Adjust quarantine expiry
+      description: Extend or shorten the quarantine_expires_at on a number currently in QUARANTINE.
+      operationId: adjustQuarantine
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: spid
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/disconnect:
+    post:
+      tags:
+      - Number Inventory
+      summary: Disconnect number
+      description: Disconnect a number from the upstream registry. For TFNs calls Somos PTR disconnect; for DIDs calls AstroSOA soadisconnect. Sets local status=DISCONNECTED on success.
+      operationId: disconnectNumber_1
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cooldownDays
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/assign:
+    post:
+      tags:
+      - Number Inventory
+      summary: Assign number
+      description: Assign a telephone number to an application with custom metadata
+      operationId: assignNumber
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/by-id/{id}/reserve:
+    post:
+      tags:
+      - Number Inventory
+      summary: Reserve number by ID
+      description: Reserve a telephone number using record ID (avoids duplicate TN issues)
+      operationId: reserveNumberById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/by-id/{id}/release:
+    post:
+      tags:
+      - Number Inventory
+      summary: Release number by ID
+      description: 'Release a telephone number using record ID (avoids duplicate TN issues). Same #365 assigned-release guard as /numbers/{tn}/release.'
+      operationId: releaseNumberById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: force
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: expectedApplicationId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/by-id/{id}/reassign:
+    post:
+      tags:
+      - Number Inventory
+      summary: Atomically reassign number to another application by ID
+      description: Reassign using record ID (avoids duplicate TN issues). See /numbers/{telephoneNumber}/reassign for the transfer semantics.
+      operationId: reassignNumberById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReassignRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/by-id/{id}/disconnect:
+    post:
+      tags:
+      - Number Inventory
+      summary: Disconnect number by ID
+      description: Disconnect a number using record ID (avoids duplicate TN issues). See /numbers/{telephoneNumber}/disconnect.
+      operationId: disconnectNumberById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: cooldownDays
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/by-id/{id}/assign:
+    post:
+      tags:
+      - Number Inventory
+      summary: Assign number by ID
+      description: Assign a telephone number using record ID (avoids duplicate TN issues)
+      operationId: assignNumberById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/summary:
+    get:
+      tags:
+      - Number Inventory
+      summary: Get inventory summary
+      description: Get summary statistics for a SPID
+      operationId: getInventorySummary_1
+      parameters:
+      - name: spid
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}:
+    get:
+      tags:
+      - Number Inventory
+      summary: Get number details
+      description: Retrieve details for a specific telephone number
+      operationId: getNumber
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: spid
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/numbers/{telephoneNumber}/activity:
+    get:
+      tags:
+      - Number Inventory
+      summary: Get number activity timeline
+      description: 'Per-TN lifecycle activity ledger: assign/release/quarantine/disconnect/snapback/port events with actor identity'
+      operationId: getNumberActivity
+      parameters:
+      - name: telephoneNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    ReassignRequest:
+      type: object
+      properties:
+        fromApplicationId:
+          type: string
+        toApplicationId:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

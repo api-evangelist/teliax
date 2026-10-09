@@ -1,0 +1,331 @@
+openapi: 3.2.0
+info:
+  title: Teliax LSMS API
+  version: 2026.6.25
+  contact:
+    name: Ringer Support
+    email: support@ringer.com
+    url: https://telique.ringer.tel
+  license:
+    name: Proprietary
+  description: 'Operations tagged LSMS across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.telique.ringer.tel
+  description: Production
+security:
+- apiToken: []
+tags:
+- name: LSMS
+  description: LSMS database queries — relationship lookups across phone numbers, LRNs, SPIDs, and service providers via REST or GraphQL.
+paths:
+  /v1/telique/lsms/list/phone_number:
+    get:
+      operationId: lsmsListPhoneNumbers
+      tags:
+      - LSMS
+      summary: List phone numbers by LRN or SPID
+      description: 'Query the LSMS database for all phone numbers associated with a
+
+        given LRN or SPID. Exactly one query parameter must be provided.
+
+
+        These endpoints query PostgreSQL directly and may have higher
+
+        latency than the primary LRN lookup endpoints.'
+      parameters:
+      - name: lrn
+        in: query
+        required: false
+        description: Local Routing Number to filter by (10-digit)
+        schema:
+          type: string
+          pattern: ^\d{10}$
+          example: '7207081999'
+      - name: spid
+        in: query
+        required: false
+        description: Service Provider ID to filter by (4 characters)
+        schema:
+          type: string
+          pattern: ^[A-Z0-9]{4}$
+          example: 567G
+      responses:
+        '200':
+          description: List of phone numbers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneNumberListResponse'
+              example:
+                count: 3
+                phone_numbers:
+                - '3036298301'
+                - '3036298302'
+                - '3036298303'
+                query:
+                  lrn: '7207081999'
+        '400':
+          description: Invalid parameters (must provide exactly one of lrn or spid)
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lsms/list/spid:
+    get:
+      operationId: lsmsListSpids
+      tags:
+      - LSMS
+      summary: List SPIDs by LRN or phone number
+      description: 'Query the LSMS database for all Service Provider IDs associated with
+
+        a given LRN or phone number. Exactly one query parameter must be provided.'
+      parameters:
+      - name: lrn
+        in: query
+        required: false
+        description: Local Routing Number to filter by (10-digit)
+        schema:
+          type: string
+          pattern: ^\d{10}$
+          example: '7207081999'
+      - name: phone_number
+        in: query
+        required: false
+        description: Phone number to filter by (10-digit)
+        schema:
+          type: string
+          pattern: ^\d{10}$
+          example: '3036298301'
+      responses:
+        '200':
+          description: List of SPIDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpidListResponse'
+              example:
+                count: 1
+                spids:
+                - 567G
+                query:
+                  lrn: '7207081999'
+        '400':
+          description: Invalid parameters (must provide exactly one of lrn or phone_number)
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lsms/list/lrn:
+    get:
+      operationId: lsmsListLrns
+      tags:
+      - LSMS
+      summary: List LRNs by SPID or phone number
+      description: 'Query the LSMS database for all Local Routing Numbers associated with
+
+        a given SPID or phone number. Exactly one query parameter must be provided.'
+      parameters:
+      - name: spid
+        in: query
+        required: false
+        description: Service Provider ID to filter by (4 characters)
+        schema:
+          type: string
+          pattern: ^[A-Z0-9]{4}$
+          example: 567G
+      - name: phone_number
+        in: query
+        required: false
+        description: Phone number to filter by (10-digit)
+        schema:
+          type: string
+          pattern: ^\d{10}$
+          example: '3036298301'
+      responses:
+        '200':
+          description: List of LRNs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LrnListResponse'
+              example:
+                count: 2
+                lrns:
+                - '7207081999'
+                - '3036298300'
+                query:
+                  spid: 567G
+        '400':
+          description: Invalid parameters (must provide exactly one of spid or phone_number)
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lsms/gql:
+    post:
+      operationId: lsmsGraphql
+      tags:
+      - LSMS
+      summary: Query LSMS data via GraphQL
+      description: 'GraphQL endpoint for flexible LSMS database queries. Supports
+
+        subscription version lookups, number block queries, service provider
+
+        information, and NPA-NXX data.
+
+
+        Available root queries:
+
+        - `subscriptionVersion(phoneNumber)` — single phone number lookup
+
+        - `subscriptionVersionsByLrn(lrn, limit, offset)` — paginated list by LRN
+
+        - `subscriptionVersionsBySpid(spid, limit, offset)` — paginated list by SPID
+
+        - `numberBlock(npanxxx)` — NPA-NXX-X block details
+
+        - `numberBlocks(spid, lrn, limit, offset)` — paginated block search
+
+        - `serviceProvider(spid, npacRegion)` — provider details
+
+        - `serviceProviders(limit, offset)` — list all providers
+
+        - `locationRoutingNumber(lrn)` — LRN details
+
+        - `npanxx(npa, nxx)` — NPA-NXX assignment info
+
+        - `npanxxBySpid(spid, limit, offset)` — NPA-NXX assignments by SPID
+
+        - `lsmsStats` — database statistics
+
+
+        Visit the GraphQL playground (GET request to the same path) for
+
+        interactive schema exploration.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: string
+                  description: GraphQL query string
+                variables:
+                  type: object
+                  description: Query variables
+            example:
+              query: "{\n  subscriptionVersion(phoneNumber: \"3036298301\") {\n    phoneNumber\n    lrn\n    spid\n    lnpType\n    activationTimestamp\n    isActive\n  }\n}\n"
+      responses:
+        '200':
+          description: GraphQL response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                  errors:
+                    type: array
+                    items:
+                      type: object
+              example:
+                data:
+                  subscriptionVersion:
+                    phoneNumber: '3036298301'
+                    lrn: '7207081999'
+                    spid: 567G
+                    lnpType: lspp
+                    activationTimestamp: 2026-04-04 23:04:50.386843+00:00
+                    isActive: true
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+components:
+  schemas:
+    LrnListResponse:
+      type: object
+      required:
+      - count
+      - lrns
+      - query
+      properties:
+        count:
+          type: integer
+          description: Number of results
+          example: 2
+        lrns:
+          type: array
+          items:
+            type: string
+          description: List of 10-digit Local Routing Numbers
+          example:
+          - '7207081999'
+          - '3036298300'
+        query:
+          $ref: '#/components/schemas/LsmsListQuery'
+    LsmsListQuery:
+      type: object
+      description: The query parameters that were used (echoed back)
+      properties:
+        lrn:
+          type: string
+          example: '7207081999'
+        spid:
+          type: string
+          example: 567G
+        phone_number:
+          type: string
+          example: '3036298301'
+    SpidListResponse:
+      type: object
+      required:
+      - count
+      - spids
+      - query
+      properties:
+        count:
+          type: integer
+          description: Number of results
+          example: 1
+        spids:
+          type: array
+          items:
+            type: string
+          description: List of 4-character Service Provider IDs
+          example:
+          - 567G
+        query:
+          $ref: '#/components/schemas/LsmsListQuery'
+    PhoneNumberListResponse:
+      type: object
+      required:
+      - count
+      - phone_numbers
+      - query
+      properties:
+        count:
+          type: integer
+          description: Number of results
+          example: 3
+        phone_numbers:
+          type: array
+          items:
+            type: string
+          description: List of 10-digit phone numbers
+          example:
+          - '3036298301'
+          - '3036298302'
+          - '3036298303'
+        query:
+          $ref: '#/components/schemas/LsmsListQuery'
+  securitySchemes:
+    apiToken:
+      type: apiKey
+      in: header
+      name: x-api-token
+      description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
+x-refined-from:
+- teliax-telique-openapi.yaml
+- teliax-telique-openapi.yml

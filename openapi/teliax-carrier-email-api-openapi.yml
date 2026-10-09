@@ -1,0 +1,355 @@
+openapi: 3.2.0
+info:
+  title: Teliax Carrier Email API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Carrier Email across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Carrier Email
+  description: Carrier coordination email (#336)
+paths:
+  /v1/port-projects/projects/{projectId}/emails:
+    get:
+      tags:
+      - Carrier Email
+      summary: List emails on this project (newest first)
+      operationId: list_3
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrierEmailDto'
+    post:
+      tags:
+      - Carrier Email
+      summary: 'Send a carrier coordination email (multipart: payload JSON + optional files)'
+      operationId: send
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - payload
+              type: object
+              properties:
+                payload:
+                  $ref: '#/components/schemas/CarrierEmailSendRequest'
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CarrierEmailDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/projects/{projectId}/emails/lsr-preview:
+    post:
+      tags:
+      - Carrier Email
+      summary: Render the filled LSR form for preview (no send, no persistence)
+      operationId: lsrPreview
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LsrPreviewRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/LsrPreviewResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/projects/{projectId}/emails/{emailId}:
+    get:
+      tags:
+      - Carrier Email
+      summary: Fetch one email including body and attachment metadata
+      operationId: get_2
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: emailId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CarrierEmailDto'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/projects/{projectId}/emails/{emailId}/attachments/{index}:
+    get:
+      tags:
+      - Carrier Email
+      summary: Download an email attachment (302 redirect to a signed URL, 1-hour expiration)
+      operationId: downloadAttachment
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: emailId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/port-projects/projects/{projectId}/emails/prefill:
+    get:
+      tags:
+      - Carrier Email
+      summary: Carrier groups + suggested subject/body for the compose modal
+      operationId: prefill
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CarrierEmailPrefillResponse'
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    CarrierEmailDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        direction:
+          type: string
+        purpose:
+          type: string
+        messageId:
+          type: string
+        fromIdentity:
+          type: string
+        replyTo:
+          type: string
+        toRecipients:
+          type: array
+          items:
+            type: string
+        ccRecipients:
+          type: array
+          items:
+            type: string
+        subject:
+          type: string
+        body:
+          type: string
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+        tns:
+          type: array
+          items:
+            type: string
+        losingSpid:
+          type: string
+        carrierName:
+          type: string
+        status:
+          type: string
+        failureReason:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    CarrierGroup:
+      type: object
+      properties:
+        spid:
+          type: string
+        carrierName:
+          type: string
+        contactEmail:
+          type: string
+        tradingPartnerExists:
+          type: boolean
+        tnCount:
+          type: integer
+          format: int32
+        tns:
+          type: array
+          items:
+            type: string
+        suggestedSubject:
+          type: string
+        suggestedBody:
+          type: string
+        contactSource:
+          type: string
+    LsrPreviewRequest:
+      type: object
+      properties:
+        losingSpid:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    LsrPreviewResponse:
+      type: object
+      properties:
+        html:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+    CarrierEmailPrefillResponse:
+      type: object
+      properties:
+        carrierGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarrierGroup'
+        operatorEmail:
+          type: string
+    CarrierEmailSendRequest:
+      type: object
+      properties:
+        losingSpid:
+          type: string
+        to:
+          type: array
+          items:
+            type: string
+        cc:
+          type: array
+          items:
+            type: string
+        subject:
+          type: string
+        body:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+        generateLsrForm:
+          type: boolean
+        saveContact:
+          type: boolean
+    AttachmentDto:
+      type: object
+      properties:
+        filename:
+          type: string
+        size:
+          type: integer
+          format: int64
+        mimeType:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

@@ -1,0 +1,1076 @@
+openapi: 3.2.0
+info:
+  title: Teliax LERG API
+  version: 2026.6.25
+  contact:
+    name: Ringer Support
+    email: support@ringer.com
+    url: https://telique.ringer.tel
+  license:
+    name: Proprietary
+  description: 'Operations tagged LERG across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.telique.ringer.tel
+  description: Production
+security:
+- apiToken: []
+tags:
+- name: LERG
+  description: LERG telecom routing data — table metadata, NPA-NXX lookups, switch data, tandem relationships, and complex cross-table queries.
+paths:
+  /v1/telique/lerg/tables:
+    get:
+      operationId: listTables
+      tags:
+      - LERG
+      summary: List all LERG tables
+      description: 'Returns metadata for all 27 LERG tables including record counts and field definitions.
+
+        Useful for discovering available tables and their structures before querying.'
+      responses:
+        '200':
+          description: List of all available LERG tables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TableInfo'
+              example:
+              - name: lerg_1
+                display_name: LERG 1
+                record_count: 20447
+                fields:
+                - name: ocn_num
+                  display_name: OCN Number
+                  data_type: string
+                - name: ocn_name
+                  display_name: OCN Name
+                  data_type: string
+              - name: lerg_6
+                display_name: LERG 6
+                record_count: 1501514
+                fields:
+                - name: npa
+                  display_name: NPA
+                  data_type: integer
+                - name: nxx
+                  display_name: NXX
+                  data_type: integer
+                - name: block_id
+                  display_name: Block ID
+                  data_type: string
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lerg/tables/{table_name}:
+    get:
+      operationId: getTableInfo
+      tags:
+      - LERG
+      summary: Get table metadata
+      description: 'Returns detailed metadata for a specific LERG table, including the full list of
+
+        fields and current record count.'
+      parameters:
+      - name: table_name
+        in: path
+        required: true
+        description: Name of the LERG table. Use `listTables` to see all available table names.
+        schema:
+          type: string
+          enum:
+          - lerg_1
+          - lerg_1_con
+          - lerg_2
+          - lerg_3
+          - lerg_4
+          - lerg_5
+          - lerg_6
+          - lerg_6_atc
+          - lerg_6_ins
+          - lerg_6_odd
+          - lerg_7
+          - lerg_7_ins
+          - lerg_7_sha
+          - lerg_7_sha_ins
+          - lerg_8
+          - lerg_8_lir
+          - lerg_8_loc
+          - lerg_8_pst
+          - lerg_9
+          - lerg_9_atc
+          - lerg10
+          - lerg11
+          - lerg12
+          - lerg12_ins
+          - lerg16
+          - lerg17
+          - lergdate
+          example: lerg_6
+      responses:
+        '200':
+          description: Table metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableInfo'
+              example:
+                name: lerg_6
+                display_name: LERG 6
+                record_count: 1501514
+                fields:
+                - name: npa
+                  display_name: NPA
+                  data_type: integer
+                - name: nxx
+                  display_name: NXX
+                  data_type: integer
+                - name: ocn
+                  display_name: OCN
+                  data_type: string
+                - name: switch
+                  display_name: Switch
+                  data_type: string
+        '404':
+          description: Table not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LergErrorResponse'
+              example:
+                error: Table 'invalid_table' not found
+                status: 404
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lerg/tables/{table_name}/schema:
+    get:
+      operationId: getTableSchema
+      tags:
+      - LERG
+      summary: Get table field definitions
+      description: 'Returns the schema for a specific LERG table including column names, display names,
+
+        data types, and nullability. Use this to understand what fields are available for
+
+        queries and filtering.'
+      parameters:
+      - name: table_name
+        in: path
+        required: true
+        description: Name of the LERG table
+        schema:
+          type: string
+          example: lerg_6
+      responses:
+        '200':
+          description: Table schema information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableSchemaResponse'
+              example:
+                table: lerg_6
+                display_name: LERG 6
+                fields:
+                - name: npa
+                  display_name: NPA
+                  data_type: integer
+                - name: nxx
+                  display_name: NXX
+                  data_type: integer
+                - name: block_id
+                  display_name: Block ID
+                  data_type: string
+                - name: ocn
+                  display_name: OCN
+                  data_type: string
+                - name: loc_name
+                  display_name: Location Name
+                  data_type: string
+                - name: switch
+                  display_name: Switch
+                  data_type: string
+        '404':
+          description: Table not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LergErrorResponse'
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lerg/fast/lerg_6/{fields}/{query}:
+    get:
+      operationId: queryLerg6Fast
+      tags:
+      - LERG
+      summary: Ultra-fast LERG 6 lookups
+      description: 'High-performance endpoint specifically optimized for LERG 6 (NPA-NXX) queries.
+
+        Uses pre-computed hash indexes for sub-microsecond lookups on NPA, NXX, OCN,
+
+        SWITCH, LATA, and state fields.
+
+
+        Best for real-time routing lookups where latency matters.
+
+
+        ## URL Format
+
+        - `fields`: Comma-separated field names to return, or `*` for all fields
+
+        - `query`: Filter conditions as `key=value` pairs separated by `&`
+
+
+        ## Indexed Fields
+
+        `npa`+`nxx` (packed), `ocn`, `switch`. Other filters (e.g. `block_id`,
+
+        `lata`, `loc_state`) are applied as post-filters after the index lookup.
+
+
+        ## Examples
+
+        - All 303 NPAs: `/v1/telique/lerg/fast/lerg_6/npa,nxx,ocn,switch/npa=303`
+
+        - Specific block: `/v1/telique/lerg/fast/lerg_6/*/npa=303&nxx=629&block_id=A`
+
+        - By switch: `/v1/telique/lerg/fast/lerg_6/npa,nxx,ocn/switch=DNVRCOMADS0`'
+      parameters:
+      - name: fields
+        in: path
+        required: true
+        description: Comma-separated list of fields to return, or `*` for all
+        schema:
+          type: string
+          example: npa,nxx,ocn,loc_name,switch
+      - name: query
+        in: path
+        required: true
+        description: Filter conditions as key=value pairs separated by &
+        schema:
+          type: string
+          example: npa=720&nxx=708
+      - name: limit
+        in: query
+        required: false
+        description: Maximum number of records to return
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+          example: 10
+      - name: offset
+        in: query
+        required: false
+        description: Number of records to skip for pagination
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          example: 0
+      responses:
+        '200':
+          description: Query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+              example:
+                table: lerg_6
+                count: 1
+                total_unique: 1
+                offset: 0
+                limit: 10
+                data:
+                - npa: 720
+                  nxx: 708
+                  ocn: '7167'
+                  loc_name: DENVER
+                  switch: DNVRCO93DS0
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LergErrorResponse'
+              example:
+                error: 'Invalid filter field: invalid_field'
+                status: 400
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lerg/{table_name}/{fields}/{query}:
+    get:
+      operationId: queryTable
+      tags:
+      - LERG
+      summary: Query any LERG table with filters
+      description: 'Perform dynamic queries on any of the 27 LERG tables with field selection and
+
+        filtering. Filters are applied with AND logic.
+
+
+        ## URL Format
+
+        - `table_name`: The LERG table to query (e.g., `lerg_6`, `lerg_1`)
+
+        - `fields`: Comma-separated field names to return, or `*` for all fields
+
+        - `query`: Filter conditions as `key=value` pairs separated by `&`
+
+
+        ## Projection Validation
+
+        Field names in the `fields` segment are validated against the table''s schema. Unknown
+
+        field names produce a `400 Bad Request` (with a `did you mean` suggestion when the
+
+        typo is close to a real column). Use `GET /v1/telique/lerg/tables/{table_name}` to
+
+        list valid fields, or pass `*` to select all fields.
+
+
+        ## Filter Operators
+
+        Filters in the URL path support exact match only. For advanced operators
+
+        (like, in, gt, lt, etc.), use the POST `/query` endpoint.
+
+
+        ## Examples
+
+        - Denver NPA-NXX data: `/v1/telique/lerg/lerg_6/npa,nxx,loc_name,switch/loc_name=DENVER`
+
+        - All columns via wildcard: `/v1/telique/lerg/lerg_6/*/npa=303&nxx=629`
+
+        - Colorado OCNs: `/v1/telique/lerg/lerg_1/ocn_num,ocn_name,ocn_state/ocn_state=CO`
+
+        - Specific NPA-NXX-Block: `/v1/telique/lerg/lerg_6/lata,ocn,switch/npa=864&nxx=763&block_id=A`'
+      parameters:
+      - name: table_name
+        in: path
+        required: true
+        description: Name of the LERG table to query
+        schema:
+          type: string
+          example: lerg_6
+      - name: fields
+        in: path
+        required: true
+        description: Comma-separated list of fields to return, or `*` for all
+        schema:
+          type: string
+          example: npa,nxx,ocn,loc_name,switch
+      - name: query
+        in: path
+        required: true
+        description: Filter conditions as key=value pairs separated by &
+        schema:
+          type: string
+          example: npa=720&loc_name=DENVER
+      - name: limit
+        in: query
+        required: false
+        description: Maximum number of records to return
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+          example: 10
+      - name: offset
+        in: query
+        required: false
+        description: Number of records to skip for pagination
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          example: 0
+      responses:
+        '200':
+          description: Query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+              example:
+                table: lerg_6
+                count: 3
+                total_unique: 3
+                data:
+                - npa: 720
+                  nxx: 708
+                  ocn: '7167'
+                  loc_name: DENVER
+                  switch: DNVRCO93DS0
+                - npa: 720
+                  nxx: 709
+                  ocn: '6534'
+                  loc_name: DENVER
+                  switch: DNVRCOMADS0
+                - npa: 720
+                  nxx: 710
+                  ocn: '9636'
+                  loc_name: DENVER
+                  switch: DNVRCOMA02T
+        '400':
+          description: 'Invalid query parameters — e.g. an unknown column name in the `fields` path
+
+            segment, or `*` combined with other field names.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LergErrorResponse'
+              example:
+                error: 'Bad request: unknown field(s) for table `lerg_6`: `category` (did you mean `lata`?). Use GET /v1/telique/lerg/tables/lerg_6 to list valid fields, or `*` to select all.'
+                status: 400
+        '404':
+          description: Table not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LergErrorResponse'
+              example:
+                error: Table 'invalid' not found
+                status: 404
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lerg/query:
+    post:
+      operationId: complexQuery
+      tags:
+      - LERG
+      summary: Complex query with filters and joins
+      description: 'Execute complex queries using a JSON request body. Supports advanced filter operators,
+
+        cross-table joins, and pagination. Use this when you need operators beyond simple
+
+        equality (like, in, gt, lt, etc.) or need to join data across LERG tables.
+
+
+        ## Filter Operators
+
+        `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `like`, `in`, `notin`, `isnull`, `isnotnull`
+
+
+        ## Join Types
+
+        `inner`, `left`, `right`'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplexQueryRequest'
+            examples:
+              simpleFilter:
+                summary: Simple query with filters
+                value:
+                  table: lerg_6
+                  fields:
+                  - npa
+                  - nxx
+                  - loc_name
+                  - ocn
+                  filters:
+                  - field: npa
+                    operator: eq
+                    value: 720
+                  - field: loc_name
+                    operator: eq
+                    value: DENVER
+                  limit: 10
+              withJoin:
+                summary: Join LERG 6 with LERG 1 to get carrier names
+                value:
+                  table: lerg_6
+                  fields:
+                  - npa
+                  - nxx
+                  - ocn
+                  - loc_name
+                  filters:
+                  - field: npa
+                    operator: eq
+                    value: 720
+                  join:
+                    join_type: inner
+                    table: lerg_1
+                    'on':
+                    - left_field: ocn
+                      right_field: ocn_num
+                    fields:
+                    - ocn_name
+                  limit: 5
+              likeFilter:
+                summary: Pattern matching with LIKE
+                value:
+                  table: lerg_1
+                  fields:
+                  - ocn_num
+                  - ocn_name
+                  - ocn_state
+                  filters:
+                  - field: ocn_name
+                    operator: like
+                    value: BANDWIDTH%
+                  limit: 10
+      responses:
+        '200':
+          description: Query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+              example:
+                table: lerg_6
+                count: 3
+                data:
+                - npa: 720
+                  nxx: 708
+                  ocn: '7167'
+                  loc_name: DENVER
+                  ocn_name: CELLCO PARTNERSHIP DBA VERIZON WIRELESS
+                joined_with: lerg_1
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LergErrorResponse'
+              example:
+                error: 'Invalid filter operator: ''invalid'''
+                status: 400
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+  /v1/telique/lerg/tandem:
+    get:
+      operationId: queryTandem
+      tags:
+      - LERG
+      summary: Query tandem switch relationships
+      description: 'Performs pre-joined queries across LERG tables to determine tandem switch
+
+        relationships. Returns the carrier, LATA, switch, and tandem for matched records.
+
+        Requires at least one search parameter.
+
+
+        ## Search Options
+
+        - **NPA + NXX**: Tandem info for a specific area code and exchange
+
+        - **Switch**: Tandem info for a specific switch CLLI code
+
+        - **Tandem**: Reverse lookup — all switches routing through a tandem
+
+        - **Name**: Tandem info for carriers matching a name pattern (supports `%` or `*` wildcards)'
+      parameters:
+      - name: npa
+        in: query
+        required: false
+        description: NPA (area code) — requires `nxx` to also be specified
+        schema:
+          type: string
+          pattern: ^[2-9][0-9]{2}$
+          example: '303'
+      - name: nxx
+        in: query
+        required: false
+        description: NXX (exchange) — requires `npa` to also be specified
+        schema:
+          type: string
+          pattern: ^[2-9][0-9]{2}$
+          example: '629'
+      - name: switch
+        in: query
+        required: false
+        description: Switch CLLI code (11 characters)
+        schema:
+          type: string
+          pattern: ^[A-Z0-9]{11}$
+          example: DNVRCOMADS0
+      - name: tandem
+        in: query
+        required: false
+        description: Tandem CLLI code — returns all switches that route through it
+        schema:
+          type: string
+          pattern: ^[A-Z0-9]{11}$
+          example: DNVRCO2630T
+      - name: name
+        in: query
+        required: false
+        description: Carrier name pattern (use `%` or `*` for wildcards)
+        schema:
+          type: string
+          example: BANDWIDTH%
+      - name: limit
+        in: query
+        required: false
+        description: Maximum number of records to return
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+          example: 100
+      - name: offset
+        in: query
+        required: false
+        description: Number of records to skip for pagination
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          example: 0
+      responses:
+        '200':
+          description: Tandem query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TandemQueryResponse'
+              examples:
+                byNpaNxx:
+                  summary: Query by NPA-NXX
+                  value:
+                    count: 1
+                    records:
+                    - ocn_name: QWEST CORPORATION
+                      ocn: '9636'
+                      lata: '656'
+                      lata_name: DENVER CO
+                      state: CO
+                      switch: DNVRCOMADS0
+                      tandem: DNVRCOMA02T
+                      tandem_ocn: '9636'
+                      tandem_ocn_name: QWEST CORPORATION
+                    query:
+                      query_type: npa_nxx
+                      limit: 100
+                      offset: 0
+                byTandem:
+                  summary: Reverse lookup by tandem
+                  value:
+                    count: 2
+                    records:
+                    - npa: '303'
+                      nxx: '629'
+                      ocn_name: QWEST CORPORATION
+                      ocn: '9636'
+                      lata: '656'
+                      lata_name: DENVER CO
+                      state: CO
+                      switch: DNVRCOMADS0
+                      tandem: DNVRCO2630T
+                      tandem_ocn: 567G
+                      tandem_ocn_name: TELIAX, INC. - CO
+                    - npa: '206'
+                      nxx: '776'
+                      ocn_name: FIVE9, INC.
+                      ocn: 598J
+                      lata: '674'
+                      lata_name: SEATTLE WASHINGTON
+                      state: WA
+                      switch: STTLWAWB39Z
+                      tandem: DNVRCO2630T
+                      tandem_ocn: 567G
+                      tandem_ocn_name: TELIAX, INC. - CO
+                    query:
+                      query_type: tandem
+                      limit: 100
+                      offset: 0
+        '400':
+          description: Invalid or missing query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LergErrorResponse'
+              examples:
+                missingParams:
+                  value:
+                    error: At least one search parameter (npa+nxx, switch, tandem, or name) is required
+                    status: 400
+                npaMissingNxx:
+                  value:
+                    error: NXX is required when searching by NPA
+                    status: 400
+    servers:
+    - url: https://api.telique.ringer.tel
+      description: Production
+components:
+  schemas:
+    TandemRecord:
+      type: object
+      properties:
+        npa:
+          type:
+          - string
+          - 'null'
+          description: NPA (area code) — only present for tandem/name queries
+          example: '303'
+        nxx:
+          type:
+          - string
+          - 'null'
+          description: NXX (exchange) — only present for tandem/name queries
+          example: '629'
+        ocn_name:
+          type:
+          - string
+          - 'null'
+          description: Operating Company Name
+          example: QWEST CORPORATION
+        ocn:
+          type:
+          - string
+          - 'null'
+          description: Operating Company Number
+          example: '9636'
+        lata:
+          type:
+          - string
+          - 'null'
+          description: LATA code
+          example: '656'
+        lata_name:
+          type:
+          - string
+          - 'null'
+          description: LATA name
+          example: DENVER CO
+        state:
+          type:
+          - string
+          - 'null'
+          description: State code
+          example: CO
+        switch:
+          type:
+          - string
+          - 'null'
+          description: Switch CLLI code
+          example: DNVRCOMADS0
+        tandem:
+          type:
+          - string
+          - 'null'
+          description: Tandem switch CLLI code
+          example: DNVRCOMA02T
+        tandem_ocn:
+          type:
+          - string
+          - 'null'
+          description: Tandem Operating Company Number
+          example: '9636'
+        tandem_ocn_name:
+          type:
+          - string
+          - 'null'
+          description: Tandem Operating Company Name
+          example: QWEST CORPORATION
+    ComplexQueryRequest:
+      type: object
+      required:
+      - table
+      properties:
+        table:
+          type: string
+          description: Name of the table to query
+          example: lerg_6
+        fields:
+          type: array
+          description: Fields to return (all fields if omitted)
+          items:
+            type: string
+          example:
+          - npa
+          - nxx
+          - ocn
+          - loc_name
+        filters:
+          type: array
+          description: Filter conditions (combined with AND)
+          items:
+            $ref: '#/components/schemas/FilterCondition'
+        limit:
+          type: integer
+          description: Maximum number of records to return
+          minimum: 1
+          maximum: 10000
+          default: 100
+          example: 10
+        offset:
+          type: integer
+          description: Number of records to skip
+          minimum: 0
+          default: 0
+          example: 0
+        join:
+          $ref: '#/components/schemas/JoinClause'
+    LergErrorResponse:
+      type: object
+      required:
+      - error
+      - status
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: Invalid request
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+    QueryResponse:
+      type: object
+      required:
+      - table
+      - count
+      - data
+      properties:
+        table:
+          type: string
+          description: Name of the queried table
+          example: lerg_6
+        count:
+          type: integer
+          description: Number of records returned
+          example: 3
+        total_unique:
+          type: integer
+          description: Total unique records matching the query before pagination. Emitted by the fast LERG 6 endpoint and the generic GET query endpoint.
+        offset:
+          type: integer
+          description: Pagination offset used for this response. Emitted by the fast LERG 6 endpoint only.
+        limit:
+          type: integer
+          description: Pagination limit used for this response. Emitted by the fast LERG 6 endpoint only.
+        data:
+          type: array
+          description: Query results — fields vary by request
+          items:
+            type: object
+            additionalProperties: true
+        joined_with:
+          type:
+          - string
+          - 'null'
+          description: Name of the joined table when a join was applied. Always present on responses from `POST /v1/telique/lerg/query`; `null` when no join was requested.
+    FieldInfo:
+      type: object
+      required:
+      - name
+      - display_name
+      - data_type
+      - nullable
+      properties:
+        name:
+          type: string
+          description: Internal field name
+          example: npa
+        display_name:
+          type: string
+          description: Display field name
+          example: NPA
+        data_type:
+          type: string
+          description: Data type of the field
+          enum:
+          - string
+          - integer
+          - float
+          - boolean
+          - date
+          example: integer
+        nullable:
+          type: boolean
+          description: Whether the field can be null
+          example: false
+    JoinCondition:
+      type: object
+      required:
+      - left_field
+      - right_field
+      properties:
+        left_field:
+          type: string
+          description: Field from the main table
+          example: ocn
+        right_field:
+          type: string
+          description: Field from the joined table
+          example: ocn_num
+    TableInfo:
+      type: object
+      required:
+      - name
+      - display_name
+      - record_count
+      - fields
+      properties:
+        name:
+          type: string
+          description: Internal table name
+          example: lerg_6
+        display_name:
+          type: string
+          description: Display name
+          example: LERG 6
+        record_count:
+          type: integer
+          description: Number of records in the table
+          example: 1501514
+        fields:
+          type: array
+          description: List of fields in the table
+          items:
+            $ref: '#/components/schemas/FieldInfo'
+    JoinClause:
+      type: object
+      required:
+      - table
+      - 'on'
+      properties:
+        table:
+          type: string
+          description: Table to join with
+          example: lerg_1
+        'on':
+          type: array
+          description: Join conditions
+          items:
+            $ref: '#/components/schemas/JoinCondition'
+        fields:
+          type: array
+          description: Fields to include from joined table
+          items:
+            type: string
+          example:
+          - ocn_name
+        join_type:
+          type: string
+          description: Type of join (defaults to inner)
+          enum:
+          - inner
+          - left
+          - right
+          default: inner
+          example: inner
+    TableSchemaResponse:
+      type: object
+      required:
+      - table
+      - display_name
+      - fields
+      properties:
+        table:
+          type: string
+          description: Internal table name
+          example: lerg_6
+        display_name:
+          type: string
+          description: Display name
+          example: LERG 6
+        fields:
+          type: array
+          description: List of field definitions
+          items:
+            $ref: '#/components/schemas/FieldInfo'
+    TandemQueryResponse:
+      type: object
+      required:
+      - count
+      - records
+      - query
+      properties:
+        count:
+          type: integer
+          description: Number of records returned
+          example: 1
+        records:
+          type: array
+          description: Tandem query results
+          items:
+            $ref: '#/components/schemas/TandemRecord'
+        query:
+          type: object
+          description: Query metadata
+          required:
+          - query_type
+          - limit
+          - offset
+          properties:
+            query_type:
+              type: string
+              description: Type of query performed
+              enum:
+              - npa_nxx
+              - switch
+              - tandem
+              - name
+              example: npa_nxx
+            limit:
+              type: integer
+              description: Maximum records requested
+              example: 100
+            offset:
+              type: integer
+              description: Number of records skipped
+              example: 0
+    FilterCondition:
+      type: object
+      required:
+      - field
+      - operator
+      - value
+      properties:
+        field:
+          type: string
+          description: Field name to filter on
+          example: npa
+        operator:
+          type: string
+          description: Filter operator
+          enum:
+          - eq
+          - ne
+          - gt
+          - gte
+          - lt
+          - lte
+          - like
+          - in
+          - notin
+          - isnull
+          - isnotnull
+          example: eq
+        value:
+          description: Value to filter by (type depends on field and operator)
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          - type: array
+            items:
+              oneOf:
+              - type: string
+              - type: number
+  securitySchemes:
+    apiToken:
+      type: apiKey
+      in: header
+      name: x-api-token
+      description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
+x-refined-from:
+- teliax-telique-openapi.yaml
+- teliax-telique-openapi.yml

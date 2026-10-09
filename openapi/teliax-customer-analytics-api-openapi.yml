@@ -1,0 +1,817 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Analytics API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/Analytics across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/Analytics
+paths:
+  /v1/cdr/details:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns one keyset page of call detail records, newest first. **Pagination is cursor-based**: pass the `next_cursor` from the previous response back as `cursor` to fetch the following page, and stop when `has_more` is false. There is no page number and no total count — an exact total over the CDR store is not affordable at platform volume. Wholesale fields (selected_vendor, vendor_cost, margin, margin_pct, tf_*) are always omitted on this customer endpoint. trunk_id / trunk_name identify the customer''s own trunk. Errors: INVALID_DATE, INVALID_CURSOR, CDR_QUERY_FAILED.'
+      tags:
+      - Customer/Analytics
+      summary: List call detail records
+      parameters:
+      - description: Start date (YYYY-MM-DD)
+        name: start_date
+        in: query
+        schema:
+          type: string
+      - description: End date (YYYY-MM-DD, inclusive)
+        name: end_date
+        in: query
+        schema:
+          type: string
+      - description: Operator TZ offset (JS getTimezoneOffset())
+        name: tz_offset_minutes
+        in: query
+        schema:
+          type: integer
+      - description: Opaque cursor from the previous response's next_cursor. Omit for the first page.
+        name: cursor
+        in: query
+        schema:
+          type: string
+      - description: Rows per page (1-1000)
+        name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+      - description: inbound | outbound
+        name: direction
+        in: query
+        schema:
+          type: string
+      - description: Filter by disposition
+        name: disposition
+        in: query
+        schema:
+          type: string
+      - description: Filter by ANI (substring)
+        name: ani
+        in: query
+        schema:
+          type: string
+      - description: Filter by DNI (substring)
+        name: dni
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CDRCursorPage'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CdrDetails
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/cdr/export:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Enqueues an asynchronous CSV export of the matching call detail records and returns **202** with a job id — it does NOT stream the file. Poll `GET /v1/cdr/export/jobs/{job_id}` until status is `done`, then download from the returned signed `url` (valid 24h from the moment it is issued; poll again for a fresh one). An export may span at most 93 days, and at most 3 exports per account may be pending or running at once. A file that ends with a TRUNCATED marker line was capped; narrow the date range. Wholesale vendor/cost/margin columns are omitted; Trunk is the customer''s own trunk group name. Errors: INVALID_DATE, VALIDATION_ERROR, NO_ACTIVE_CUSTOMER, RATE_LIMITED, CDR_EXPORT_FAILED, CDR_EXPORT_UNAVAILABLE.'
+      tags:
+      - Customer/Analytics
+      summary: Request a CDR CSV export
+      parameters:
+      - description: Start date (YYYY-MM-DD)
+        name: start_date
+        in: query
+        schema:
+          type: string
+      - description: End date (YYYY-MM-DD, inclusive)
+        name: end_date
+        in: query
+        schema:
+          type: string
+      - description: Operator TZ offset (JS getTimezoneOffset())
+        name: tz_offset_minutes
+        in: query
+        schema:
+          type: integer
+      - description: inbound | outbound
+        name: direction
+        in: query
+        schema:
+          type: string
+      - description: Filter by disposition
+        name: disposition
+        in: query
+        schema:
+          type: string
+      - description: Filter by ANI (substring)
+        name: ani
+        in: query
+        schema:
+          type: string
+      - description: Filter by DNI (substring)
+        name: dni
+        in: query
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CDRExportJobRef'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CdrExport
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/cdr/export/jobs/{job_id}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the state of an export job. While `pending` or `running`, poll again. On `done` the response carries a freshly signed `url` valid until `expires_at` (24h) — the link is minted per request, so an expired one is replaced simply by polling again. On `error`, `error_code` names the failure (including EXPORT_TIMEOUT for a job abandoned mid-run). A job belonging to another customer returns 404. Errors: INVALID_ID, NOT_FOUND, NO_ACTIVE_CUSTOMER, CDR_EXPORT_FAILED, CDR_EXPORT_UNAVAILABLE.'
+      tags:
+      - Customer/Analytics
+      summary: Poll a CDR CSV export job
+      parameters:
+      - description: Export job id
+        name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CDRExportJobStatus'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CdrExportJobsByJobId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/cdr/statistics:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns aggregated CDR metrics for a date range. Wholesale economics (total_cost, total_margin, avg_margin_pct) are always omitted on this customer endpoint. `quality` (avg MOS/packet-loss/jitter/PDD + sample count) is present only when the server is reading from the CDR rollup mirror; it is absent (omitted) otherwise. Errors: INVALID_DATE, CDR_QUERY_FAILED.'
+      tags:
+      - Customer/Analytics
+      summary: Get call statistics
+      parameters:
+      - description: Start date (YYYY-MM-DD)
+        name: start_date
+        in: query
+        schema:
+          type: string
+      - description: End date (YYYY-MM-DD, inclusive)
+        name: end_date
+        in: query
+        schema:
+          type: string
+      - description: Operator TZ offset (JS getTimezoneOffset())
+        name: tz_offset_minutes
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CallStatistics'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CdrStatistics
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/cdr/trends:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns time-bucketed CDR aggregates for charts. Wholesale total_margin is always omitted on this customer endpoint. Errors: INVALID_DATE, INVALID_GRANULARITY, CDR_QUERY_FAILED.'
+      tags:
+      - Customer/Analytics
+      summary: Get call trend data
+      parameters:
+      - description: Start date (YYYY-MM-DD)
+        name: start_date
+        in: query
+        schema:
+          type: string
+      - description: End date (YYYY-MM-DD, inclusive)
+        name: end_date
+        in: query
+        schema:
+          type: string
+      - description: Operator TZ offset (JS getTimezoneOffset())
+        name: tz_offset_minutes
+        in: query
+        schema:
+          type: integer
+      - description: hour | day | week
+        name: granularity
+        in: query
+        schema:
+          type: string
+          default: day
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrendDataPoint'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1CdrTrends
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    github_com_ringer-warp_api-gateway_internal_models.QualityStats:
+      type: object
+      properties:
+        avg_jitter_ms:
+          type: number
+        avg_mos:
+          type: number
+        avg_packet_loss_pct:
+          type: number
+        avg_pdd_ms:
+          type: number
+        samples:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.CallDetail:
+      type: object
+      properties:
+        ani:
+          type: string
+        answer_stamp:
+          type: string
+        billed_seconds:
+          type: integer
+        call_type:
+          description: 'CallType is a vestigial pre-Phase-A field; the writer chain stopped
+
+            populating it. Kept on the model for legacy consumers but the
+
+            frontend renders the "Zone" column from the Zone field below.'
+          type: string
+        codec:
+          description: 'Codec is the negotiated customer-leg audio codec (e.g. PCMU, opus)
+
+            captured from answer SDP; NULL when not captured.'
+          type: string
+        customer_rate:
+          type: number
+        direction:
+          type: string
+        disposition:
+          type: string
+        dni:
+          type: string
+        end_stamp:
+          type: string
+        id:
+          type: string
+        jitter_ms:
+          type: integer
+        jurisdiction:
+          type: string
+        margin:
+          type: number
+        margin_pct:
+          type: number
+        mos_score:
+          type: number
+        packet_loss_pct:
+          type: number
+        pdd_ms:
+          description: 'PDDMS is true Post-Dial Delay in milliseconds when Option B ms stamps
+
+            were captured (start_ms/progress_ms/answer_ms). When only whole-second
+
+            stamps exist, ListCDRs falls back to pdd_seconds×1000 — UI shows "N s"
+
+            when divisible by 1000 (not sub-second precision).'
+          type: integer
+        pdd_seconds:
+          description: 'PDDSeconds is true PDD in whole seconds: (progress||answer)−start.'
+          type: integer
+        product_type:
+          type: string
+        raw_seconds:
+          type: integer
+        ring_seconds:
+          description: RingSeconds is alerting duration (answer−progress). Not PDD.
+          type: integer
+        rtp_errors:
+          type: integer
+        rtp_packets:
+          description: 'Media packet counts (mig 128/129). Total is ingress+egress when both set.
+
+            Ingress = customer→WARP; egress = WARP→customer on the customer-labeled leg.'
+          type: integer
+        rtp_packets_egress:
+          type: integer
+        rtp_packets_ingress:
+          type: integer
+        selected_vendor:
+          type: string
+        sip_response_code:
+          type: integer
+        ss_attestation:
+          description: 'STIR/SHAKEN provenance. Outbound signing fields are null on
+
+            unsigned/legacy calls; inbound verification fields are null on
+
+            outbound/legacy calls.'
+          type: string
+        ss_origid:
+          type: string
+        ss_signed:
+          type: boolean
+        ss_signer:
+          description: 'Who signed the outbound call''s Identity: "warp" (WARP signed it with its own certificate) or "customer" (the caller''s own signature was passed through unchanged).'
+          type: string
+        ss_signer_org:
+          description: 'Organization of the signing certificate''s holder: WARP''s own certificate when ss_signer is "warp"; for "customer" the holder the certificate CLAIMS, trustworthy only when ss_signer_verstat is "verified".'
+          type: string
+        ss_signer_spc:
+          description: 'Service Provider Code from the signing certificate: WARP''s own when ss_signer is "warp"; for "customer" the code the certificate CLAIMS, trustworthy only when ss_signer_verstat is "verified".'
+          type: string
+        ss_signer_verify_reason:
+          description: Machine reason token behind ss_signer_verstat ("ok" when verified), up to 255 characters.
+          type: string
+        ss_signer_verstat:
+          description: 'WARP''s record-only check of a customer''s signature: "verified", "verification_failed" or "could_not_verify"; null when ss_signer is "warp". Distinct from ss_verstat, the check on calls arriving at WARP.'
+          type: string
+        ss_signer_x5u:
+          description: Address of the signing certificate (https only). Display it as text, never as a link.
+          type: string
+        ss_verify_attestation:
+          type: string
+        ss_verify_origid:
+          type: string
+        ss_verify_reason:
+          type: string
+        ss_verstat:
+          type: string
+        start_stamp:
+          type: string
+        tf_cic:
+          description: 'Toll-free outbound routing key fields; null except on toll-free
+
+            outbound calls.'
+          type: string
+        tf_key_type:
+          type: string
+        tf_ror:
+          type: string
+        total_charge:
+          type: number
+        trunk_id:
+          description: 'Customer-facing: which of the CUSTOMER''s trunks handled this call.
+
+            Distinct from SelectedVendor (WARP''s downstream carrier, redacted).
+
+            Empty on inbound calls that predate the inbound-trunk capture (PR #164,
+
+            then in the since-retired proxy.cfg; b2bua carries the same field).'
+          type: string
+        trunk_name:
+          type: string
+        vendor_cost:
+          description: 'Wholesale — customer wire: always redacted by internal/cdrredact.
+
+            omitempty so the zeroed values are absent rather than misleading zeros.'
+          type: number
+        zone:
+          description: 'Zone is the legacy zone classification (TOLLFREE / INTERSTATE /
+
+            INTRASTATE / LOCAL / INTERNATIONAL / etc.) populated by Kamailio +
+
+            cdr-drainer. Surfaced to the customer-side CDR table as the Zone
+
+            column.'
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.CallStatistics:
+      type: object
+      properties:
+        acd:
+          type: number
+        answered_calls:
+          type: integer
+        asr:
+          type: number
+        avg_margin_pct:
+          type: number
+        call_type_breakdown:
+          type: object
+          additionalProperties:
+            type: integer
+        connected_minutes:
+          type: number
+        disposition_breakdown:
+          type: object
+          additionalProperties:
+            type: integer
+        inbound_calls:
+          type: integer
+        outbound_calls:
+          type: integer
+        period_end:
+          type: string
+        period_start:
+          type: string
+        quality:
+          description: 'Quality is populated ONLY when CDR_MIRROR_READS is enabled — the mirror
+
+            grain (migration 152) carries sum/cnt quality columns the legacy
+
+            per-row raw_cdr scan never aggregated. nil on the legacy path; the
+
+            frontend falls back to its existing no-quality-data rendering. Never
+
+            redacted (customer-visible; internal/cdrredact zeroes fields
+
+            individually and does not touch this one).'
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.QualityStats'
+        total_calls:
+          type: integer
+        total_charge:
+          type: number
+        total_cost:
+          description: 'Wholesale economics — customer wire: always redacted by internal/cdrredact.
+
+            omitempty so the zeroed values are absent rather than misleading zeros.'
+          type: number
+        total_margin:
+          type: number
+        total_minutes:
+          description: Minimum/increment-rounded billed minutes.
+          type: number
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.CDRCursorPage:
+      type: object
+      properties:
+        has_more:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CallDetail'
+        limit:
+          description: 'Limit echoes the page size actually applied after clamping, which may
+
+            differ from what the caller asked for.'
+          type: integer
+        next_cursor:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.CDRExportJobStatus:
+      type: object
+      properties:
+        error_code:
+          type: string
+        expires_at:
+          type: string
+        job_id:
+          type: string
+        status:
+          type: string
+        url:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.CDRExportJobRef:
+      type: object
+      properties:
+        job_id:
+          type: string
+        status:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.TrendDataPoint:
+      type: object
+      properties:
+        acd:
+          type: number
+        answered_calls:
+          type: integer
+        asr:
+          type: number
+        connected_minutes:
+          type: number
+        period:
+          type: string
+        total_calls:
+          type: integer
+        total_charge:
+          type: number
+        total_margin:
+          description: 'Wholesale — customer wire: always redacted by internal/cdrredact.'
+          type: number
+        total_minutes:
+          description: Minimum/increment-rounded billed minutes.
+          type: number
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-soa-query-response-schema.json",
+  "title": "SoaQueryResponse",
+  "description": "SOA query response",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-tniq-openapi.yml#/components/schemas/SoaQueryResponse",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "description": "Response timestamp",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "description": "Operation status"
+    },
+    "tn": {
+      "type": "string",
+      "description": "Telephone number"
+    },
+    "currentSpid": {
+      "type": "string",
+      "description": "Current SPID"
+    },
+    "lrn": {
+      "type": "string",
+      "description": "Location Routing Number"
+    },
+    "portStatus": {
+      "type": "string",
+      "description": "Port status"
+    },
+    "subscriptionVersionState": {
+      "type": "string",
+      "description": "AstroSOA subscription-version state"
+    },
+    "newSpDueDate": {
+      "type": "string",
+      "description": "New service provider due date from the subscription version"
+    },
+    "oldSpDueDate": {
+      "type": "string",
+      "description": "Old service provider due date from the subscription version"
+    },
+    "oldSpAuthorization": {
+      "type": "string",
+      "description": "Old service provider authorization"
+    },
+    "createTimestamp": {
+      "type": "string",
+      "description": "Subscription-version create timestamp"
+    },
+    "lnpType": {
+      "type": "string",
+      "description": "LNP type"
+    },
+    "currentSpName": {
+      "type": "string",
+      "description": "Current service provider name"
+    },
+    "currentSpType": {
+      "type": "string",
+      "description": "Current service provider type"
+    },
+    "rateCenter": {
+      "type": "string",
+      "description": "Rate center"
+    },
+    "state": {
+      "type": "string",
+      "description": "State"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if status is ERROR"
+    }
+  }
+}

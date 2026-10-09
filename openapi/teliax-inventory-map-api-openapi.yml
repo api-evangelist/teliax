@@ -1,0 +1,182 @@
+openapi: 3.2.0
+info:
+  title: Teliax Inventory Map API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Inventory Map across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Inventory Map
+  description: Geographic inventory visualization data
+paths:
+  /v1/inventory/map/data:
+    post:
+      tags:
+      - Inventory Map
+      summary: Get inventory map data
+      description: Returns aggregated inventory statistics by geographic region (state, LATA, rate center, etc.). Results are automatically filtered to customer's allowed SPIDs.
+      operationId: getMapData
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryMapRequestDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/map/states:
+    get:
+      tags:
+      - Inventory Map
+      summary: Get available states
+      description: Returns list of states with inventory, filtered to customer's allowed SPIDs
+      operationId: getAvailableStates
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/map/rate-centers:
+    get:
+      tags:
+      - Inventory Map
+      summary: Get available rate centers
+      description: Returns list of rate centers with inventory, optionally filtered by state and LATA
+      operationId: getAvailableRateCenters
+      parameters:
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: lata
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/inventory/map/latas:
+    get:
+      tags:
+      - Inventory Map
+      summary: Get available LATAs
+      description: Returns list of LATAs with inventory, optionally filtered by state
+      operationId: getAvailableLatas
+      parameters:
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    InventoryMapRequestDto:
+      type: object
+      properties:
+        regionType:
+          type: string
+          enum:
+          - STATE
+          - LATA
+          - RATE_CENTER
+          - ZIP_CODE
+          - NPA_NXX
+        states:
+          type: array
+          items:
+            type: string
+        latas:
+          type: array
+          items:
+            type: integer
+            format: int32
+        spids:
+          type: array
+          items:
+            type: string
+        localities:
+          type: array
+          items:
+            type: string
+        npas:
+          type: array
+          items:
+            type: string
+        minAvailabilityPercentage:
+          type: number
+          format: double
+        maxAvailabilityPercentage:
+          type: number
+          format: double
+        minAvailableCount:
+          type: integer
+          format: int64
+        includeEmpty:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

@@ -1,0 +1,839 @@
+openapi: 3.2.0
+info:
+  title: Teliax Messaging Brands API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Messaging Brands across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Messaging Brands
+  description: 10DLC brand registration and management
+paths:
+  /v1/messaging/brands/{brandId}:
+    get:
+      tags:
+      - Messaging Brands
+      summary: Get brand
+      description: Get a specific 10DLC brand by ID
+      operationId: getBrand
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - Messaging Brands
+      summary: Update brand
+      description: Update an existing 10DLC brand
+      operationId: updateBrand
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBrandRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Messaging Brands
+      summary: Delete brand
+      description: Delete a 10DLC brand (must have no campaigns)
+      operationId: deleteBrand
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/revet:
+    put:
+      tags:
+      - Messaging Brands
+      summary: Resubmit brand for verification
+      operationId: revet
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/application:
+    put:
+      tags:
+      - Messaging Brands
+      summary: Bind consumer application association (local only)
+      description: 'Local binding only — never contacts The Campaign Registry. Stamps applicationId/applicationMetadata (#267''s consumer-association key) onto an EXISTING brand without rebuilding/forwarding a TCR update, unlike PUT /{brandId} which would push a destructive sparse update to TCR. For consumer (WARP) application binding during their link-table retirement backfill; see issue #371.'
+      operationId: bindBrandApplication
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BindApplicationRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands:
+    get:
+      tags:
+      - Messaging Brands
+      summary: List brands
+      description: List all 10DLC brands for the authenticated customer. Results are constrained to the resolved customer (the token's customer, or `customerId` when the caller is authorized for it). `applicationId` filters within that customer by the consumer-association key (#267).
+      operationId: listBrands
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: applicationId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - Messaging Brands
+      summary: Create brand
+      description: Register a new 10DLC brand with TCR
+      operationId: createBrand
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBrandRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/vetting:
+    post:
+      tags:
+      - Messaging Brands
+      summary: Request external vetting for a brand
+      operationId: submitVetting
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitVettingRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/vetting/{vettingId}/appeal:
+    post:
+      tags:
+      - Messaging Brands
+      summary: Submit an appeal against an existing external vet
+      operationId: appealVetting
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: vettingId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitVetAppealRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/vetting/import:
+    post:
+      tags:
+      - Messaging Brands
+      summary: Import an existing external vet
+      operationId: importVetting
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportVettingRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/transfer:
+    post:
+      tags:
+      - Messaging Brands
+      summary: Transfer (re-home) a brand to another customer
+      description: '#267: updates the owning customer_id on the brand AND all its campaigns in one transaction. TCR/CNP identifiers and approval state are untouched. Caller must be authorized for BOTH source and target customers.'
+      operationId: transferBrand
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/cnp-register:
+    post:
+      tags:
+      - Messaging Brands
+      summary: Retry CNP registration
+      description: Retry brand registration with the customer's connectivity partner (e.g., Sinch/Inteliquent)
+      operationId: retryCnpRegistration_1
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/appeal:
+    post:
+      tags:
+      - Messaging Brands
+      summary: Submit an appeal against brand identity status
+      operationId: appealIdentity
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitIdentityAppealRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/appeal-evidence:
+    post:
+      tags:
+      - Messaging Brands
+      summary: Upload an evidence file for future brand appeals
+      operationId: uploadEvidence
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/link:
+    post:
+      tags:
+      - Messaging Brands
+      summary: Link existing TCR brand
+      description: Link an existing TCR brand to this customer's account
+      operationId: linkBrand
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkBrandRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/vetting/providers:
+    get:
+      tags:
+      - Messaging Brands
+      summary: List TCR external vetting providers (cached 24h)
+      operationId: listVettingProviders
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/lookup/{tcrBrandId}:
+    get:
+      tags:
+      - Messaging Brands
+      summary: Lookup brand from TCR
+      description: Preview an existing TCR brand before linking
+      operationId: lookupBrand
+      parameters:
+      - name: tcrBrandId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/appeal-categories/vet:
+    get:
+      tags:
+      - Messaging Brands
+      summary: List TCR external-vet appeal categories (cached 24h)
+      operationId: listVetAppealCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/appeal-categories/identity:
+    get:
+      tags:
+      - Messaging Brands
+      summary: List TCR brand-identity appeal categories (cached 24h)
+      operationId: listIdentityAppealCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/brands/{brandId}/appeal-evidence/{attachmentId}:
+    delete:
+      tags:
+      - Messaging Brands
+      summary: Delete a previously-uploaded evidence file
+      operationId: deleteEvidence
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: attachmentId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    SubmitVettingRequest:
+      required:
+      - evpId
+      - vettingClass
+      type: object
+      properties:
+        evpId:
+          type: string
+        vettingClass:
+          type: string
+        additionalRequestPayload:
+          type: string
+    CreateBrandRequest:
+      required:
+      - displayName
+      - entityType
+      - legalName
+      type: object
+      properties:
+        displayName:
+          type: string
+        legalName:
+          type: string
+        companyName:
+          type: string
+        entityType:
+          type: string
+        taxId:
+          type: string
+        vertical:
+          type: string
+        website:
+          type: string
+        brandRelationship:
+          type: string
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+        postalCode:
+          type: string
+        primaryContactName:
+          type: string
+        primaryContactEmail:
+          type: string
+        primaryContactPhone:
+          type: string
+        stockExchange:
+          type: string
+        stockSymbol:
+          type: string
+        altBusinessId:
+          type: string
+        altBusinessIdType:
+          type: string
+        applicationId:
+          type: string
+        applicationMetadata:
+          type: object
+          additionalProperties:
+            type: object
+    LinkBrandRequest:
+      required:
+      - tcrBrandId
+      type: object
+      properties:
+        tcrBrandId:
+          type: string
+    TransferRequest:
+      type: object
+      properties:
+        toCustomerId:
+          type: string
+          format: uuid
+    BindApplicationRequest:
+      required:
+      - applicationId
+      type: object
+      properties:
+        applicationId:
+          type: string
+        applicationMetadata:
+          type: object
+          additionalProperties:
+            type: object
+    ImportVettingRequest:
+      required:
+      - evpId
+      - vettingId
+      type: object
+      properties:
+        evpId:
+          type: string
+        vettingId:
+          type: string
+        vettingToken:
+          type: string
+    SubmitIdentityAppealRequest:
+      required:
+      - appealCategories
+      type: object
+      properties:
+        appealCategories:
+          type: array
+          items:
+            type: string
+        explanation:
+          maxLength: 1024
+          minLength: 0
+          type: string
+        attachmentUuids:
+          type: array
+          items:
+            type: string
+    SubmitVetAppealRequest:
+      required:
+      - appealCategories
+      - evpId
+      type: object
+      properties:
+        evpId:
+          type: string
+        appealCategories:
+          type: array
+          items:
+            type: string
+        explanation:
+          maxLength: 1024
+          minLength: 0
+          type: string
+        attachmentUuids:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

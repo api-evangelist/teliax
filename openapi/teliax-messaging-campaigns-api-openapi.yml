@@ -1,0 +1,983 @@
+openapi: 3.2.0
+info:
+  title: Teliax Messaging Campaigns API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Messaging Campaigns across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Messaging Campaigns
+  description: 10DLC campaign management and phone number assignment
+paths:
+  /v1/messaging/campaigns/{campaignId}:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: Get campaign
+      operationId: getCampaign
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - Messaging Campaigns
+      summary: Update campaign
+      operationId: updateCampaign
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCampaignRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/resubmit:
+    put:
+      tags:
+      - Messaging Campaigns
+      summary: Resubmit campaign
+      description: Resubmit campaign to specified MNOs
+      operationId: resubmitCampaign
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/application:
+    put:
+      tags:
+      - Messaging Campaigns
+      summary: Bind consumer application association (local only)
+      description: 'Local binding only — never contacts The Campaign Registry. Stamps applicationId/applicationMetadata (#267''s consumer-association key) onto an EXISTING campaign without rebuilding/forwarding a TCR update, unlike PUT /campaigns/{campaignId} which would push a destructive sparse update to TCR. For consumer (WARP) application binding during their link-table retirement backfill; see issue #371.'
+      operationId: bindCampaignApplication
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BindApplicationRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/cnp-backfill:
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Backfill CNP registration
+      description: Register all unregistered brands and campaigns with the customer's CNP. Used to push existing records after CNP integration is enabled.
+      operationId: backfillCnpRegistration
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: List campaigns
+      description: List all 10DLC campaigns, optionally filtered by brand. Results are constrained to the resolved customer (the token's customer, or `customerId` when the caller is authorized for it). `applicationId` filters within that customer by the consumer-association key (#267).
+      operationId: listCampaigns
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: brandId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: applicationId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Create campaign
+      description: Register a new 10DLC campaign with TCR
+      operationId: createCampaign
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCampaignRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/transfer:
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Transfer (re-home) a campaign to another customer
+      description: '#267: updates the owning customer_id on the campaign. Allowed ONLY when the campaign''s brand already belongs to the target customer (409 BRAND_MISMATCH otherwise — a campaign''s TCR identity is permanently bound to its brand, so transfer the brand instead, which cascades its campaigns). TCR/CNP identifiers and approval state are untouched. Caller must be authorized for BOTH source and target customers.'
+      operationId: transferCampaign
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/numbers:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: List assigned numbers
+      operationId: listAssignedNumbers
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Assign numbers to campaign
+      operationId: assignNumbers
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignNumbersRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Messaging Campaigns
+      summary: Remove numbers from campaign
+      operationId: removeNumbers
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignNumbersRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/nudge:
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Nudge CNP
+      description: Send a nudge to the CNP to review or appeal a campaign
+      operationId: nudgeCampaign
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/cnp:
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Elect CNP
+      description: Elect a Connectivity Partner for a campaign
+      operationId: electCnp
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/cnp-register:
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Retry CNP registration
+      description: Retry campaign registration with the customer's connectivity partner (e.g., Sinch/Inteliquent)
+      operationId: retryCnpRegistration
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/cnp-provision-numbers:
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Provision campaign TNs with the CNP
+      description: Enqueue a durable push (or, with remove=true, withdrawal) of a batch of TNs to the campaign's elected connectivity partner (e.g., Sinch) so the DCA routes MO/MT. Defaults to the campaign's currently-assigned numbers when phoneNumbers is omitted. Returns the push reference; completion is async via webhook/reconcile.
+      operationId: provisionCnpNumbers
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/cnp-migration:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: Get CNP migration status
+      description: Get the current CNP migration status for a campaign
+      operationId: getCnpMigrationStatus
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Initiate CNP migration
+      description: Begin migrating a campaign to a new upstream connectivity partner
+      operationId: initiateCnpMigration
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Messaging Campaigns
+      summary: Cancel CNP migration
+      description: Cancel an in-progress CNP migration for a campaign
+      operationId: cancelCnpMigration
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: explanation
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/link:
+    post:
+      tags:
+      - Messaging Campaigns
+      summary: Link existing TCR campaign
+      description: Link an existing TCR campaign (own or partner) to this customer
+      operationId: linkCampaign
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkCampaignRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/overview:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: Messaging overview
+      description: Get summary statistics for messaging/10DLC
+      operationId: getOverview
+      parameters:
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/sharing:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: Get sharing status
+      description: Get campaign sharing/CNP status from TCR
+      operationId: getCampaignSharing
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/numbers/status:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: List assigned numbers with CNP provisioning status
+      description: Returns each active assigned TN enriched with per-TN messaging/CNP provisioning status (smsStatus, cnpProvisioningStatus, cnpCarrierCode, cnpProvisioningError) from number_inventory.
+      operationId: listAssignedNumberStatuses
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/{campaignId}/mno-status:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: Get MNO status
+      operationId: getMnoStatus
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: customerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/messaging/campaigns/lookup/{tcrCampaignId}:
+    get:
+      tags:
+      - Messaging Campaigns
+      summary: Lookup campaign from TCR
+      description: Preview a TCR campaign before linking (tries own, then partner)
+      operationId: lookupCampaign
+      parameters:
+      - name: tcrCampaignId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    LinkCampaignRequest:
+      required:
+      - tcrCampaignId
+      type: object
+      properties:
+        tcrCampaignId:
+          type: string
+    TransferRequest:
+      type: object
+      properties:
+        toCustomerId:
+          type: string
+          format: uuid
+    CreateCampaignRequest:
+      required:
+      - brandId
+      - description
+      - messageFlow
+      - sampleMessages
+      - useCase
+      type: object
+      properties:
+        brandId:
+          type: string
+          format: uuid
+        useCase:
+          type: string
+        description:
+          maxLength: 2147483647
+          minLength: 40
+          type: string
+        messageFlow:
+          maxLength: 2147483647
+          minLength: 40
+          type: string
+        sampleMessages:
+          maxItems: 5
+          minItems: 1
+          type: array
+          items:
+            type: string
+        subUseCases:
+          type: array
+          items:
+            type: string
+        resellerId:
+          type: string
+        subscriberOptin:
+          type: boolean
+        subscriberOptout:
+          type: boolean
+        subscriberHelp:
+          type: boolean
+        optinKeywords:
+          type: string
+        optinMessage:
+          type: string
+        optoutKeywords:
+          type: string
+        optoutMessage:
+          type: string
+        helpKeywords:
+          type: string
+        helpMessage:
+          type: string
+        embeddedLink:
+          type: boolean
+        embeddedPhone:
+          type: boolean
+        numberPool:
+          type: boolean
+        ageGated:
+          type: boolean
+        directLending:
+          type: boolean
+        affiliateMarketing:
+          type: boolean
+        privacyPolicyUrl:
+          type: string
+        termsUrl:
+          type: string
+        autoRenewal:
+          type: boolean
+        applicationId:
+          type: string
+        applicationMetadata:
+          type: object
+          additionalProperties:
+            type: object
+    AssignNumbersRequest:
+      required:
+      - phoneNumbers
+      type: object
+      properties:
+        phoneNumbers:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            type: string
+        source:
+          type: string
+          description: Origin of the assignment request. If 'bulk_csv', triggers a customer notification email.
+          example: bulk_csv
+    BindApplicationRequest:
+      required:
+      - applicationId
+      type: object
+      properties:
+        applicationId:
+          type: string
+        applicationMetadata:
+          type: object
+          additionalProperties:
+            type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

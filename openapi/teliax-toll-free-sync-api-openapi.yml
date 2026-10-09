@@ -1,0 +1,271 @@
+openapi: 3.2.0
+info:
+  title: Teliax Toll-Free Sync API
+  version: v1
+  contact:
+    name: Ringer API Support
+    url: https://ringer.tel
+    email: api-support@ringer.tel
+  description: 'Operations tagged Toll-Free Sync across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tniq.ringer.tel
+  description: Production
+- url: https://tniq-api.ringer.tel
+  description: Production (legacy alias)
+- url: https://staging-api.ringer.tel
+  description: Staging
+tags:
+- name: Toll-Free Sync
+  description: Toll-free number inventory synchronization
+paths:
+  /v1/tollfree/sync/{syncJobId}/reject:
+    post:
+      tags:
+      - Toll-Free Sync
+      summary: Reject staged sync
+      description: Discard the staged toll-free sync results without applying them to live inventory
+      operationId: rejectSync
+      parameters:
+      - name: syncJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/sync/{syncJobId}/commit:
+    post:
+      tags:
+      - Toll-Free Sync
+      summary: Commit staged sync
+      description: Apply the staged toll-free sync results to live inventory
+      operationId: commitSync
+      parameters:
+      - name: syncJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/sync/start:
+    post:
+      tags:
+      - Toll-Free Sync
+      summary: Start inventory sync
+      description: Start a background toll-free inventory sync for a customer. By default the run stages results for review (autoCommit=false); set autoCommit=true to apply changes directly to the live inventory.
+      operationId: startSync
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartSyncRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/sync/{syncJobId}:
+    get:
+      tags:
+      - Toll-Free Sync
+      summary: Get sync status
+      description: Get the current status and progress of a sync job
+      operationId: getSyncStatus
+      parameters:
+      - name: syncJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - Toll-Free Sync
+      summary: Cancel sync
+      description: Cancel a running sync job
+      operationId: cancelSync
+      parameters:
+      - name: syncJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/sync/{syncJobId}/diff:
+    get:
+      tags:
+      - Toll-Free Sync
+      summary: Get sync diff summary
+      description: Returns the staged-vs-live change summary for a completed toll-free sync
+      operationId: getDiff
+      parameters:
+      - name: syncJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/sync/{syncJobId}/diff/download:
+    get:
+      tags:
+      - Toll-Free Sync
+      summary: Download sync diff report
+      description: Downloads the staged-vs-live diff for a toll-free sync as an Excel workbook
+      operationId: downloadDiff
+      parameters:
+      - name: syncJobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+  /v1/tollfree/sync/history:
+    get:
+      tags:
+      - Toll-Free Sync
+      summary: Get sync history
+      description: Get recent sync jobs for a customer
+      operationId: getSyncHistory
+      parameters:
+      - name: customerId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    servers:
+    - url: https://api.tniq.ringer.tel
+      description: Production
+    - url: https://tniq-api.ringer.tel
+      description: Production (legacy alias)
+    - url: https://staging-api.ringer.tel
+      description: Staging
+components:
+  schemas:
+    RejectRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+    StartSyncRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+        autoCommit:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- teliax-tniq-openapi.json
+- teliax-tniq-openapi.yml

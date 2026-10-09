@@ -1,0 +1,2280 @@
+openapi: 3.2.0
+info:
+  title: Teliax Customer/Messaging API
+  version: 1.0.0
+  contact: {}
+  description: 'Operations tagged Customer/Messaging across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: //api.warp.ringer.tel
+tags:
+- name: Customer/Messaging
+paths:
+  /v1/messages:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists the active customer''s messages (inbound and outbound), most
+
+        recent first. Filter by direction and status.
+
+
+        Errors: NO_ACTIVE_CUSTOMER, UNAUTHORIZED (401); INTERNAL_ERROR (500).'
+      tags:
+      - Customer/Messaging
+      summary: List messages
+      parameters:
+      - description: Page (1-based)
+        name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - description: Page size (max 100)
+        name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 20
+      - description: Filter by direction
+        name: direction
+        in: query
+        schema:
+          type: string
+          enum:
+          - INBOUND
+          - OUTBOUND
+      - description: Filter by delivery status (e.g. queued, sent, delivered, failed)
+        name: status
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      allOf:
+                      - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.ListResponse'
+                      - type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.Message'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1Messages
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Sends an outbound SMS from one of your assigned numbers. The
+
+        `from` number must be assigned to your account and enrolled in an
+
+        approved 10DLC campaign, otherwise the request is rejected.
+
+
+        Supply an `Idempotency-Key` header to make retries safe: a repeated
+
+        request with the same key returns the original message with HTTP 200
+
+        instead of creating a duplicate (a first successful create returns 201).
+
+
+        Errors: NO_ACTIVE_CUSTOMER, UNAUTHORIZED (401); INVALID_PAYLOAD,
+
+        MISSING_PARAM, INVALID_TO (400); FROM_NOT_OWNED (403, the `from`
+
+        number is not assigned to your account); CAMPAIGN_NOT_APPROVED (403,
+
+        the `from` number is not enrolled in an approved 10DLC campaign);
+
+        INTERNAL_ERROR (500).'
+      tags:
+      - Customer/Messaging
+      summary: Send an SMS message
+      parameters:
+      - description: Client-supplied key that makes retries idempotent
+        name: Idempotency-Key
+        in: header
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.createMessageRequest'
+        description: Message to send
+        required: true
+      responses:
+        '200':
+          description: Idempotent replay — the message for this Idempotency-Key already exists
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.Message'
+        '201':
+          description: Message created and handed off to the messaging gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.Message'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '403':
+          description: FROM_NOT_OWNED or CAMPAIGN_NOT_APPROVED
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1Messages
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messages/stats:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns aggregate message counts for the active customer: overall
+
+        totals (total, inbound, outbound, delivered, failed) plus a
+
+        per-campaign breakdown.
+
+
+        Errors: NO_ACTIVE_CUSTOMER, UNAUTHORIZED (401); INTERNAL_ERROR (500).'
+      tags:
+      - Customer/Messaging
+      summary: Get message statistics
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.MessageStats'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagesStats
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messages/{id}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Retrieves a single message owned by the active customer by its
+
+        WARP message UUID.
+
+
+        Errors: NO_ACTIVE_CUSTOMER, UNAUTHORIZED (401); INVALID_ID (400);
+
+        NOT_FOUND (404); INTERNAL_ERROR (500).'
+      tags:
+      - Customer/Messaging
+      summary: Get a message
+      parameters:
+      - description: Message UUID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.Message'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagesById
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/brands:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists the active customer''s registered 10DLC brands. Each item in
+
+        `data.items` is a snake_case TCR brand object proxied from the
+
+        messaging backend (fields are normalized from the upstream
+
+        camelCase); shape follows the TCR brand model.'
+      tags:
+      - Customer/Messaging
+      summary: List 10DLC brands
+      parameters:
+      - description: Page (1-based)
+        name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - description: Page size (max 100)
+        name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 20
+      responses:
+        '200':
+          description: data.items is an array of snake_case TCR brand objects
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.ListResponse'
+        '502':
+          description: TNIQ_ERROR — messaging backend unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingBrands
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Registers a new 10DLC brand for the active customer, stamping the
+
+        applicationId ownership binding. `data` is the created snake_case TCR
+
+        brand object.
+
+
+        Errors: INVALID_PAYLOAD, TNIQ_VALIDATION (400); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Create 10DLC brand
+      requestBody:
+        $ref: '#/components/requestBodies/github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload'
+      responses:
+        '201':
+          description: data is the created snake_case TCR brand object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1MessagingBrands
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/brands/link:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Links a brand that already exists at TCR into the active customer''s
+
+        account. `data` is the linked snake_case TCR brand object.
+
+
+        Errors: INVALID_PAYLOAD (400); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Link an existing TCR brand into this account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.linkBrandRequest'
+        description: TCR brand ID
+        required: true
+      responses:
+        '200':
+          description: data is the linked snake_case TCR brand object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1MessagingBrandsLink
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/brands/lookup/{tcrBrandId}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Reads brand details from TCR by TCR brand ID, without requiring the
+
+        brand to be registered in this account. `data` is a snake_case TCR
+
+        brand object.
+
+
+        Errors: NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Look up a TCR brand directly
+      parameters:
+      - description: TCR brand ID
+        name: tcrBrandId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data is a snake_case TCR brand object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingBrandsLookupByTcrBrandId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/brands/{id}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Retrieves a single 10DLC brand owned by the active customer. `data`
+
+        is a snake_case TCR brand object proxied from the messaging backend.
+
+
+        Errors: NOT_FOUND (404, includes cross-tenant access); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Get brand by ID
+      parameters:
+      - description: Brand ID (messaging-backend UUID)
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data is a snake_case TCR brand object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingBrandsById
+      x-operation-id-source: derived
+    put:
+      security:
+      - ApiKeyAuth: []
+      description: 'Full replace of a 10DLC brand owned by the active customer (PUT
+
+        semantics). `data` is the updated snake_case TCR brand object.
+
+
+        Errors: INVALID_PAYLOAD (400); NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Update 10DLC brand
+      parameters:
+      - description: Brand ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload'
+      responses:
+        '200':
+          description: data is the updated snake_case TCR brand object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: putV1MessagingBrandsById
+      x-operation-id-source: derived
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Deletes a 10DLC brand owned by the active customer.
+
+
+        Errors: NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Delete 10DLC brand
+      parameters:
+      - description: Brand ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Brand deleted
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1MessagingBrandsById
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists the active customer''s 10DLC campaigns, optionally filtered by
+
+        parent brand. Each item in `data.items` is a snake_case TCR campaign
+
+        object proxied from the messaging backend.'
+      tags:
+      - Customer/Messaging
+      summary: List 10DLC campaigns
+      parameters:
+      - description: Page (1-based)
+        name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - description: Page size (max 100)
+        name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 20
+      - description: Filter by parent brand ID
+        name: brand_id
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data.items is an array of snake_case TCR campaign objects
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.ListResponse'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingCampaigns
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Registers a new 10DLC campaign for the active customer, stamping the
+
+        applicationId ownership binding. `data` is the created snake_case TCR
+
+        campaign object.
+
+
+        Errors: INVALID_PAYLOAD, TNIQ_VALIDATION (400); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Create 10DLC campaign
+      requestBody:
+        $ref: '#/components/requestBodies/github_com_ringer-warp_api-gateway_internal_tniq.CampaignPayload'
+      responses:
+        '201':
+          description: data is the created snake_case TCR campaign object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1MessagingCampaigns
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/link:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Links a campaign that already exists at TCR into the active
+
+        customer''s account. `data` is the linked snake_case TCR campaign
+
+        object.
+
+
+        Errors: INVALID_PAYLOAD (400); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Link an existing TCR campaign into this account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.linkCampaignRequest'
+        description: TCR campaign ID
+        required: true
+      responses:
+        '200':
+          description: data is the linked snake_case TCR campaign object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1MessagingCampaignsLink
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/lookup/{tcrCampaignId}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Reads campaign details from TCR by TCR campaign ID, without
+
+        requiring the campaign to be registered in this account. `data` is a
+
+        snake_case TCR campaign object.
+
+
+        Errors: NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Look up a TCR campaign directly
+      parameters:
+      - description: TCR campaign ID
+        name: tcrCampaignId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data is a snake_case TCR campaign object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingCampaignsLookupByTcrCampaignId
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/{id}:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Retrieves a single 10DLC campaign owned by the active customer.
+
+        `data` is a snake_case TCR campaign object.
+
+
+        Errors: NOT_FOUND (404, includes cross-tenant access); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Get campaign by ID
+      parameters:
+      - description: Campaign ID (messaging-backend UUID)
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data is a snake_case TCR campaign object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingCampaignsById
+      x-operation-id-source: derived
+    put:
+      security:
+      - ApiKeyAuth: []
+      description: 'Updates a 10DLC campaign owned by the active customer. `data` is the
+
+        updated snake_case TCR campaign object.
+
+
+        Errors: INVALID_PAYLOAD (400); NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Update 10DLC campaign
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/github_com_ringer-warp_api-gateway_internal_tniq.CampaignPayload'
+      responses:
+        '200':
+          description: data is the updated snake_case TCR campaign object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: putV1MessagingCampaignsById
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/{id}/cnp:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Elects a Connectivity Partner / DCA for a campaign owned by the
+
+        active customer. The request body is a free-form JSON object passed
+
+        through to the messaging backend; `data` is the resulting snake_case
+
+        TCR campaign object.
+
+
+        Errors: INVALID_PAYLOAD (400); NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Elect a connectivity partner (CNP) for a campaign
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+        description: CNP election payload (backend-defined)
+        required: true
+      responses:
+        '200':
+          description: data is a snake_case TCR campaign object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1MessagingCampaignsByIdCnp
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/{id}/mno-status:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns per-MNO (mobile carrier) registration status for a campaign
+
+        owned by the active customer. `data` is a snake_case object proxied
+
+        from the messaging backend.
+
+
+        Errors: NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Get campaign MNO status
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data is a snake_case per-MNO status object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingCampaignsByIdMnoStatus
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/{id}/nudge:
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Prompts the elected Connectivity Partner to re-review a campaign
+
+        owned by the active customer. The request body is optional. Returns
+
+        202 Accepted with no body.
+
+
+        Errors: NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Nudge the connectivity partner (CNP) for a campaign
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+        description: Optional nudge payload
+      responses:
+        '202':
+          description: Nudge accepted
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1MessagingCampaignsByIdNudge
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/{id}/numbers:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists telephone numbers attached to a campaign owned by the active
+
+        customer. Each item in `data.items` is a snake_case object proxied
+
+        from the messaging backend.
+
+
+        Errors: NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: List numbers attached to a campaign
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Page (1-based)
+        name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - description: Page size (max 500)
+        name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 50
+      responses:
+        '200':
+          description: data.items is an array of snake_case campaign-number objects
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.ListResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingCampaignsByIdNumbers
+      x-operation-id-source: derived
+    post:
+      security:
+      - ApiKeyAuth: []
+      description: 'Attaches telephone numbers to a campaign owned by the active
+
+        customer. Best-effort proxies to the messaging backend, then writes
+
+        the WARP-authoritative association for each TN the customer owns.
+
+        Returns 200 with per-TN assigned/failed lists (this response is NOT
+
+        wrapped in the standard envelope).
+
+
+        Errors: INVALID_PAYLOAD (400); NOT_FOUND (404, campaign not owned);
+
+        TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Attach numbers to a campaign
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.campaignNumbersRequest'
+        description: Phone numbers to attach
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_handlers.assignCampaignNumbersResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: postV1MessagingCampaignsByIdNumbers
+      x-operation-id-source: derived
+    delete:
+      security:
+      - ApiKeyAuth: []
+      description: 'Detaches telephone numbers from a campaign owned by the active
+
+        customer. Best-effort proxies to the messaging backend, then clears
+
+        the WARP-authoritative association for each owned TN. Returns 200
+
+        with per-TN removed/failed lists (this response is NOT wrapped in the
+
+        standard envelope).
+
+
+        Errors: INVALID_PAYLOAD (400); NOT_FOUND (404, campaign not owned);
+
+        TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Detach numbers from a campaign
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_handlers.campaignNumbersRequest'
+        description: Phone numbers to detach
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_handlers.removeCampaignNumbersResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: deleteV1MessagingCampaignsByIdNumbers
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/{id}/resubmit:
+    put:
+      security:
+      - ApiKeyAuth: []
+      description: 'Resubmits a 10DLC campaign owned by the active customer for review.
+
+        `data` is the resulting snake_case TCR campaign object.
+
+
+        Errors: NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Resubmit a 10DLC campaign
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data is a snake_case TCR campaign object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: putV1MessagingCampaignsByIdResubmit
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/campaigns/{id}/sharing:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the connectivity-partner (CNP) sharing status for a campaign
+
+        owned by the active customer. `data` is a snake_case object proxied
+
+        from the messaging backend.
+
+
+        Errors: NOT_FOUND (404); TNIQ_ERROR (502).'
+      tags:
+      - Customer/Messaging
+      summary: Get campaign sharing status
+      parameters:
+      - description: Campaign ID
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data is a snake_case sharing-status object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingCampaignsByIdSharing
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/carriers:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the mobile network operators (MNOs) relevant to 10DLC.
+
+        Served from the messaging backend when available, otherwise from a
+
+        static WARP-maintained fallback.'
+      tags:
+      - Customer/Messaging
+      summary: Get mobile carriers (MNOs)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.MNOInfo'
+      operationId: getV1MessagingCarriers
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/dcas:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the connectivity partners (DCA/CNPs) WARP elects against.
+
+        This surfaces only the common ones rather than the full upstream
+
+        partner list.'
+      tags:
+      - Customer/Messaging
+      summary: Get Direct Connect Aggregators (CNPs)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.DCAInfo'
+      operationId: getV1MessagingDcas
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/entity-types:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the valid brand entity types (e.g. PRIVATE_PROFIT,
+
+        NON_PROFIT). Served from the messaging backend when available,
+
+        otherwise from a static WARP-maintained fallback.'
+      tags:
+      - Customer/Messaging
+      summary: Get brand entity types
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.EntityTypeInfo'
+      operationId: getV1MessagingEntityTypes
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/numbers:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Lists every active DID owned by the active customer joined to its
+
+        messaging association: attached campaign/brand, messaging status,
+
+        MMS enablement, and whether a per-TN inbound webhook is configured
+
+        (`has_webhook` — true when `numbers.sms_usages.inbound_webhook_url`
+
+        is set for that number).
+
+
+        Errors: NO_ACTIVE_CUSTOMER, UNAUTHORIZED (401); INTERNAL_ERROR (500).'
+      tags:
+      - Customer/Messaging
+      summary: List messaging-enabled numbers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      allOf:
+                      - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.ListResponse'
+                      - type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.MessagingNumber'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingNumbers
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/throughput-estimate:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Estimates messaging throughput (messages/sec, daily cap) and a
+
+        recommendation for a brand given its trust score and vetting status.
+
+        `data` contains trust_score, vetted, messages_per_second, daily_cap,
+
+        and recommendation.
+
+
+        Errors: MISSING_PARAM, INVALID_PARAM (400).'
+      tags:
+      - Customer/Messaging
+      summary: Get throughput estimate based on trust score
+      parameters:
+      - description: Brand trust score (0-100)
+        name: trust_score
+        in: query
+        required: true
+        schema:
+          type: integer
+      - description: Is the brand externally vetted
+        name: vetted
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: data is a throughput-estimate object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingThroughputEstimate
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/use-case-requirements:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the submission requirements (sample count, opt-in rules,
+
+        approval difficulty, notes) for a given campaign use case. `data` is
+
+        a free-form object whose keys depend on the use case.
+
+
+        Errors: MISSING_PARAM, INVALID_USE_CASE (400).'
+      tags:
+      - Customer/Messaging
+      summary: Get use case submission requirements
+      parameters:
+      - description: Use case code (e.g. MARKETING, 2FA)
+        name: use_case
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: data is a use-case-requirements object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    error:
+                      $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+      operationId: getV1MessagingUseCaseRequirements
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/use-cases:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the list of valid 10DLC campaign use cases (served from a
+
+        static WARP-maintained list; the upstream enum is not currently
+
+        exposed).'
+      tags:
+      - Customer/Messaging
+      summary: Get campaign use cases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.UseCaseInfo'
+      operationId: getV1MessagingUseCases
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+  /v1/messaging/verticals:
+    get:
+      security:
+      - ApiKeyAuth: []
+      description: 'Returns the valid brand industry verticals (served from a static
+
+        WARP-maintained list; the upstream enum is not currently exposed).'
+      tags:
+      - Customer/Messaging
+      summary: Get industry verticals
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIResponse'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.VerticalInfo'
+      operationId: getV1MessagingVerticals
+      x-operation-id-source: derived
+    servers:
+    - url: //api.warp.ringer.tel
+components:
+  schemas:
+    internal_handlers.campaignNumbersRequest:
+      type: object
+      required:
+      - phone_numbers
+      properties:
+        phone_numbers:
+          description: PhoneNumbers is the list of telephone numbers to attach or detach.
+          type: array
+          minItems: 1
+          items:
+            type: string
+    internal_handlers.assignCampaignNumbersResponse:
+      type: object
+      properties:
+        assigned:
+          type: array
+          items:
+            type: string
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.campaignNumberResult'
+    github_com_ringer-warp_api-gateway_internal_repository.Message:
+      type: object
+      properties:
+        body:
+          type: string
+        created_at:
+          type: string
+        customer_id:
+          type: string
+        direction:
+          type: string
+        encoding:
+          type: string
+        error_code:
+          type: string
+        from:
+          type: string
+        id:
+          type: string
+        segments:
+          type: integer
+        status:
+          type: string
+        status_callback_url:
+          type: string
+        to:
+          type: string
+        updated_at:
+          type: string
+        vendor_message_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.CampaignPayload:
+      type: object
+      properties:
+        affiliateMarketing:
+          type: boolean
+        ageGated:
+          type: boolean
+        applicationId:
+          description: 'ApplicationID/ApplicationMetadata: omitempty is load-bearing. tniq''s
+
+            updateCampaign is otherwise full-replace, but these two fields are
+
+            null-safe on update as of v2.169.0 (ringer-soa 5f5f9b2d) — absent means
+
+            "no change", NOT "clear". There is no verified way to clear a binding
+
+            via this endpoint (explicit JSON null is indistinguishable from
+
+            omission on this DTO and is likewise treated as no-op).'
+          type: string
+        applicationMetadata:
+          type: object
+          additionalProperties: {}
+        autoRenewal:
+          type: boolean
+        brandId:
+          type: string
+        description:
+          type: string
+        directLending:
+          type: boolean
+        embeddedLink:
+          type: boolean
+        embeddedPhone:
+          type: boolean
+        helpKeywords:
+          type: string
+        helpMessage:
+          type: string
+        messageFlow:
+          type: string
+        numberPool:
+          type: boolean
+        optinKeywords:
+          type: string
+        optinMessage:
+          type: string
+        optoutKeywords:
+          type: string
+        optoutMessage:
+          type: string
+        privacyPolicyUrl:
+          type: string
+        resellerId:
+          type: string
+        sampleMessages:
+          type: array
+          items:
+            type: string
+        subUseCases:
+          type: array
+          items:
+            type: string
+        subscriberHelp:
+          type: boolean
+        subscriberOptin:
+          type: boolean
+        subscriberOptout:
+          type: boolean
+        termsUrl:
+          type: string
+        useCase:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.UseCaseInfo:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        difficulty:
+          description: 'Difficulty is a WARP-side EASY/MEDIUM/HARD rating reflecting TCR
+
+            approval friction.'
+          type: string
+        display_name:
+          type: string
+        min_samples:
+          description: 'MinSamples is the WARP-recommended minimum number of sample
+
+            messages for this use case, tuned to maximize approval chance.'
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_repository.MessageCampaignStats:
+      type: object
+      properties:
+        campaign_id:
+          type: string
+        delivered:
+          type: integer
+        outbound:
+          type: integer
+    internal_handlers.linkBrandRequest:
+      type: object
+      required:
+      - tcr_brand_id
+      properties:
+        tcr_brand_id:
+          description: TCRBrandID is the TCR brand ID to link into this account.
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.MNOInfo:
+      type: object
+      properties:
+        mno_id:
+          type: string
+        name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload:
+      type: object
+      properties:
+        altBusinessId:
+          type: string
+        altBusinessIdType:
+          type: string
+        applicationId:
+          description: 'ApplicationID/ApplicationMetadata: omitempty is load-bearing. tniq''s
+
+            updateBrand is otherwise full-replace, but these two fields are
+
+            null-safe on update as of v2.169.0 (ringer-soa 5f5f9b2d) — absent means
+
+            "no change", NOT "clear". There is no verified way to clear a binding
+
+            via this endpoint (sending JSON null was considered and rejected by the
+
+            upstream fix; omission and null are both treated as no-op).'
+          type: string
+        applicationMetadata:
+          type: object
+          additionalProperties: {}
+        brandRelationship:
+          type: string
+        city:
+          type: string
+        companyName:
+          type: string
+        country:
+          type: string
+        displayName:
+          type: string
+        entityType:
+          type: string
+        legalName:
+          type: string
+        postalCode:
+          type: string
+        primaryContactEmail:
+          type: string
+        primaryContactName:
+          type: string
+        primaryContactPhone:
+          type: string
+        state:
+          type: string
+        stockExchange:
+          type: string
+        stockSymbol:
+          type: string
+        street:
+          type: string
+        taxId:
+          type: string
+        vertical:
+          type: string
+        website:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.DCAInfo:
+      type: object
+      properties:
+        dca_id:
+          type: string
+        display_name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.MessageStats:
+      type: object
+      properties:
+        by_campaign:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.MessageCampaignStats'
+        delivered:
+          type: integer
+        failed:
+          type: integer
+        inbound:
+          type: integer
+        outbound:
+          type: integer
+        total:
+          type: integer
+    internal_handlers.linkCampaignRequest:
+      type: object
+      required:
+      - tcr_campaign_id
+      properties:
+        tcr_campaign_id:
+          description: TCRCampaignID is the TCR campaign ID to link into this account.
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.VerticalInfo:
+      type: object
+      properties:
+        code:
+          type: string
+        display_name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.MessagingNumber:
+      type: object
+      properties:
+        brand_id:
+          type: string
+        campaign_id:
+          type: string
+        campaign_source:
+          type: string
+        has_webhook:
+          type: boolean
+        last_sync_at:
+          type: string
+        messaging_status:
+          type: string
+        mms_enabled:
+          type: boolean
+        tn:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
+    internal_handlers.createMessageRequest:
+      type: object
+      properties:
+        body:
+          description: 'Body is the message text. Encoding (GSM-7 vs UCS-2) and segment count are
+
+            computed automatically from the content.'
+          type: string
+          example: Your verification code is 123456
+        from:
+          description: 'From is the sending telephone number. Must be a number assigned to your
+
+            account AND enrolled in an approved 10DLC campaign. NANP format, e.g.
+
+            "13039813633".'
+          type: string
+          example: '13039813633'
+        status_callback:
+          description: 'StatusCallback is recorded against the message but is NOT yet delivered
+
+            to: nothing posts message-status webhooks to it today. Poll
+
+            GET /v1/messages/{id} for status. Inbound-message webhooks are a separate,
+
+            working feature configured per telephone number.'
+          type: string
+          example: https://example.com/webhooks/sms
+        to:
+          description: 'To is the destination telephone number in E.164 / NANP format, e.g.
+
+            "13125551212".'
+          type: string
+          example: '13125551212'
+    internal_handlers.removeCampaignNumbersResponse:
+      type: object
+      properties:
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.campaignNumberResult'
+        removed:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_models.EntityTypeInfo:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        display_name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.ListResponse:
+      type: object
+      properties:
+        items: {}
+        pagination:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+    internal_handlers.campaignNumberResult:
+      type: object
+      properties:
+        reason:
+          description: 'Reason is the per-TN failure reason: not_found, not_owned, lookup_error,
+
+            or write_error.'
+          type: string
+        tn:
+          type: string
+  requestBodies:
+    github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload'
+      description: Brand payload
+      required: true
+    github_com_ringer-warp_api-gateway_internal_tniq.CampaignPayload:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.CampaignPayload'
+      description: Campaign payload
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- teliax-warp-openapi.json
+- teliax-warp-openapi.yml

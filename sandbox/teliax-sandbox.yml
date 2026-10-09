@@ -1,0 +1,12 @@
+generated: '2026-10-09'
+method: none
+source: https://warp.ringer.tel/docs/guides/connected-apps-and-integrations
+description: 'No sandbox is published. WARP issues test-labelled keys, but the docs state they are not a sandbox: "test keys begin rk_test_ . The rk_test_ prefix is a label for your own bookkeeping — it is not a sandbox, and a test key acts on real data." Telique offers a free tier (10 operations per minute) against live data rather than a test environment; TNIQ docs describe no test environment.'
+docs: https://warp.ringer.tel/docs/guides/connected-apps-and-integrations
+key_prefixes:
+- prefix: rk_
+  mode: live
+- prefix: rk_test_
+  mode: label-only
+  note: acts on real data
+test_values: []

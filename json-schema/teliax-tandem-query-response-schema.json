@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-tandem-query-response-schema.json",
+  "title": "TandemQueryResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-telique-openapi.yml#/components/schemas/TandemQueryResponse",
+  "type": "object",
+  "required": [
+    "count",
+    "records",
+    "query"
+  ],
+  "properties": {
+    "count": {
+      "type": "integer",
+      "description": "Number of records returned"
+    },
+    "records": {
+      "type": "array",
+      "description": "Tandem query results",
+      "items": {
+        "$ref": "#/$defs/TandemRecord"
+      }
+    },
+    "query": {
+      "type": "object",
+      "description": "Query metadata",
+      "required": [
+        "query_type",
+        "limit",
+        "offset"
+      ],
+      "properties": {
+        "query_type": {
+          "type": "string",
+          "description": "Type of query performed",
+          "enum": [
+            "npa_nxx",
+            "switch",
+            "tandem",
+            "name"
+          ]
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Maximum records requested"
+        },
+        "offset": {
+          "type": "integer",
+          "description": "Number of records skipped"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "TandemRecord": {
+      "type": "object",
+      "properties": {
+        "npa": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "NPA (area code) — only present for tandem/name queries"
+        },
+        "nxx": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "NXX (exchange) — only present for tandem/name queries"
+        },
+        "ocn_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Operating Company Name"
+        },
+        "ocn": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Operating Company Number"
+        },
+        "lata": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "LATA code"
+        },
+        "lata_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "LATA name"
+        },
+        "state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "State code"
+        },
+        "switch": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Switch CLLI code"
+        },
+        "tandem": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tandem switch CLLI code"
+        },
+        "tandem_ocn": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tandem Operating Company Number"
+        },
+        "tandem_ocn_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tandem Operating Company Name"
+        }
+      }
+    }
+  }
+}

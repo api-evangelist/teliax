@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/teliax/main/json-schema/teliax-toll-free-ptr-operation-dto-schema.json",
+  "title": "TollFreePtrOperationDto",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/teliax-tniq-openapi.yml#/components/schemas/TollFreePtrOperationDto",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "customerId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "telephoneNumber": {
+      "type": "string"
+    },
+    "operationType": {
+      "type": "string"
+    },
+    "actingRespOrgId": {
+      "type": "string"
+    },
+    "srcTemplateName": {
+      "type": "string"
+    },
+    "srcTemplateCrn": {
+      "type": "string"
+    },
+    "srcEffDtTm": {
+      "type": "string"
+    },
+    "srcRecVersionId": {
+      "type": "string"
+    },
+    "targetTemplateName": {
+      "type": "string"
+    },
+    "targetTemplateCrn": {
+      "type": "string"
+    },
+    "targetEffDtTm": {
+      "type": "string"
+    },
+    "targetRespOrgId": {
+      "type": "string"
+    },
+    "svcOrderNum": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDING_PRECHECK",
+        "PENDING_SUBMIT",
+        "SUBMITTED",
+        "APPLIED",
+        "FAILED",
+        "TIMEOUT",
+        "CANCELLED"
+      ]
+    },
+    "errorCode": {
+      "type": "string",
+      "enum": [
+        "PRECHECK_TEMPLATE_NOT_FOUND",
+        "PRECHECK_TEMPLATE_INACTIVE",
+        "PRECHECK_TEMPLATE_LOCKED",
+        "PRECHECK_CROSS_RESPORG",
+        "OPERATION_ALREADY_PENDING",
+        "SUBMIT_REJECTED",
+        "APPLY_REJECTED",
+        "APPLY_TIMEOUT",
+        "SOMOS_UNREACHABLE",
+        "UNKNOWN_ERROR"
+      ]
+    },
+    "errorMessage": {
+      "type": "string"
+    },
+    "pollAttempts": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "nextPollAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "timeoutAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submittedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "appliedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "failedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "timedOutAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "string"
+    },
+    "parentOperationId": {
+      "type": "string",
+      "format": "uuid"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Trunks API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Trunks API
   contact: {}
-  description: 'Operations tagged Customer/Trunks across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -105,8 +105,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1Trunks
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}:
     get:
       security:
@@ -306,8 +304,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1TrunksByTrunkId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/cascade-preview:
     get:
       security:
@@ -370,8 +366,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1TrunksByTrunkIdCascadePreview
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/credentials:
     get:
       security:
@@ -537,8 +531,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1TrunksByTrunkIdCredentials
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/credentials/{cred_id}:
     delete:
       security:
@@ -694,8 +686,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: patchV1TrunksByTrunkIdCredentialsByCredId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/credentials/{cred_id}/calls:
     get:
       security:
@@ -777,8 +767,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1TrunksByTrunkIdCredentialsByCredIdCalls
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/credentials/{cred_id}/registrations:
     get:
       security:
@@ -860,8 +848,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1TrunksByTrunkIdCredentialsByCredIdRegistrations
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/credentials/{cred_id}/registrations/{contact_id}:
     delete:
       security:
@@ -938,8 +924,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1TrunksByTrunkIdCredentialsByCredIdRegistrationsByContactId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/credentials/{cred_id}/rotate:
     post:
       security:
@@ -1019,8 +1003,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1TrunksByTrunkIdCredentialsByCredIdRotate
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/endpoints:
     get:
       security:
@@ -1175,8 +1157,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1TrunksByTrunkIdEndpoints
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/endpoints/{endpoint_id}:
     get:
       security:
@@ -1388,8 +1368,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: patchV1TrunksByTrunkIdEndpointsByEndpointId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/ips:
     get:
       security:
@@ -1515,8 +1493,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1TrunksByTrunkIdIps
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/ips/{ip_id}:
     delete:
       security:
@@ -1645,8 +1621,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: patchV1TrunksByTrunkIdIpsByIpId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/trunks/{trunk_id}/throttle-state:
     get:
       security:
@@ -1698,29 +1672,91 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1TrunksByTrunkIdThrottleState
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
-    internal_handlers.MessageResponse:
-      type: object
-      properties:
-        message:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_repository.CustomerTrunkCascade:
-      type: object
-      properties:
-        active_calls:
-          description: handler-populated from Redis
-          type: integer
-        cdr_count:
-          type: integer
-        src_ips:
-          type: integer
-        tns_routed_here:
-          type: integer
     internal_handlers.CredentialActiveCall:
       type: object
+    internal_handlers.createCredReq:
+      type: object
+      required:
+      - username
+      properties:
+        username:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.TrunkGroupWithIPs:
+      type: object
+      properties:
+        allowed_number_classes:
+          type: array
+          items:
+            type: string
+        auth_type:
+          description: IP_ACL, DIGEST, BOTH
+          type: string
+        capacity_channels_inbound:
+          type: integer
+        capacity_channels_outbound:
+          type: integer
+        capacity_cps_inbound:
+          description: 'SP10.7.0: split into directional capacity. Inbound = WARP→Customer;
+
+            outbound = Customer→WARP.'
+          type: integer
+        capacity_cps_outbound:
+          type: integer
+        created_at:
+          type: string
+        created_by:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        inbound_dnis_format:
+          default: national
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
+        ips:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkIP'
+        name:
+          type: string
+        options_ping_enabled:
+          description: 'When true (default), WARP periodically health-checks this trunk''s
+
+            inbound endpoints and skips unhealthy ones. Set false if your SBC does
+
+            not answer SIP OPTIONS, so it stays selectable regardless of probe result.'
+          type: boolean
+        poi_assignment_id:
+          description: 'Trunk-level override for the Place-of-Interconnection fallback caller
+
+            ID. Null means this trunk inherits the customer-level POI. Admin-only.'
+          type: string
+        poi_number:
+          description: Resolved details of the number backing PoiAssignmentID, when set.
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary'
+        sip_config:
+          type: array
+          items:
+            type: integer
+        ss_attest_fallback:
+          type: string
+        ss_existing_header_policy:
+          type: string
+        ss_signing_mode:
+          description: 'STIR/SHAKEN per-trunk signing policy. Admin-only. Null means WARP
+
+            applies its default policy (sign / attest B / validate).'
+          type: string
+        updated_at:
+          type: string
     github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkEndpointRequest:
       type: object
       properties:
@@ -1750,6 +1786,259 @@ components:
           type: integer
           maximum: 100
           minimum: 1
+    internal_handlers.patchCredReq:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    internal_handlers.CredentialListItem:
+      type: object
+      properties:
+        active_call_count:
+          type: integer
+        created_at:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        last_rotated_at:
+          type: string
+        realm:
+          type: string
+        registration_count:
+          type: integer
+        username:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.CustomerTrunkSIPConfig:
+      type: object
+      properties:
+        caller_id_mode:
+          description: passthrough, block, rewrite
+          type: string
+        caller_id_number:
+          description: Override number (if rewrite)
+          type: string
+        codecs:
+          description: Codecs (ordered preference list)
+          type: array
+          items:
+            type: string
+        cps_limit:
+          type: integer
+        custom_headers:
+          description: Additional SIP headers
+          type: object
+          additionalProperties:
+            type: string
+        diversion_header:
+          description: SIP headers
+          type: boolean
+        dtmf_mode:
+          description: rfc2833, inband — empty inherits/system default
+          type: string
+        early_media:
+          description: Allow 183 early media
+          type: boolean
+        fax_mode:
+          description: Media
+          type: string
+        from_mode:
+          description: passthrough, rewrite_caller, rewrite_trunk
+          type: string
+        max_call_duration:
+          description: Limits
+          type: integer
+        max_concurrent_calls:
+          description: Capacity (overrides trunk_groups columns if set)
+          type: integer
+        min_se:
+          description: Min-SE header value (seconds)
+          type: integer
+        p_charge_info:
+          description: Include P-Charge-Info
+          type: boolean
+        pai_mode:
+          description: Header handling
+          type: string
+        recording:
+          description: Enable call recording
+          type: boolean
+        rpid_mode:
+          description: passthrough, strip, generate
+          type: string
+        session_expires:
+          description: Session timers
+          type: integer
+    internal_handlers.CredentialInfo:
+      type: object
+      properties:
+        created_at:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        last_rotated_at:
+          type: string
+        realm:
+          type: string
+        trunk_group_id:
+          type: string
+        username:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.TrunkGroup:
+      type: object
+      properties:
+        allowed_number_classes:
+          type: array
+          items:
+            type: string
+        auth_type:
+          description: IP_ACL, DIGEST, BOTH
+          type: string
+        capacity_channels_inbound:
+          type: integer
+        capacity_channels_outbound:
+          type: integer
+        capacity_cps_inbound:
+          description: 'SP10.7.0: split into directional capacity. Inbound = WARP→Customer;
+
+            outbound = Customer→WARP.'
+          type: integer
+        capacity_cps_outbound:
+          type: integer
+        created_at:
+          type: string
+        created_by:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        inbound_dnis_format:
+          default: national
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
+        name:
+          type: string
+        options_ping_enabled:
+          description: 'When true (default), WARP periodically health-checks this trunk''s
+
+            inbound endpoints and skips unhealthy ones. Set false if your SBC does
+
+            not answer SIP OPTIONS, so it stays selectable regardless of probe result.'
+          type: boolean
+        poi_assignment_id:
+          description: 'Trunk-level override for the Place-of-Interconnection fallback caller
+
+            ID. Null means this trunk inherits the customer-level POI. Admin-only.'
+          type: string
+        poi_number:
+          description: Resolved details of the number backing PoiAssignmentID, when set.
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary'
+        sip_config:
+          type: array
+          items:
+            type: integer
+        ss_attest_fallback:
+          type: string
+        ss_existing_header_policy:
+          type: string
+        ss_signing_mode:
+          description: 'STIR/SHAKEN per-trunk signing policy. Admin-only. Null means WARP
+
+            applies its default policy (sign / attest B / validate).'
+          type: string
+        updated_at:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.CustomerTrunkCascade:
+      type: object
+      properties:
+        active_calls:
+          description: handler-populated from Redis
+          type: integer
+        cdr_count:
+          type: integer
+        src_ips:
+          type: integer
+        tns_routed_here:
+          type: integer
+    internal_handlers.CredentialSipConfig:
+      type: object
+      properties:
+        auth_realm:
+          type: string
+        registrar:
+          type: string
+        sip_domain:
+          type: string
+    internal_handlers.CredentialShowOnce:
+      type: object
+      properties:
+        credential:
+          $ref: '#/components/schemas/internal_handlers.CredentialInfo'
+        password:
+          type: string
+        sip_config:
+          $ref: '#/components/schemas/internal_handlers.CredentialSipConfig'
+    github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary:
+      type: object
+      properties:
+        friendly_name:
+          type: string
+        id:
+          type: string
+        npa:
+          type: string
+        nxx:
+          type: string
+        state:
+          type: string
+        tn:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.TrunkEndpoint:
+      type: object
+      properties:
+        created_at:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        host:
+          type: string
+        id:
+          type: integer
+        port:
+          type: integer
+        priority:
+          type: integer
+        raw_uri:
+          type: string
+        transport:
+          type: string
+        trunk_group_id:
+          type: string
+        updated_at:
+          type: string
+        weight:
+          type: integer
     internal_handlers.TrunkEndpointResult:
       type: object
       properties:
@@ -1842,138 +2131,6 @@ components:
           type: integer
           maximum: 32
           minimum: 0
-    github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat:
-      type: string
-      enum:
-      - national
-      - cc_national
-      - e164
-      x-enum-varnames:
-      - InboundDNISNational
-      - InboundDNISCCNational
-      - InboundDNISE164
-    internal_handlers.CustomerTrunkIPList:
-      type: object
-      properties:
-        ips:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkIP'
-        trunk_group_id:
-          type: string
-    internal_handlers.CredentialSipConfig:
-      type: object
-      properties:
-        auth_realm:
-          type: string
-        registrar:
-          type: string
-        sip_domain:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.TrunkGroup:
-      type: object
-      properties:
-        allowed_number_classes:
-          type: array
-          items:
-            type: string
-        auth_type:
-          description: IP_ACL, DIGEST, BOTH
-          type: string
-        capacity_channels_inbound:
-          type: integer
-        capacity_channels_outbound:
-          type: integer
-        capacity_cps_inbound:
-          description: 'SP10.7.0: split into directional capacity. Inbound = WARP→Customer;
-
-            outbound = Customer→WARP.'
-          type: integer
-        capacity_cps_outbound:
-          type: integer
-        created_at:
-          type: string
-        created_by:
-          type: string
-        customer_id:
-          type: string
-        description:
-          type: string
-        enabled:
-          type: boolean
-        id:
-          type: string
-        inbound_dnis_format:
-          default: national
-          allOf:
-          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
-        name:
-          type: string
-        options_ping_enabled:
-          description: 'When true (default), WARP periodically health-checks this trunk''s
-
-            inbound endpoints and skips unhealthy ones. Set false if your SBC does
-
-            not answer SIP OPTIONS, so it stays selectable regardless of probe result.'
-          type: boolean
-        poi_assignment_id:
-          description: 'Trunk-level override for the Place-of-Interconnection fallback caller
-
-            ID. Null means this trunk inherits the customer-level POI. Admin-only.'
-          type: string
-        poi_number:
-          description: Resolved details of the number backing PoiAssignmentID, when set.
-          allOf:
-          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary'
-        sip_config:
-          type: array
-          items:
-            type: integer
-        ss_attest_fallback:
-          type: string
-        ss_existing_header_policy:
-          type: string
-        ss_signing_mode:
-          description: 'STIR/SHAKEN per-trunk signing policy. Admin-only. Null means WARP
-
-            applies its default policy (sign / attest B / validate).'
-          type: string
-        updated_at:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.TrunkEndpoint:
-      type: object
-      properties:
-        created_at:
-          type: string
-        description:
-          type: string
-        enabled:
-          type: boolean
-        host:
-          type: string
-        id:
-          type: integer
-        port:
-          type: integer
-        priority:
-          type: integer
-        raw_uri:
-          type: string
-        transport:
-          type: string
-        trunk_group_id:
-          type: string
-        updated_at:
-          type: string
-        weight:
-          type: integer
-    internal_handlers.createCredReq:
-      type: object
-      required:
-      - username
-      properties:
-        username:
-          type: string
     github_com_ringer-warp_api-gateway_internal_models.TrunkIP:
       type: object
       properties:
@@ -1996,21 +2153,65 @@ components:
           type: string
         updated_at:
           type: string
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+    github_com_ringer-warp_api-gateway_internal_models.CreateTrunkEndpointRequest:
       type: object
       properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
-    internal_handlers.patchCredReq:
-      type: object
-      properties:
+        description:
+          type: string
         enabled:
           type: boolean
+        host:
+          type: string
+        port:
+          type: integer
+          maximum: 65535
+          minimum: 1
+        priority:
+          type: integer
+          maximum: 10
+          minimum: 1
+        raw_uri:
+          type: string
+        transport:
+          type: string
+          enum:
+          - UDP
+          - TCP
+          - TLS
+        weight:
+          type: integer
+          maximum: 100
+          minimum: 1
+    github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat:
+      type: string
+      enum:
+      - national
+      - cc_national
+      - e164
+      x-enum-varnames:
+      - InboundDNISNational
+      - InboundDNISCCNational
+      - InboundDNISE164
+    internal_handlers.CustomerTrunkIPList:
+      type: object
+      properties:
+        ips:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkIP'
+        trunk_group_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
     github_com_ringer-warp_api-gateway_internal_models.CreateTrunkGroupRequest:
       type: object
       required:
@@ -2071,233 +2272,6 @@ components:
           type: boolean
         sip_config:
           $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CustomerTrunkSIPConfig'
-    github_com_ringer-warp_api-gateway_internal_models.CustomerTrunkSIPConfig:
-      type: object
-      properties:
-        caller_id_mode:
-          description: passthrough, block, rewrite
-          type: string
-        caller_id_number:
-          description: Override number (if rewrite)
-          type: string
-        codecs:
-          description: Codecs (ordered preference list)
-          type: array
-          items:
-            type: string
-        cps_limit:
-          type: integer
-        custom_headers:
-          description: Additional SIP headers
-          type: object
-          additionalProperties:
-            type: string
-        diversion_header:
-          description: SIP headers
-          type: boolean
-        dtmf_mode:
-          description: rfc2833, inband — empty inherits/system default
-          type: string
-        early_media:
-          description: Allow 183 early media
-          type: boolean
-        fax_mode:
-          description: Media
-          type: string
-        from_mode:
-          description: passthrough, rewrite_caller, rewrite_trunk
-          type: string
-        max_call_duration:
-          description: Limits
-          type: integer
-        max_concurrent_calls:
-          description: Capacity (overrides trunk_groups columns if set)
-          type: integer
-        min_se:
-          description: Min-SE header value (seconds)
-          type: integer
-        p_charge_info:
-          description: Include P-Charge-Info
-          type: boolean
-        pai_mode:
-          description: Header handling
-          type: string
-        recording:
-          description: Enable call recording
-          type: boolean
-        rpid_mode:
-          description: passthrough, strip, generate
-          type: string
-        session_expires:
-          description: Session timers
-          type: integer
-    internal_handlers.CredentialListItem:
-      type: object
-      properties:
-        active_call_count:
-          type: integer
-        created_at:
-          type: string
-        enabled:
-          type: boolean
-        id:
-          type: string
-        last_rotated_at:
-          type: string
-        realm:
-          type: string
-        registration_count:
-          type: integer
-        username:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest:
-      type: object
-      properties:
-        description:
-          type: string
-        enabled:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_models.TrunkGroupWithIPs:
-      type: object
-      properties:
-        allowed_number_classes:
-          type: array
-          items:
-            type: string
-        auth_type:
-          description: IP_ACL, DIGEST, BOTH
-          type: string
-        capacity_channels_inbound:
-          type: integer
-        capacity_channels_outbound:
-          type: integer
-        capacity_cps_inbound:
-          description: 'SP10.7.0: split into directional capacity. Inbound = WARP→Customer;
-
-            outbound = Customer→WARP.'
-          type: integer
-        capacity_cps_outbound:
-          type: integer
-        created_at:
-          type: string
-        created_by:
-          type: string
-        customer_id:
-          type: string
-        description:
-          type: string
-        enabled:
-          type: boolean
-        id:
-          type: string
-        inbound_dnis_format:
-          default: national
-          allOf:
-          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.InboundDNISFormat'
-        ips:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.TrunkIP'
-        name:
-          type: string
-        options_ping_enabled:
-          description: 'When true (default), WARP periodically health-checks this trunk''s
-
-            inbound endpoints and skips unhealthy ones. Set false if your SBC does
-
-            not answer SIP OPTIONS, so it stays selectable regardless of probe result.'
-          type: boolean
-        poi_assignment_id:
-          description: 'Trunk-level override for the Place-of-Interconnection fallback caller
-
-            ID. Null means this trunk inherits the customer-level POI. Admin-only.'
-          type: string
-        poi_number:
-          description: Resolved details of the number backing PoiAssignmentID, when set.
-          allOf:
-          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary'
-        sip_config:
-          type: array
-          items:
-            type: integer
-        ss_attest_fallback:
-          type: string
-        ss_existing_header_policy:
-          type: string
-        ss_signing_mode:
-          description: 'STIR/SHAKEN per-trunk signing policy. Admin-only. Null means WARP
-
-            applies its default policy (sign / attest B / validate).'
-          type: string
-        updated_at:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.CreateTrunkEndpointRequest:
-      type: object
-      properties:
-        description:
-          type: string
-        enabled:
-          type: boolean
-        host:
-          type: string
-        port:
-          type: integer
-          maximum: 65535
-          minimum: 1
-        priority:
-          type: integer
-          maximum: 10
-          minimum: 1
-        raw_uri:
-          type: string
-        transport:
-          type: string
-          enum:
-          - UDP
-          - TCP
-          - TLS
-        weight:
-          type: integer
-          maximum: 100
-          minimum: 1
-    internal_handlers.CredentialRegistration:
-      type: object
-      properties:
-        contact:
-          type: string
-        contact_id:
-          type: string
-        expires_at:
-          type: string
-        last_keepalive:
-          type: string
-        registered_at:
-          type: string
-        source_ip:
-          type: string
-        transport:
-          type: string
-        user_agent:
-          type: string
-    internal_handlers.CredentialShowOnce:
-      type: object
-      properties:
-        credential:
-          $ref: '#/components/schemas/internal_handlers.CredentialInfo'
-        password:
-          type: string
-        sip_config:
-          $ref: '#/components/schemas/internal_handlers.CredentialSipConfig'
-    github_com_ringer-warp_api-gateway_internal_models.APIError:
-      type: object
-      properties:
-        code:
-          type: string
-        details:
-          type: object
-          additionalProperties: true
-        message:
-          type: string
     internal_handlers.throttleStatePayload:
       type: object
       properties:
@@ -2322,6 +2296,25 @@ components:
         fetched_at:
           type: string
         trunk_group_id:
+          type: string
+    internal_handlers.CredentialRegistration:
+      type: object
+      properties:
+        contact:
+          type: string
+        contact_id:
+          type: string
+        expires_at:
+          type: string
+        last_keepalive:
+          type: string
+        registered_at:
+          type: string
+        source_ip:
+          type: string
+        transport:
+          type: string
+        user_agent:
           type: string
     github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkGroupRequest:
       type: object
@@ -2387,63 +2380,42 @@ components:
 
             means no change.'
           type: string
-    github_com_ringer-warp_api-gateway_internal_models.Meta:
+    internal_handlers.MessageResponse:
       type: object
       properties:
-        page:
-          type: integer
-        per_page:
-          type: integer
-        total:
-          type: integer
-        total_pages:
-          type: integer
-    internal_handlers.CredentialInfo:
+        message:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest:
       type: object
       properties:
-        created_at:
+        description:
           type: string
         enabled:
           type: boolean
-        id:
-          type: string
-        last_rotated_at:
-          type: string
-        realm:
-          type: string
-        trunk_group_id:
-          type: string
-        username:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.PoiNumberSummary:
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
       type: object
       properties:
-        friendly_name:
+        code:
           type: string
-        id:
-          type: string
-        npa:
-          type: string
-        nxx:
-          type: string
-        state:
-          type: string
-        tn:
+        details:
+          type: object
+          additionalProperties: true
+        message:
           type: string
   requestBodies:
-    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest'
-      description: Fields to update
-      required: true
     github_com_ringer-warp_api-gateway_internal_models.AddTrunkIPRequest:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.AddTrunkIPRequest'
       description: IP ACL entry
+      required: true
+    github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkIPRequest'
+      description: Fields to update
       required: true
     github_com_ringer-warp_api-gateway_internal_models.UpdateTrunkGroupRequest:
       content:
@@ -2458,6 +2430,3 @@ components:
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

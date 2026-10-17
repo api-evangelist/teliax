@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Reports API
-  version: v1
+  title: TNIQ by Ringer — Customer Reports API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Reports across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -61,13 +61,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reports/jobs/{id}:
     get:
       tags:
@@ -89,15 +82,26 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ReportJobResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
+    CreateReportJobRequest:
+      required:
+      - reportType
+      type: object
+      properties:
+        reportType:
+          type: string
+          enum:
+          - SOA_QUEUE_SNAPSHOT
+          - PORT_OUTS
+          - PORT_INS
+          - INVENTORY_XLSX
+          - INVENTORY_MAP_XLSX
+          - NNID_SMS_IMPACT
+        params:
+          type: object
+          additionalProperties:
+            type: object
     ReportJobResponse:
       type: object
       properties:
@@ -143,30 +147,9 @@ components:
         completedAt:
           type: string
           format: date-time
-    CreateReportJobRequest:
-      required:
-      - reportType
-      type: object
-      properties:
-        reportType:
-          type: string
-          enum:
-          - SOA_QUEUE_SNAPSHOT
-          - PORT_OUTS
-          - PORT_INS
-          - INVENTORY_XLSX
-          - INVENTORY_MAP_XLSX
-          - NNID_SMS_IMPACT
-        params:
-          type: object
-          additionalProperties:
-            type: object
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

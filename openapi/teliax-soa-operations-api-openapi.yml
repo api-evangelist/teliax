@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax SOA Operations API
-  version: v1
+  title: TNIQ by Ringer — Customer SOA Operations API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged SOA Operations across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -82,13 +82,6 @@ paths:
                 type: object
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/lrn/remove:
     post:
       tags:
@@ -153,13 +146,6 @@ paths:
                 $ref: '#/components/schemas/SoaResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/lrn/create:
     post:
       tags:
@@ -233,13 +219,6 @@ paths:
                 $ref: '#/components/schemas/SoaResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/intrasp:
     post:
       tags:
@@ -313,13 +292,6 @@ paths:
                 $ref: '#/components/schemas/SoaResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/events/{recno}/acknowledge:
     post:
       tags:
@@ -365,13 +337,6 @@ paths:
                 $ref: '#/components/schemas/SoaResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/disconnect:
     post:
       tags:
@@ -427,13 +392,6 @@ paths:
                 $ref: '#/components/schemas/SoaResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/create:
     post:
       tags:
@@ -493,13 +451,6 @@ paths:
       deprecated: true
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/conflict/remove:
     post:
       tags:
@@ -546,13 +497,6 @@ paths:
                 type: object
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/conflict/create:
     post:
       tags:
@@ -599,13 +543,6 @@ paths:
                 type: object
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/cancel:
     post:
       tags:
@@ -670,13 +607,6 @@ paths:
                 $ref: '#/components/schemas/SoaResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/activate:
     post:
       tags:
@@ -750,13 +680,6 @@ paths:
                 $ref: '#/components/schemas/SoaResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/status/{tn}:
     get:
       tags:
@@ -802,13 +725,6 @@ paths:
                 $ref: '#/components/schemas/SoaStatusResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/spid/{tn}:
     get:
       tags:
@@ -854,13 +770,6 @@ paths:
                 $ref: '#/components/schemas/SoaSpidResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/query/{tn}:
     get:
       tags:
@@ -929,13 +838,6 @@ paths:
                 $ref: '#/components/schemas/SoaQueryResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/events:
     get:
       tags:
@@ -964,13 +866,6 @@ paths:
                 $ref: '#/components/schemas/SoaEventsResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/lnp/soa/activation-ready/{newspid}:
     get:
       tags:
@@ -1016,15 +911,31 @@ paths:
                 $ref: '#/components/schemas/SoaActReadyResponse'
       security:
       - bearerAuth: []
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
+    SoaLrnCreateRequest:
+      required:
+      - newspid
+      - region
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit LRN to create
+          example: '2125550000'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID
+          example: '1234'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID
+          example: EAST
+      description: Request to create an LRN
     SoaActReadyResponse:
       type: object
       properties:
@@ -1061,222 +972,6 @@ components:
         dataSource:
           type: string
       description: SOA activation ready response
-    SoaEventsResponse:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Response timestamp
-          format: date-time
-          example: '2024-12-27T10:30:00Z'
-        status:
-          type: string
-          description: Operation status
-          example: SUCCESS
-        events:
-          type: array
-          description: List of events
-          items:
-            type: object
-            additionalProperties:
-              type: object
-              description: List of events
-            description: List of events
-        eventCount:
-          type: integer
-          description: Total number of events
-          format: int32
-        error:
-          type: string
-          description: Error message if status is ERROR
-      description: SOA events response
-    SoaConflictRemoveRequest:
-      required:
-      - tn
-      type: object
-      properties:
-        tn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit telephone number
-          example: '2125551234'
-      description: Request to remove a conflict from a telephone number
-    SoaDisconnectRequest:
-      required:
-      - spid
-      - tn
-      type: object
-      properties:
-        tn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit telephone number
-          example: '2125551234'
-        spid:
-          pattern: ^[0-9A-Z]{4}$
-          type: string
-          description: 4-character current SPID
-          example: '1234'
-        region:
-          maxLength: 4
-          type: string
-          description: 4-character region ID (optional)
-          example: EAST
-      description: Request to disconnect a telephone number
-    SoaStatusResponse:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Response timestamp
-          format: date-time
-          example: '2024-12-27T10:30:00Z'
-        status:
-          type: string
-          description: Port status
-          example: PENDING
-        message:
-          type: string
-          description: Response message
-        currentSpid:
-          type: string
-          description: Current SPID
-          example: 567G
-        newSpid:
-          type: string
-          description: New SPID (target)
-          example: 616J
-        oldSpid:
-          type: string
-          description: Old SPID (source)
-          example: 567G
-        lrn:
-          type: string
-          description: Location Routing Number
-          example: '7208441000'
-        dueDate:
-          type: string
-          description: Due date in MM/dd/yyyy format
-          example: 07/02/2025
-        lastAction:
-          type: string
-          description: Last action taken
-          example: CREATE
-        lastActionDate:
-          type: string
-          description: Last action timestamp
-          format: date-time
-        activationDate:
-          type: string
-          description: Activation timestamp if completed
-          format: date-time
-        error:
-          type: string
-          description: Error details if any
-        dataSource:
-          type: string
-        npac:
-          $ref: '#/components/schemas/NpacStateResponse'
-        local_cache:
-          $ref: '#/components/schemas/SoaStatusResponse'
-      description: SOA port status response
-    SoaIntraSpRequest:
-      required:
-      - lrn
-      - newspid
-      - tn
-      type: object
-      properties:
-        tn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit telephone number
-          example: '2125551234'
-        lrn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit LRN
-          example: '2125550000'
-        newspid:
-          pattern: ^[0-9A-Z]{4}$
-          type: string
-          description: 4-character gaining SPID
-          example: '1234'
-        ddd:
-          type: string
-          description: Due date (optional)
-          example: 12/31/2024
-        region:
-          maxLength: 4
-          type: string
-          description: 4-character region ID (optional)
-          example: EAST
-      description: Request for intra-SPID port
-    SoaCancelRequest:
-      required:
-      - newspid
-      - tn
-      type: object
-      properties:
-        tn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit telephone number
-          example: '2125551234'
-        newspid:
-          pattern: ^[0-9A-Z]{4}$
-          type: string
-          description: 4-character gaining SPID
-          example: '1234'
-      description: Request to cancel a port order
-    SoaConflictCreateRequest:
-      required:
-      - tn
-      type: object
-      properties:
-        tn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit telephone number
-          example: '2125551234'
-      description: Request to create a conflict for a telephone number
-    NpacStateResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        role:
-          type: string
-        our_spid:
-          type: string
-        new_spid:
-          type: string
-        old_spid:
-          type: string
-        lrn:
-          type: string
-        new_sp_due_date:
-          type: string
-          format: date
-        old_sp_due_date:
-          type: string
-          format: date
-        old_sp_authorization:
-          type: string
-        conflict_placed_by:
-          type: string
-        conflict_at:
-          type: string
-          format: date-time
-        raw_sv_state:
-          type: string
-        observed_at:
-          type: string
-          format: date-time
-        source:
-          type: string
-        current_spid:
-          type: string
     SoaQueryResponse:
       type: object
       properties:
@@ -1346,6 +1041,294 @@ components:
           type: string
           description: Error message if status is ERROR
       description: SOA query response
+    NpacStateResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        role:
+          type: string
+        our_spid:
+          type: string
+        new_spid:
+          type: string
+        old_spid:
+          type: string
+        lrn:
+          type: string
+        new_sp_due_date:
+          type: string
+          format: date
+        old_sp_due_date:
+          type: string
+          format: date
+        old_sp_authorization:
+          type: string
+        conflict_placed_by:
+          type: string
+        conflict_at:
+          type: string
+          format: date-time
+        raw_sv_state:
+          type: string
+        observed_at:
+          type: string
+          format: date-time
+        source:
+          type: string
+        current_spid:
+          type: string
+    SoaStatusResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Port status
+          example: PENDING
+        message:
+          type: string
+          description: Response message
+        currentSpid:
+          type: string
+          description: Current SPID
+          example: 567G
+        newSpid:
+          type: string
+          description: New SPID (target)
+          example: 616J
+        oldSpid:
+          type: string
+          description: Old SPID (source)
+          example: 567G
+        lrn:
+          type: string
+          description: Location Routing Number
+          example: '7208441000'
+        dueDate:
+          type: string
+          description: Due date in MM/dd/yyyy format
+          example: 07/02/2025
+        lastAction:
+          type: string
+          description: Last action taken
+          example: CREATE
+        lastActionDate:
+          type: string
+          description: Last action timestamp
+          format: date-time
+        activationDate:
+          type: string
+          description: Activation timestamp if completed
+          format: date-time
+        error:
+          type: string
+          description: Error details if any
+        dataSource:
+          type: string
+        npac:
+          $ref: '#/components/schemas/NpacStateResponse'
+        local_cache:
+          $ref: '#/components/schemas/SoaStatusResponse'
+      description: SOA port status response
+    SoaSpidResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Operation status
+          example: SUCCESS
+        tn:
+          type: string
+          description: Telephone number
+          example: '3036298301'
+        spid:
+          type: string
+          description: Current SPID
+          example: 567G
+        lrn:
+          type: string
+          description: Location Routing Number
+          example: '7207081999'
+        spName:
+          type: string
+          description: Service provider name
+          example: Verizon
+        error:
+          type: string
+          description: Error message if status is ERROR
+      description: SOA SPID query response
+    SoaEventsResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Response timestamp
+          format: date-time
+          example: '2024-12-27T10:30:00Z'
+        status:
+          type: string
+          description: Operation status
+          example: SUCCESS
+        events:
+          type: array
+          description: List of events
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              description: List of events
+            description: List of events
+        eventCount:
+          type: integer
+          description: Total number of events
+          format: int32
+        error:
+          type: string
+          description: Error message if status is ERROR
+      description: SOA events response
+    SoaDisconnectRequest:
+      required:
+      - spid
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+        spid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character current SPID
+          example: '1234'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID (optional)
+          example: EAST
+      description: Request to disconnect a telephone number
+    SoaLrnRemoveRequest:
+      required:
+      - newspid
+      - region
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit LRN to remove
+          example: '2125550000'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID
+          example: '1234'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID
+          example: EAST
+      description: Request to remove an LRN
+    SoaConflictCreateRequest:
+      required:
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+      description: Request to create a conflict for a telephone number
+    SoaCreateRequest:
+      required:
+      - lrn
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number to port
+          example: '2125551234'
+        lrn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit Location Routing Number
+          example: '2125550000'
+        newspid:
+          type: string
+          description: 4-character gaining SPID (auto-detected from target LRN if not provided)
+          example: '1234'
+        oldspid:
+          type: string
+          description: 4-character losing SPID (auto-detected from current TN if not provided)
+          example: '5678'
+        ddd:
+          type: string
+          description: Port due date in ISO instant format (auto-set to tomorrow midnight UTC if not provided)
+          example: '2025-11-07T05:00:00.000Z'
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID (optional)
+          example: EAST
+      description: Request to create a new port order
+    SoaConflictRemoveRequest:
+      required:
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+      description: Request to remove a conflict from a telephone number
+    SoaIntraSpRequest:
+      required:
+      - lrn
+      - newspid
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+          example: '2125551234'
+        lrn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit LRN
+          example: '2125550000'
+        newspid:
+          pattern: ^[0-9A-Z]{4}$
+          type: string
+          description: 4-character gaining SPID
+          example: '1234'
+        ddd:
+          type: string
+          description: Due date (optional)
+          example: 12/31/2024
+        region:
+          maxLength: 4
+          type: string
+          description: 4-character region ID (optional)
+          example: EAST
+      description: Request for intra-SPID port
     SoaResponse:
       type: object
       properties:
@@ -1394,63 +1377,23 @@ components:
           description: Skip the DDD-reached check in the NPAC write guard (operator override)
           example: false
       description: Request to activate a ported telephone number
-    SoaLrnRemoveRequest:
+    SoaCancelRequest:
       required:
       - newspid
-      - region
       - tn
       type: object
       properties:
         tn:
           pattern: ^[0-9]{10}$
           type: string
-          description: 10-digit LRN to remove
-          example: '2125550000'
+          description: 10-digit telephone number
+          example: '2125551234'
         newspid:
           pattern: ^[0-9A-Z]{4}$
           type: string
           description: 4-character gaining SPID
           example: '1234'
-        region:
-          maxLength: 4
-          type: string
-          description: 4-character region ID
-          example: EAST
-      description: Request to remove an LRN
-    SoaCreateRequest:
-      required:
-      - lrn
-      - tn
-      type: object
-      properties:
-        tn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit telephone number to port
-          example: '2125551234'
-        lrn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit Location Routing Number
-          example: '2125550000'
-        newspid:
-          type: string
-          description: 4-character gaining SPID (auto-detected from target LRN if not provided)
-          example: '1234'
-        oldspid:
-          type: string
-          description: 4-character losing SPID (auto-detected from current TN if not provided)
-          example: '5678'
-        ddd:
-          type: string
-          description: Port due date in ISO instant format (auto-set to tomorrow midnight UTC if not provided)
-          example: '2025-11-07T05:00:00.000Z'
-        region:
-          maxLength: 4
-          type: string
-          description: 4-character region ID (optional)
-          example: EAST
-      description: Request to create a new port order
+      description: Request to cancel a port order
     SoaReleaseRequest:
       required:
       - ddd
@@ -1484,67 +1427,9 @@ components:
           description: 4-character region ID (optional)
           example: EAST
       description: Request to release a telephone number
-    SoaSpidResponse:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Response timestamp
-          format: date-time
-          example: '2024-12-27T10:30:00Z'
-        status:
-          type: string
-          description: Operation status
-          example: SUCCESS
-        tn:
-          type: string
-          description: Telephone number
-          example: '3036298301'
-        spid:
-          type: string
-          description: Current SPID
-          example: 567G
-        lrn:
-          type: string
-          description: Location Routing Number
-          example: '7207081999'
-        spName:
-          type: string
-          description: Service provider name
-          example: Verizon
-        error:
-          type: string
-          description: Error message if status is ERROR
-      description: SOA SPID query response
-    SoaLrnCreateRequest:
-      required:
-      - newspid
-      - region
-      - tn
-      type: object
-      properties:
-        tn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit LRN to create
-          example: '2125550000'
-        newspid:
-          pattern: ^[0-9A-Z]{4}$
-          type: string
-          description: 4-character gaining SPID
-          example: '1234'
-        region:
-          maxLength: 4
-          type: string
-          description: 4-character region ID
-          example: EAST
-      description: Request to create an LRN
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

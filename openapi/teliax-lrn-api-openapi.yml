@@ -1,14 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Teliax LRN API
+  title: Telique Telecom LRN API
   version: 2026.6.25
+  description: 'Unified Telique telecom data API. Consolidated from 4 services: lrn, cnam, lerg, routelink.
+
+
+    Get your API token at telique.ringer.tel.'
   contact:
     name: Ringer Support
     email: support@ringer.com
     url: https://telique.ringer.tel
   license:
     name: Proprietary
-  description: 'Operations tagged LRN across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.telique.ringer.tel
   description: Production
@@ -136,35 +139,8 @@ paths:
                 message: Data store is temporarily unavailable
                 code: 503
                 timestamp: 2026-04-04 23:04:50.391142+00:00
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
 components:
   schemas:
-    LrnMetadata:
-      type: object
-      description: 'Routing metadata for the LRN response. For authoritative NPAC port-event
-
-        history (activation timestamp, transaction history), use the LSMS GraphQL
-
-        `subscriptionVersion` query — this REST endpoint only carries the routing
-
-        identifiers needed to dial the number.
-
-        '
-      properties:
-        spid:
-          type: string
-          description: Service Provider ID (4 characters)
-          example: 567G
-        lnp_type:
-          type: string
-          description: Local Number Portability type
-          enum:
-          - lspp
-          - lisp
-          - pool
-          example: lspp
     LrnLookupResponse:
       type: object
       required:
@@ -222,12 +198,33 @@ components:
           type: object
           description: Optional structured context; omitted when absent.
           additionalProperties: true
+    LrnMetadata:
+      type: object
+      description: 'Routing metadata for the LRN response. For authoritative NPAC port-event
+
+        history (activation timestamp, transaction history), use the LSMS GraphQL
+
+        `subscriptionVersion` query — this REST endpoint only carries the routing
+
+        identifiers needed to dial the number.
+
+        '
+      properties:
+        spid:
+          type: string
+          description: Service Provider ID (4 characters)
+          example: 567G
+        lnp_type:
+          type: string
+          description: Local Number Portability type
+          enum:
+          - lspp
+          - lisp
+          - pool
+          example: lspp
   securitySchemes:
     apiToken:
       type: apiKey
       in: header
       name: x-api-token
       description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
-x-refined-from:
-- teliax-telique-openapi.yaml
-- teliax-telique-openapi.yml

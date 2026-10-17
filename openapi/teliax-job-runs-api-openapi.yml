@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Job Runs API
-  version: v1
+  title: TNIQ by Ringer — Customer Job Runs API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Job Runs across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -39,13 +39,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/JobRunAckResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/runs:
     get:
       tags:
@@ -80,13 +73,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/JobRunDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
     JobRunDto:
@@ -177,6 +163,3 @@ components:
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

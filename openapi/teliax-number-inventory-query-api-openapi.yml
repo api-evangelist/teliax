@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Number Inventory Query API
-  version: v1
+  title: TNIQ by Ringer — Customer Number Inventory Query API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Number Inventory Query across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -38,13 +38,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/query/validate:
     post:
       tags:
@@ -67,13 +60,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/query/export:
     post:
       tags:
@@ -90,13 +76,6 @@ paths:
       responses:
         '200':
           description: OK
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/aggregate:
     post:
       tags:
@@ -117,33 +96,8 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
-    AggregateRequest:
-      type: object
-      properties:
-        query:
-          type: string
-        spids:
-          type: array
-          items:
-            type: string
-        groupBy:
-          type: array
-          items:
-            type: string
-        limit:
-          type: integer
-          format: int32
-        orderBy:
-          type: string
     ExportRequest:
       type: object
       properties:
@@ -184,12 +138,27 @@ components:
           type: array
           items:
             type: string
+    AggregateRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        spids:
+          type: array
+          items:
+            type: string
+        groupBy:
+          type: array
+          items:
+            type: string
+        limit:
+          type: integer
+          format: int32
+        orderBy:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

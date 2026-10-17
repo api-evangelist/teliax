@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Managed Port Processing API
-  version: v1
+  title: TNIQ by Ringer — Customer Managed Port Processing API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Managed Port Processing across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -69,13 +69,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ManagedProcessingResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-projects/projects/{projectId}/managed-processing/actions/{actionId}/satisfy:
     post:
       tags:
@@ -113,13 +106,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ManagedProcessingResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
     ManagedProcessingResponse:
@@ -150,41 +136,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    ActionScope:
-      type: object
-      properties:
-        groupId:
-          type: string
-          format: uuid
-        tns:
-          type: array
-          items:
-            type: string
-    SubmitManagedProcessingRequest:
-      type: object
-      properties:
-        desiredDueDate:
-          type: string
-          format: date
-    SatisfyActionRequest:
-      required:
-      - responseType
-      type: object
-      properties:
-        responseType:
-          type: string
-        documentId:
-          type: string
-          format: uuid
-        fields:
-          type: object
-          additionalProperties:
-            type: string
-        desiredDueDate:
-          type: string
-          format: date
-        acknowledged:
-          type: boolean
     CustomerActionResponse:
       type: object
       properties:
@@ -204,12 +155,44 @@ components:
         openedAt:
           type: string
           format: date-time
+    SubmitManagedProcessingRequest:
+      type: object
+      properties:
+        desiredDueDate:
+          type: string
+          format: date
+    ActionScope:
+      type: object
+      properties:
+        groupId:
+          type: string
+          format: uuid
+        tns:
+          type: array
+          items:
+            type: string
+    SatisfyActionRequest:
+      required:
+      - responseType
+      type: object
+      properties:
+        responseType:
+          type: string
+        documentId:
+          type: string
+          format: uuid
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+        desiredDueDate:
+          type: string
+          format: date
+        acknowledged:
+          type: boolean
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

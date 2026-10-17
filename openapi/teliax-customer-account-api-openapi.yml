@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Account API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Account API
   contact: {}
-  description: 'Operations tagged Customer/Account across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -53,8 +53,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1AccountCapacity
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/me/balance:
     get:
       security:
@@ -110,8 +108,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersMeBalance
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/me/utilization:
     get:
       security:
@@ -167,8 +163,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersMeUtilization
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/scopes:
     get:
       security:
@@ -215,10 +209,29 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1Scopes
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
     internal_handlers.AccountCapacityResponse:
       type: object
       properties:
@@ -270,34 +283,6 @@ components:
           type: integer
         cps_out_zone1:
           type: integer
-    internal_handlers.scopeEntryDTO:
-      type: object
-      properties:
-        description:
-          type: string
-        display_name:
-          type: string
-        display_order:
-          type: integer
-        is_superadmin_only:
-          type: boolean
-        name:
-          type: string
-        resource_patterns:
-          type: array
-          items:
-            type: string
-    github_com_ringer-warp_api-gateway_internal_models.Meta:
-      type: object
-      properties:
-        page:
-          type: integer
-        per_page:
-          type: integer
-        total:
-          type: integer
-        total_pages:
-          type: integer
     internal_handlers.balancePayload:
       type: object
       properties:
@@ -339,16 +324,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/internal_handlers.scopeEntryDTO'
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+    internal_handlers.scopeEntryDTO:
       type: object
       properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
+        description:
+          type: string
+        display_name:
+          type: string
+        display_order:
+          type: integer
+        is_superadmin_only:
           type: boolean
+        name:
+          type: string
+        resource_patterns:
+          type: array
+          items:
+            type: string
     github_com_ringer-warp_api-gateway_internal_models.APIError:
       type: object
       properties:
@@ -365,6 +357,3 @@ components:
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

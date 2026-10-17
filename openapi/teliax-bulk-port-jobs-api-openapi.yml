@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Bulk Port Jobs API
-  version: v1
+  title: TNIQ by Ringer — Customer Bulk Port Jobs API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Bulk Port Jobs across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -38,13 +38,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RetryJobResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-projects/jobs/retry/project/{projectId}:
     post:
       tags:
@@ -65,13 +58,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RetryJobResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-projects/jobs/stats:
     get:
       tags:
@@ -85,13 +71,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/JobStatsResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-projects/jobs/state/{state}:
     get:
       tags:
@@ -127,13 +106,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/JobResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-projects/jobs/project/{projectId}/status:
     get:
       tags:
@@ -154,13 +126,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ProjectJobStatusResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-projects/jobs/failed:
     get:
       tags:
@@ -191,13 +156,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/FailedJobResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-projects/jobs/{jobId}:
     delete:
       tags:
@@ -214,71 +172,8 @@ paths:
       responses:
         '200':
           description: OK
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
-    RetryJobResponse:
-      type: object
-      properties:
-        jobId:
-          type: string
-          format: uuid
-        projectId:
-          type: string
-          format: uuid
-        success:
-          type: boolean
-        message:
-          type: string
-        retriedCount:
-          type: integer
-          format: int32
-    JobResponse:
-      type: object
-      properties:
-        jobId:
-          type: string
-          format: uuid
-        jobName:
-          type: string
-        state:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    ProjectJobStatusResponse:
-      type: object
-      properties:
-        projectId:
-          type: string
-          format: uuid
-        totalTns:
-          type: integer
-          format: int64
-        pendingTns:
-          type: integer
-          format: int64
-        validatedTns:
-          type: integer
-          format: int64
-        validTns:
-          type: integer
-          format: int64
-        errorTns:
-          type: integer
-          format: int64
-        percentComplete:
-          type: integer
-          format: int32
     JobStatsResponse:
       type: object
       properties:
@@ -312,6 +207,22 @@ components:
         backgroundJobServers:
           type: integer
           format: int32
+    JobResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        jobName:
+          type: string
+        state:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     FailedJobResponse:
       type: object
       properties:
@@ -328,12 +239,49 @@ components:
         numberOfRetries:
           type: integer
           format: int32
+    ProjectJobStatusResponse:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        totalTns:
+          type: integer
+          format: int64
+        pendingTns:
+          type: integer
+          format: int64
+        validatedTns:
+          type: integer
+          format: int64
+        validTns:
+          type: integer
+          format: int64
+        errorTns:
+          type: integer
+          format: int64
+        percentComplete:
+          type: integer
+          format: int32
+    RetryJobResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        success:
+          type: boolean
+        message:
+          type: string
+        retriedCount:
+          type: integer
+          format: int32
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

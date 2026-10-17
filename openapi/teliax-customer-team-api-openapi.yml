@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Team API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Team API
   contact: {}
-  description: 'Operations tagged Customer/Team across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -84,8 +84,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersByIdHubspotContacts
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/invitations:
     get:
       security:
@@ -150,8 +148,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersByIdInvitations
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/invitations/{invitationId}:
     delete:
       security:
@@ -222,8 +218,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1CustomersByIdInvitationsByInvitationId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/members:
     get:
       security:
@@ -277,8 +271,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersByIdMembers
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/members/{userId}:
     delete:
       security:
@@ -338,8 +330,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1CustomersByIdMembersByUserId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/members/{userId}/role:
     put:
       security:
@@ -426,8 +416,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: putV1CustomersByIdMembersByUserIdRole
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/roles:
     get:
       security:
@@ -560,8 +548,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1CustomersByIdRoles
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/roles/{roleId}:
     get:
       security:
@@ -795,8 +781,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: patchV1CustomersByIdRolesByRoleId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/roles/{roleId}/duplicate:
     post:
       security:
@@ -894,96 +878,43 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1CustomersByIdRolesByRoleIdDuplicate
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
-    internal_handlers.duplicateRoleRequest:
-      type: object
-      required:
-      - display_name
-      - name
-      properties:
-        description:
-          type: string
-          maxLength: 512
-        display_name:
-          type: string
-          maxLength: 128
-          minLength: 1
-        name:
-          type: string
-          maxLength: 64
-          minLength: 1
-    internal_handlers.setMemberRoleRequest:
-      type: object
-      required:
-      - role_id
-      properties:
-        role_id:
-          type: string
-    internal_handlers.RoleUpdatedResponse:
+    internal_handlers.InvitationSummary:
       type: object
       properties:
-        id:
+        created_at:
           type: string
-    internal_handlers.HubSpotInviteContact:
-      type: object
-      properties:
         email:
+          type: string
+        expires_at:
           type: string
         first_name:
           type: string
         id:
           type: string
-        jobtitle:
+        invited_by:
           type: string
         last_name:
           type: string
-        name:
+        role_display_name:
           type: string
-    internal_handlers.updateRoleRequest:
+        role_id:
+          type: string
+        role_name:
+          type: string
+        status:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
       type: object
       properties:
-        description:
-          type: string
-          maxLength: 512
-        display_name:
-          type: string
-          maxLength: 128
-          minLength: 1
-        scopes:
-          type: array
-          items:
-            type: string
-    github_com_ringer-warp_api-gateway_internal_models.RoleListItem:
-      type: object
-      properties:
-        created_at:
-          type: string
-        customer_id:
-          description: null for system roles
-          type: string
-        description:
-          type: string
-        display_name:
-          type: string
-        id:
-          type: string
-        is_superadmin:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
           type: boolean
-        is_system:
-          type: boolean
-        member_count:
-          type: integer
-        name:
-          type: string
-        scopes:
-          type: array
-          items:
-            type: string
-        updated_at:
-          type: string
     github_com_ringer-warp_api-gateway_internal_models.Meta:
       type: object
       properties:
@@ -995,32 +926,6 @@ components:
           type: integer
         total_pages:
           type: integer
-    github_com_ringer-warp_api-gateway_internal_models.RoleWithScopes:
-      type: object
-      properties:
-        created_at:
-          type: string
-        customer_id:
-          description: null for system roles
-          type: string
-        description:
-          type: string
-        display_name:
-          type: string
-        id:
-          type: string
-        is_superadmin:
-          type: boolean
-        is_system:
-          type: boolean
-        name:
-          type: string
-        scopes:
-          type: array
-          items:
-            type: string
-        updated_at:
-          type: string
     internal_handlers.createRoleRequest:
       type: object
       required:
@@ -1053,12 +958,134 @@ components:
           type: string
         user_id:
           type: string
+    internal_handlers.updateRoleRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 512
+        display_name:
+          type: string
+          maxLength: 128
+          minLength: 1
+        scopes:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_models.RoleWithScopes:
+      type: object
+      properties:
+        created_at:
+          type: string
+        customer_id:
+          description: null for system roles
+          type: string
+        description:
+          type: string
+        display_name:
+          type: string
+        id:
+          type: string
+        is_superadmin:
+          type: boolean
+        is_system:
+          type: boolean
+        name:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: string
+    internal_handlers.HubSpotInviteContact:
+      type: object
+      properties:
+        email:
+          type: string
+        first_name:
+          type: string
+        id:
+          type: string
+        jobtitle:
+          type: string
+        last_name:
+          type: string
+        name:
+          type: string
     internal_handlers.RoleCreatedResponse:
       type: object
       properties:
         id:
           type: string
         name:
+          type: string
+    internal_handlers.setMemberRoleRequest:
+      type: object
+      required:
+      - role_id
+      properties:
+        role_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.RoleListItem:
+      type: object
+      properties:
+        created_at:
+          type: string
+        customer_id:
+          description: null for system roles
+          type: string
+        description:
+          type: string
+        display_name:
+          type: string
+        id:
+          type: string
+        is_superadmin:
+          type: boolean
+        is_system:
+          type: boolean
+        member_count:
+          type: integer
+        name:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: string
+    internal_handlers.RoleUpdatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+    internal_handlers.duplicateRoleRequest:
+      type: object
+      required:
+      - display_name
+      - name
+      properties:
+        description:
+          type: string
+          maxLength: 512
+        display_name:
+          type: string
+          maxLength: 128
+          minLength: 1
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
           type: string
     github_com_ringer-warp_api-gateway_internal_repository.MemberEntry:
       type: object
@@ -1079,57 +1106,9 @@ components:
           type: string
         user_id:
           type: string
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
-      type: object
-      properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_models.APIError:
-      type: object
-      properties:
-        code:
-          type: string
-        details:
-          type: object
-          additionalProperties: true
-        message:
-          type: string
-    internal_handlers.InvitationSummary:
-      type: object
-      properties:
-        created_at:
-          type: string
-        email:
-          type: string
-        expires_at:
-          type: string
-        first_name:
-          type: string
-        id:
-          type: string
-        invited_by:
-          type: string
-        last_name:
-          type: string
-        role_display_name:
-          type: string
-        role_id:
-          type: string
-        role_name:
-          type: string
-        status:
-          type: string
   securitySchemes:
     ApiKeyAuth:
       description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Numbers API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Numbers API
   contact: {}
-  description: 'Operations tagged Customer/Numbers across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -137,8 +137,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:read
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/capabilities:
     get:
       security:
@@ -236,8 +234,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:read
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/edit-state/{assignmentID}:
     get:
       security:
@@ -388,8 +384,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:read
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/inline:
     post:
       security:
@@ -589,8 +583,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:write
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/previews:
     post:
       security:
@@ -747,8 +739,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:write
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/{id}:
     get:
       security:
@@ -888,8 +878,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:read
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/{id}/items:
     get:
       security:
@@ -1072,8 +1060,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:read
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/{id}/results.csv:
     get:
       security:
@@ -1237,8 +1223,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:read
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/{id}/retry-preview:
     post:
       security:
@@ -1429,8 +1413,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:write
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/number-operations/{id}/submit:
     post:
       security:
@@ -1646,8 +1628,6 @@ paths:
                     $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       x-required-scopes:
       - numbers:write
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers:
     get:
       security:
@@ -1754,8 +1734,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1Numbers
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/bulk-assign:
     post:
       security:
@@ -1825,8 +1803,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1NumbersBulkAssign
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/bulk-route:
     post:
       security:
@@ -1889,8 +1865,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1NumbersBulkRoute
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/pricing:
     get:
       security:
@@ -1935,8 +1909,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1NumbersPricing
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/search:
     get:
       security:
@@ -2040,8 +2012,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1NumbersSearch
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/{tn}:
     get:
       security:
@@ -2172,8 +2142,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: patchV1NumbersByTn
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/{tn}/assign:
     post:
       security:
@@ -2253,8 +2221,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1NumbersByTnAssign
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/{tn}/port-out-pin:
     get:
       security:
@@ -2405,8 +2371,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1NumbersByTnPortOutPin
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/{tn}/release:
     post:
       security:
@@ -2486,8 +2450,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1NumbersByTnRelease
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/{tn}/sms:
     delete:
       security:
@@ -2607,8 +2569,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: patchV1NumbersByTnSms
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/numbers/{tn}/voice:
     delete:
       security:
@@ -2761,104 +2721,49 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: patchV1NumbersByTnVoice
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
-    internal_handlers.VoiceClearedResponse:
+    github_com_ringer-warp_api-gateway_internal_services.SearchResult:
       type: object
       properties:
-        voice_cleared:
-          type: boolean
-    internal_handlers.PortOutPINSetResponse:
-      type: object
-      properties:
-        set:
-          type: boolean
+        locality:
+          type: string
+        monthly_rate:
+          type: number
+        npa:
+          type: string
+        number_type:
+          type: string
+        nxx:
+          type: string
+        provider:
+          description: 'Provider identifies which upstream returned this candidate: "TNIQ" or
+
+            a fallback provider''s Key() (e.g. "INTELIQUENT"). Explicit beats
+
+            implicit on the wire — set on every result, including primary-path
+
+            TNIQ hits.'
+          type: string
+        reservation_expires_at:
+          type: string
+        reservation_status:
+          description: '"spare" — DID inventory and TFN search-spare both browse without reserving; nothing here is pre-reserved'
+          type: string
+        state:
+          type: string
+        tn:
+          type: string
     internal_handlers.setPINReq:
       type: object
       properties:
         pin:
           type: string
-    internal_handlers.NumbersPage:
+    internal_handlers.ReleaseNumberRequest:
       type: object
       properties:
-        numbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Assignment'
-        page:
-          type: integer
-        size:
-          type: integer
-        total_elements:
-          type: integer
-    internal_handlers.BulkAssignTNMetadata:
-      type: object
-      properties:
-        locality:
+        reason:
           type: string
-        state:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_numbermutation.FieldSnapshot:
-      type: object
-      additionalProperties: false
-      required:
-      - assignment_id
-      - tn
-      - field
-      - value
-      - token
-      - routing_type
-      - trunk_name
-      - editable
-      - reason_code
-      properties:
-        assignment_id:
-          type: string
-          format: uuid
-        tn:
-          type: string
-        field:
-          type: string
-          enum:
-          - cnam
-          - lookup
-          - trunk
-          - friendly_name
-        value:
-          oneOf:
-          - type:
-            - string
-            - 'null'
-          - type: boolean
-        token:
-          type: string
-          pattern: ^[0-9a-fA-F]{64}$
-        routing_type:
-          type:
-          - string
-          - 'null'
-        trunk_name:
-          type:
-          - string
-          - 'null'
-        editable:
-          type: boolean
-        reason_code:
-          type:
-          - string
-          - 'null'
-          enum:
-          - assignment_unavailable
-          - field_changed
-          - unsupported_number_type
-          - trunk_required
-          - trunk_unavailable
-          - publication_rejected
-          - outcome_unknown
-          - service_unavailable
-          - null
     github_com_ringer-warp_api-gateway_internal_numberops.Operation:
       type: object
       additionalProperties: false
@@ -2954,51 +2859,6 @@ components:
           - string
           - 'null'
           format: date-time
-    github_com_ringer-warp_api-gateway_internal_numberops.Selection:
-      oneOf:
-      - type: object
-        additionalProperties: false
-        required:
-        - mode
-        - assignment_ids
-        properties:
-          mode:
-            type: string
-            enum:
-            - explicit
-          assignment_ids:
-            type: array
-            minItems: 1
-            maxItems: 10000
-            items:
-              type: string
-              format: uuid
-      - type: object
-        additionalProperties: false
-        required:
-        - mode
-        - filters
-        - excluded_assignment_ids
-        properties:
-          mode:
-            type: string
-            enum:
-            - all_matching
-          filters:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.InventoryFilter'
-          excluded_assignment_ids:
-            type: array
-            maxItems: 10000
-            items:
-              type: string
-              format: uuid
-      discriminator:
-        propertyName: mode
-    internal_handlers.SmsClearedResponse:
-      type: object
-      properties:
-        sms_cleared:
-          type: boolean
     github_com_ringer-warp_api-gateway_internal_numberops.RecentOperations:
       type: object
       additionalProperties: false
@@ -3014,6 +2874,93 @@ components:
           type:
           - string
           - 'null'
+    internal_handlers.NumberPricingResponse:
+      type: object
+      properties:
+        did:
+          $ref: '#/components/schemas/internal_handlers.NumberPricingEntry'
+        tfn:
+          $ref: '#/components/schemas/internal_handlers.NumberPricingEntry'
+    internal_handlers.SmsClearedResponse:
+      type: object
+      properties:
+        sms_cleared:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_services.BulkAssignTNResult:
+      type: object
+      properties:
+        assignment_id:
+          type: string
+        error:
+          type: string
+        extras:
+          description: 'Extras carries per-option outcomes of the OPTIONAL post-procurement
+
+            extras (cnam_dip / cnam_listing / campaign), populated by the HANDLER
+
+            layer after BulkAssign returns, and of the service''s own post-procurement
+
+            voice write (voice_routing). Extras are best-effort: an extras failure
+
+            never changes Status.'
+          type: object
+          additionalProperties:
+            type: string
+        status:
+          description: '"ok" | "failed"'
+          type: string
+        tn:
+          type: string
+    internal_handlers.VoiceClearedResponse:
+      type: object
+      properties:
+        voice_cleared:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_numberops.OperationPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - next_cursor
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.OperationItem'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    internal_handlers.UpdateVoiceUsageRequest:
+      type: object
+      properties:
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          type: boolean
+        e911_address_id:
+          type: string
+        e911_enabled:
+          type: boolean
+        forward_preserve_ani:
+          type: boolean
+        forward_to_number:
+          description: 'ForwardToNumber / ForwardPreserveANI configure voice_routing_type=forward.
+
+            An empty string on ForwardToNumber leaves the value unchanged — there
+
+            is no "clear the forward target" wire affordance here; switch
+
+            voice_routing_type away from "forward" instead.'
+          type: string
+        trunk_id:
+          type: string
+        voice_destination:
+          type: string
+        voice_failover_destination:
+          type: string
+        voice_routing_type:
+          type: string
     internal_handlers.NumberPricingEntry:
       type: object
       properties:
@@ -3022,6 +2969,109 @@ components:
           type: number
         sku_code:
           type: string
+    internal_handlers.NumbersPage:
+      type: object
+      properties:
+        numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Assignment'
+        page:
+          type: integer
+        size:
+          type: integer
+        total_elements:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.AssignmentWithUsages:
+      type: object
+      properties:
+        acquired_at:
+          type: string
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          description: Service settings are list-only; a missing voice usage means disabled.
+          type: boolean
+        created_at:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        e911_enabled:
+          type: boolean
+        friendly_name:
+          type: string
+        id:
+          type: string
+        locality:
+          type: string
+        monthly_rate_at_assignment:
+          description: Monthly recurring rate captured at the time this number was assigned.
+          type: number
+        npa:
+          type: string
+        number_type:
+          description: did | tfn
+          type: string
+        nxx:
+          type: string
+        poi_lock:
+          description: POILock is set only when the number is POI-locked; omitted otherwise.
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.POILock'
+        procurement_note:
+          type: string
+        procurement_request_id:
+          type: string
+        provider:
+          description: 'Provider records which upstream supplies this TN (IQNT DID integration).
+
+            Deliberately wire-visible — the cart/search flow already surfaces it.'
+          type: string
+        release_reason:
+          type: string
+        released_at:
+          type: string
+        sms_usage:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.SmsUsage'
+        source:
+          description: procure | port_in | claim
+          type: string
+        state:
+          type: string
+        status:
+          description: active | released
+          type: string
+        tn:
+          type: string
+        tniq_application_id:
+          type: string
+        tniq_last_sync_at:
+          type: string
+        trunk_id:
+          type: string
+        trunk_name:
+          type: string
+        updated_at:
+          type: string
+        voice_routing_type:
+          description: 'Voice-routing summary for list rows; null on single-number reads — use
+
+            the embedded voice_usage there.'
+          type: string
+        voice_usage:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.VoiceUsage'
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
     github_com_ringer-warp_api-gateway_internal_numberops.InlineRequest:
       type: object
       additionalProperties: false
@@ -3038,6 +3088,202 @@ components:
         expected_token:
           type: string
           pattern: ^[0-9a-fA-F]{64}$
+    github_com_ringer-warp_api-gateway_internal_models.VoiceUsage:
+      type: object
+      properties:
+        assignment_id:
+          type: string
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          type: boolean
+        cnam_listed_at:
+          type: string
+        created_at:
+          type: string
+        e911_address_id:
+          type: string
+        e911_enabled:
+          type: boolean
+        forward_preserve_ani:
+          type: boolean
+        forward_to_number:
+          description: Destination number or SIP URI used when voice_routing_type is "forward".
+          type: string
+        reject_reason_phrase:
+          type: string
+        reject_response_code:
+          type: integer
+        trunk_id:
+          type: string
+        updated_at:
+          type: string
+        voice_destination:
+          type: string
+        voice_failover_destination:
+          type: string
+        voice_routing_type:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_numberops.BulkAction:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - name
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_cnam
+          name:
+            type: string
+            minLength: 1
+            description: Normalized published CNAM; must remain nonempty and satisfy CNAM normalization.
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        properties:
+          kind:
+            type: string
+            enum:
+            - clear_cnam
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - enabled
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_lookup
+          enabled:
+            type: boolean
+      - type: object
+        additionalProperties: false
+        required:
+        - kind
+        - trunk_id
+        properties:
+          kind:
+            type: string
+            enum:
+            - set_trunk
+          trunk_id:
+            type: string
+            format: uuid
+      discriminator:
+        propertyName: kind
+    github_com_ringer-warp_api-gateway_internal_numberops.PreviewRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - selection
+      - action
+      properties:
+        selection:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Selection'
+        action:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.BulkAction'
+    github_com_ringer-warp_api-gateway_internal_services.BulkAssignResult:
+      type: object
+      properties:
+        cnam_listing_operation_id:
+          description: 'CNAMListingOperationID is the durable number-operation that publishes
+
+            the batch''s cnam_display_name, set by the handler when the listing was
+
+            queued (TNs then carry extras.cnam_listing="queued"). Progress is at
+
+            GET /v1/number-operations/{id}; per-TN outcomes at .../{id}/items.'
+          type: string
+        failed:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_services.BulkAssignTNResult'
+        succeeded:
+          type: integer
+        total:
+          type: integer
+    internal_handlers.UpdateSmsUsageRequest:
+      type: object
+      properties:
+        fallback_inbound_url:
+          type: string
+        inbound_webhook_secret:
+          type: string
+        inbound_webhook_url:
+          type: string
+        mms_enabled:
+          type: boolean
+    internal_handlers.PortOutPINSetResponse:
+      type: object
+      properties:
+        set:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_numbermutation.FieldSnapshot:
+      type: object
+      additionalProperties: false
+      required:
+      - assignment_id
+      - tn
+      - field
+      - value
+      - token
+      - routing_type
+      - trunk_name
+      - editable
+      - reason_code
+      properties:
+        assignment_id:
+          type: string
+          format: uuid
+        tn:
+          type: string
+        field:
+          type: string
+          enum:
+          - cnam
+          - lookup
+          - trunk
+          - friendly_name
+        value:
+          oneOf:
+          - type:
+            - string
+            - 'null'
+          - type: boolean
+        token:
+          type: string
+          pattern: ^[0-9a-fA-F]{64}$
+        routing_type:
+          type:
+          - string
+          - 'null'
+        trunk_name:
+          type:
+          - string
+          - 'null'
+        editable:
+          type: boolean
+        reason_code:
+          type:
+          - string
+          - 'null'
+          enum:
+          - assignment_unavailable
+          - field_changed
+          - unsupported_number_type
+          - trunk_required
+          - trunk_unavailable
+          - publication_rejected
+          - outcome_unknown
+          - service_unavailable
+          - null
     github_com_ringer-warp_api-gateway_internal_numbermutation.Action:
       oneOf:
       - type: object
@@ -3103,23 +3349,142 @@ components:
             maxLength: 255
       discriminator:
         propertyName: kind
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+    github_com_ringer-warp_api-gateway_internal_models.Assignment:
       type: object
       properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
-    internal_handlers.PortOutPINStatusResponse:
-      type: object
-      properties:
-        locked_until:
+        acquired_at:
           type: string
-        set:
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          description: Service settings are list-only; a missing voice usage means disabled.
           type: boolean
+        created_at:
+          type: string
+        customer_id:
+          type: string
+        description:
+          type: string
+        e911_enabled:
+          type: boolean
+        friendly_name:
+          type: string
+        id:
+          type: string
+        locality:
+          type: string
+        monthly_rate_at_assignment:
+          description: Monthly recurring rate captured at the time this number was assigned.
+          type: number
+        npa:
+          type: string
+        number_type:
+          description: did | tfn
+          type: string
+        nxx:
+          type: string
+        procurement_note:
+          type: string
+        procurement_request_id:
+          type: string
+        provider:
+          description: 'Provider records which upstream supplies this TN (IQNT DID integration).
+
+            Deliberately wire-visible — the cart/search flow already surfaces it.'
+          type: string
+        release_reason:
+          type: string
+        released_at:
+          type: string
+        sms_usage:
+          description: 'SMS summary for list rows; null on single-number reads — use the
+
+            embedded sms_usage there.'
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.SmsUsage'
+        source:
+          description: procure | port_in | claim
+          type: string
+        state:
+          type: string
+        status:
+          description: active | released
+          type: string
+        tn:
+          type: string
+        tniq_application_id:
+          type: string
+        tniq_last_sync_at:
+          type: string
+        trunk_id:
+          type: string
+        trunk_name:
+          type: string
+        updated_at:
+          type: string
+        voice_routing_type:
+          description: 'Voice-routing summary for list rows; null on single-number reads — use
+
+            the embedded voice_usage there.'
+          type: string
+    internal_handlers.ReleaseNumberResponse:
+      type: object
+      properties:
+        released:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.POILock:
+      type: object
+      properties:
+        account:
+          description: referenced at the account level
+          type: boolean
+        locked:
+          type: boolean
+        trunk_groups:
+          description: never null; empty array when no trunks reference this number
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.POITrunkRef'
+    github_com_ringer-warp_api-gateway_internal_numberops.InventoryFilter:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - active
+          - held
+        search:
+          type: string
+        type:
+          type: string
+          enum:
+          - did
+          - tfn
+        voice_configured:
+          type: boolean
+        sms_configured:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.POITrunkRef:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
     github_com_ringer-warp_api-gateway_internal_models.SmsUsage:
       type: object
       properties:
@@ -3147,30 +3512,19 @@ components:
           type: string
         updated_at:
           type: string
-    github_com_ringer-warp_api-gateway_internal_services.BulkAssignTNResult:
+    internal_handlers.PortOutPINStatusResponse:
       type: object
       properties:
-        assignment_id:
+        locked_until:
           type: string
-        error:
+        set:
+          type: boolean
+    internal_handlers.AssignNumberRequest:
+      type: object
+      properties:
+        description:
           type: string
-        extras:
-          description: 'Extras carries per-option outcomes of the OPTIONAL post-procurement
-
-            extras (cnam_dip / cnam_listing / campaign), populated by the HANDLER
-
-            layer after BulkAssign returns, and of the service''s own post-procurement
-
-            voice write (voice_routing). Extras are best-effort: an extras failure
-
-            never changes Status.'
-          type: object
-          additionalProperties:
-            type: string
-        status:
-          description: '"ok" | "failed"'
-          type: string
-        tn:
+        friendly_name:
           type: string
     github_com_ringer-warp_api-gateway_internal_services.SearchResponse:
       type: object
@@ -3185,6 +3539,77 @@ components:
           type: integer
         total_elements:
           type: integer
+    internal_handlers.BulkAssignRequest:
+      type: object
+      properties:
+        campaign_id:
+          type: string
+        cnam_display_name:
+          type: string
+        cnam_enabled:
+          description: 'Optional post-procurement extras, applied per successfully assigned TN
+
+            (best-effort; outcomes in each result''s extras map, never failing the
+
+            batch). CNAMEnabled turns on the inbound caller-name dip (requires the
+
+            TN to be routed to a trunk — trunkless TNs report skipped_no_trunk).
+
+            CNAMDisplayName sets one outbound CNARG listing name (≤15 chars A–Z,
+
+            0–9, spaces; DIDs only) on every TN in the batch.
+
+            CampaignID attaches all assigned TNs to that 10DLC messaging campaign.'
+          type: boolean
+        default_trunk_id:
+          type: string
+        forward_preserve_ani:
+          type: boolean
+        forward_to_number:
+          type: string
+        note:
+          type: string
+        per_tn_overrides:
+          type: object
+          additionalProperties:
+            type: string
+        provider_by_tn:
+          description: 'ProviderByTN routes each TN to the DID provider that should fulfill it
+
+            ("TNIQ" | "INTELIQUENT"); missing/empty entries default to TNIQ.
+
+            Sourcing is automatic from the cart the customer built via search — a
+
+            caller-spoofed key is harmless: the wrong vendor simply doesn''t have
+
+            that TN in its own inventory, so the order fails per-TN rather than
+
+            misattributing cost.'
+          type: object
+          additionalProperties:
+            type: string
+        routing_type:
+          description: 'RoutingType selects batch-level voice routing: "trunk" (default when
+
+            trunk fields are present), "forward", or "reject". Voicemail is not
+
+            yet available and 400s. Forward and reject ignore trunk fields.'
+          type: string
+        tn_metadata:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/internal_handlers.BulkAssignTNMetadata'
+        tns:
+          type: array
+          items:
+            type: string
+    internal_handlers.BulkAssignTNMetadata:
+      type: object
+      properties:
+        locality:
+          type: string
+        state:
+          type: string
     internal_handlers.BulkRouteRequest:
       type: object
       properties:
@@ -3194,92 +3619,23 @@ components:
             type: string
         trunk_id:
           type: string
-    github_com_ringer-warp_api-gateway_internal_models.VoiceUsage:
-      type: object
-      properties:
-        assignment_id:
-          type: string
-        cnam_display_name:
-          type: string
-        cnam_enabled:
-          type: boolean
-        cnam_listed_at:
-          type: string
-        created_at:
-          type: string
-        e911_address_id:
-          type: string
-        e911_enabled:
-          type: boolean
-        forward_preserve_ani:
-          type: boolean
-        forward_to_number:
-          description: Destination number or SIP URI used when voice_routing_type is "forward".
-          type: string
-        reject_reason_phrase:
-          type: string
-        reject_response_code:
-          type: integer
-        trunk_id:
-          type: string
-        updated_at:
-          type: string
-        voice_destination:
-          type: string
-        voice_failover_destination:
-          type: string
-        voice_routing_type:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_numberops.OperationPage:
+    github_com_ringer-warp_api-gateway_internal_numberops.Capabilities:
       type: object
       additionalProperties: false
       required:
-      - items
-      - next_cursor
+      - available
+      - all_matching_enabled
+      - max_matching
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.OperationItem'
-        next_cursor:
+        available:
+          type: boolean
+        all_matching_enabled:
+          type: boolean
+        max_matching:
           type:
-          - string
+          - integer
           - 'null'
-    internal_handlers.NumberPricingResponse:
-      type: object
-      properties:
-        did:
-          $ref: '#/components/schemas/internal_handlers.NumberPricingEntry'
-        tfn:
-          $ref: '#/components/schemas/internal_handlers.NumberPricingEntry'
-    internal_handlers.AssignNumberRequest:
-      type: object
-      properties:
-        description:
-          type: string
-        friendly_name:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.APIError:
-      type: object
-      properties:
-        code:
-          type: string
-        details:
-          type: object
-          additionalProperties: true
-        message:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_numberops.PreviewRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - selection
-      - action
-      properties:
-        selection:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.Selection'
-        action:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.BulkAction'
+          minimum: 1
     github_com_ringer-warp_api-gateway_internal_numberops.NumberOperation:
       type: object
       additionalProperties: false
@@ -3382,453 +3738,15 @@ components:
           type: string
         friendly_name:
           type: string
-    internal_handlers.BulkAssignRequest:
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
       type: object
       properties:
-        campaign_id:
+        code:
           type: string
-        cnam_display_name:
-          type: string
-        cnam_enabled:
-          description: 'Optional post-procurement extras, applied per successfully assigned TN
-
-            (best-effort; outcomes in each result''s extras map, never failing the
-
-            batch). CNAMEnabled turns on the inbound caller-name dip (requires the
-
-            TN to be routed to a trunk — trunkless TNs report skipped_no_trunk).
-
-            CNAMDisplayName sets one outbound CNARG listing name (≤15 chars A–Z,
-
-            0–9, spaces; DIDs only) on every TN in the batch.
-
-            CampaignID attaches all assigned TNs to that 10DLC messaging campaign.'
-          type: boolean
-        default_trunk_id:
-          type: string
-        forward_preserve_ani:
-          type: boolean
-        forward_to_number:
-          type: string
-        note:
-          type: string
-        per_tn_overrides:
+        details:
           type: object
-          additionalProperties:
-            type: string
-        provider_by_tn:
-          description: 'ProviderByTN routes each TN to the DID provider that should fulfill it
-
-            ("TNIQ" | "INTELIQUENT"); missing/empty entries default to TNIQ.
-
-            Sourcing is automatic from the cart the customer built via search — a
-
-            caller-spoofed key is harmless: the wrong vendor simply doesn''t have
-
-            that TN in its own inventory, so the order fails per-TN rather than
-
-            misattributing cost.'
-          type: object
-          additionalProperties:
-            type: string
-        routing_type:
-          description: 'RoutingType selects batch-level voice routing: "trunk" (default when
-
-            trunk fields are present), "forward", or "reject". Voicemail is not
-
-            yet available and 400s. Forward and reject ignore trunk fields.'
-          type: string
-        tn_metadata:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/internal_handlers.BulkAssignTNMetadata'
-        tns:
-          type: array
-          items:
-            type: string
-    internal_handlers.ReleaseNumberResponse:
-      type: object
-      properties:
-        released:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_models.POILock:
-      type: object
-      properties:
-        account:
-          description: referenced at the account level
-          type: boolean
-        locked:
-          type: boolean
-        trunk_groups:
-          description: never null; empty array when no trunks reference this number
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.POITrunkRef'
-    github_com_ringer-warp_api-gateway_internal_numberops.BulkAction:
-      oneOf:
-      - type: object
-        additionalProperties: false
-        required:
-        - kind
-        - name
-        properties:
-          kind:
-            type: string
-            enum:
-            - set_cnam
-          name:
-            type: string
-            minLength: 1
-            description: Normalized published CNAM; must remain nonempty and satisfy CNAM normalization.
-      - type: object
-        additionalProperties: false
-        required:
-        - kind
-        properties:
-          kind:
-            type: string
-            enum:
-            - clear_cnam
-      - type: object
-        additionalProperties: false
-        required:
-        - kind
-        - enabled
-        properties:
-          kind:
-            type: string
-            enum:
-            - set_lookup
-          enabled:
-            type: boolean
-      - type: object
-        additionalProperties: false
-        required:
-        - kind
-        - trunk_id
-        properties:
-          kind:
-            type: string
-            enum:
-            - set_trunk
-          trunk_id:
-            type: string
-            format: uuid
-      discriminator:
-        propertyName: kind
-    github_com_ringer-warp_api-gateway_internal_numberops.InventoryFilter:
-      type: object
-      additionalProperties: false
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          enum:
-          - active
-          - held
-        search:
-          type: string
-        type:
-          type: string
-          enum:
-          - did
-          - tfn
-        voice_configured:
-          type: boolean
-        sms_configured:
-          type: boolean
-    internal_handlers.ReleaseNumberRequest:
-      type: object
-      properties:
-        reason:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_numberops.Capabilities:
-      type: object
-      additionalProperties: false
-      required:
-      - available
-      - all_matching_enabled
-      - max_matching
-      properties:
-        available:
-          type: boolean
-        all_matching_enabled:
-          type: boolean
-        max_matching:
-          type:
-          - integer
-          - 'null'
-          minimum: 1
-    github_com_ringer-warp_api-gateway_internal_services.BulkAssignResult:
-      type: object
-      properties:
-        cnam_listing_operation_id:
-          description: 'CNAMListingOperationID is the durable number-operation that publishes
-
-            the batch''s cnam_display_name, set by the handler when the listing was
-
-            queued (TNs then carry extras.cnam_listing="queued"). Progress is at
-
-            GET /v1/number-operations/{id}; per-TN outcomes at .../{id}/items.'
-          type: string
-        failed:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_services.BulkAssignTNResult'
-        succeeded:
-          type: integer
-        total:
-          type: integer
-    github_com_ringer-warp_api-gateway_internal_models.Assignment:
-      type: object
-      properties:
-        acquired_at:
-          type: string
-        cnam_display_name:
-          type: string
-        cnam_enabled:
-          description: Service settings are list-only; a missing voice usage means disabled.
-          type: boolean
-        created_at:
-          type: string
-        customer_id:
-          type: string
-        description:
-          type: string
-        e911_enabled:
-          type: boolean
-        friendly_name:
-          type: string
-        id:
-          type: string
-        locality:
-          type: string
-        monthly_rate_at_assignment:
-          description: Monthly recurring rate captured at the time this number was assigned.
-          type: number
-        npa:
-          type: string
-        number_type:
-          description: did | tfn
-          type: string
-        nxx:
-          type: string
-        procurement_note:
-          type: string
-        procurement_request_id:
-          type: string
-        provider:
-          description: 'Provider records which upstream supplies this TN (IQNT DID integration).
-
-            Deliberately wire-visible — the cart/search flow already surfaces it.'
-          type: string
-        release_reason:
-          type: string
-        released_at:
-          type: string
-        sms_usage:
-          description: 'SMS summary for list rows; null on single-number reads — use the
-
-            embedded sms_usage there.'
-          allOf:
-          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.SmsUsage'
-        source:
-          description: procure | port_in | claim
-          type: string
-        state:
-          type: string
-        status:
-          description: active | released
-          type: string
-        tn:
-          type: string
-        tniq_application_id:
-          type: string
-        tniq_last_sync_at:
-          type: string
-        trunk_id:
-          type: string
-        trunk_name:
-          type: string
-        updated_at:
-          type: string
-        voice_routing_type:
-          description: 'Voice-routing summary for list rows; null on single-number reads — use
-
-            the embedded voice_usage there.'
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.AssignmentWithUsages:
-      type: object
-      properties:
-        acquired_at:
-          type: string
-        cnam_display_name:
-          type: string
-        cnam_enabled:
-          description: Service settings are list-only; a missing voice usage means disabled.
-          type: boolean
-        created_at:
-          type: string
-        customer_id:
-          type: string
-        description:
-          type: string
-        e911_enabled:
-          type: boolean
-        friendly_name:
-          type: string
-        id:
-          type: string
-        locality:
-          type: string
-        monthly_rate_at_assignment:
-          description: Monthly recurring rate captured at the time this number was assigned.
-          type: number
-        npa:
-          type: string
-        number_type:
-          description: did | tfn
-          type: string
-        nxx:
-          type: string
-        poi_lock:
-          description: POILock is set only when the number is POI-locked; omitted otherwise.
-          allOf:
-          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.POILock'
-        procurement_note:
-          type: string
-        procurement_request_id:
-          type: string
-        provider:
-          description: 'Provider records which upstream supplies this TN (IQNT DID integration).
-
-            Deliberately wire-visible — the cart/search flow already surfaces it.'
-          type: string
-        release_reason:
-          type: string
-        released_at:
-          type: string
-        sms_usage:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.SmsUsage'
-        source:
-          description: procure | port_in | claim
-          type: string
-        state:
-          type: string
-        status:
-          description: active | released
-          type: string
-        tn:
-          type: string
-        tniq_application_id:
-          type: string
-        tniq_last_sync_at:
-          type: string
-        trunk_id:
-          type: string
-        trunk_name:
-          type: string
-        updated_at:
-          type: string
-        voice_routing_type:
-          description: 'Voice-routing summary for list rows; null on single-number reads — use
-
-            the embedded voice_usage there.'
-          type: string
-        voice_usage:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.VoiceUsage'
-    internal_handlers.UpdateSmsUsageRequest:
-      type: object
-      properties:
-        fallback_inbound_url:
-          type: string
-        inbound_webhook_secret:
-          type: string
-        inbound_webhook_url:
-          type: string
-        mms_enabled:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_models.Meta:
-      type: object
-      properties:
-        page:
-          type: integer
-        per_page:
-          type: integer
-        total:
-          type: integer
-        total_pages:
-          type: integer
-    github_com_ringer-warp_api-gateway_internal_services.SearchResult:
-      type: object
-      properties:
-        locality:
-          type: string
-        monthly_rate:
-          type: number
-        npa:
-          type: string
-        number_type:
-          type: string
-        nxx:
-          type: string
-        provider:
-          description: 'Provider identifies which upstream returned this candidate: "TNIQ" or
-
-            a fallback provider''s Key() (e.g. "INTELIQUENT"). Explicit beats
-
-            implicit on the wire — set on every result, including primary-path
-
-            TNIQ hits.'
-          type: string
-        reservation_expires_at:
-          type: string
-        reservation_status:
-          description: '"spare" — DID inventory and TFN search-spare both browse without reserving; nothing here is pre-reserved'
-          type: string
-        state:
-          type: string
-        tn:
-          type: string
-    internal_handlers.UpdateVoiceUsageRequest:
-      type: object
-      properties:
-        cnam_display_name:
-          type: string
-        cnam_enabled:
-          type: boolean
-        e911_address_id:
-          type: string
-        e911_enabled:
-          type: boolean
-        forward_preserve_ani:
-          type: boolean
-        forward_to_number:
-          description: 'ForwardToNumber / ForwardPreserveANI configure voice_routing_type=forward.
-
-            An empty string on ForwardToNumber leaves the value unchanged — there
-
-            is no "clear the forward target" wire affordance here; switch
-
-            voice_routing_type away from "forward" instead.'
-          type: string
-        trunk_id:
-          type: string
-        voice_destination:
-          type: string
-        voice_failover_destination:
-          type: string
-        voice_routing_type:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.POITrunkRef:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
+          additionalProperties: true
+        message:
           type: string
     github_com_ringer-warp_api-gateway_internal_numberops.OperationItem:
       type: object
@@ -3871,12 +3789,49 @@ components:
           - null
         retryable:
           type: boolean
+    github_com_ringer-warp_api-gateway_internal_numberops.Selection:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        required:
+        - mode
+        - assignment_ids
+        properties:
+          mode:
+            type: string
+            enum:
+            - explicit
+          assignment_ids:
+            type: array
+            minItems: 1
+            maxItems: 10000
+            items:
+              type: string
+              format: uuid
+      - type: object
+        additionalProperties: false
+        required:
+        - mode
+        - filters
+        - excluded_assignment_ids
+        properties:
+          mode:
+            type: string
+            enum:
+            - all_matching
+          filters:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_numberops.InventoryFilter'
+          excluded_assignment_ids:
+            type: array
+            maxItems: 10000
+            items:
+              type: string
+              format: uuid
+      discriminator:
+        propertyName: mode
   securitySchemes:
     ApiKeyAuth:
       description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

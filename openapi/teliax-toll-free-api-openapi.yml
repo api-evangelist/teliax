@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Toll Free API
-  version: v1
+  title: TNIQ by Ringer — Customer Toll Free API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Toll-Free across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -106,13 +106,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/{tmplName}/unlock:
     put:
       tags:
@@ -149,13 +142,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/{tmplName}/lock:
     put:
       tags:
@@ -192,13 +178,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/query:
     put:
       tags:
@@ -235,13 +214,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/{tmplName}/disconnect:
     post:
       tags:
@@ -278,13 +250,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/drafts:
     get:
       tags:
@@ -332,13 +297,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/drafts/{draftId}/push:
     post:
       tags:
@@ -371,13 +329,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/copy:
     post:
       tags:
@@ -410,13 +361,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/search-spare:
     post:
       tags:
@@ -449,13 +393,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/search-and-reserve:
     post:
       tags:
@@ -488,13 +425,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/reserve:
     post:
       tags:
@@ -527,13 +457,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/ptr-operations/{id}/retry:
     post:
       tags:
@@ -555,13 +478,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/TollFreePtrOperationDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/disconnect/{num}:
     post:
       tags:
@@ -593,13 +509,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/change-resporg:
     post:
       tags:
@@ -629,13 +538,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/activate:
     post:
       tags:
@@ -680,13 +582,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ActivateBatchResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/{tmplName}:
     get:
       tags:
@@ -763,13 +658,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/{tmplName}/history:
     get:
       tags:
@@ -801,13 +689,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/{tmplName}/history/{effDtTm}/{activityTimestamp}:
     get:
       tags:
@@ -849,13 +730,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/templates/drafts/{draftId}:
     get:
       tags:
@@ -909,13 +783,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/status:
     get:
       tags:
@@ -930,13 +797,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/reserved-numbers:
     get:
       tags:
@@ -963,13 +823,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/ptr-operations:
     get:
       tags:
@@ -998,13 +851,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TollFreePtrOperationDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/ptr-operations/{id}:
     get:
       tags:
@@ -1026,13 +872,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/TollFreePtrOperationDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/pointer-record/{num}:
     get:
       tags:
@@ -1064,13 +903,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/inventory:
     get:
       tags:
@@ -1116,13 +948,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/inventory/summary:
     get:
       tags:
@@ -1144,13 +969,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/history/{tfn}:
     get:
       tags:
@@ -1182,13 +1000,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/entities/{entityId}/respOrgs:
     get:
       tags:
@@ -1209,13 +1020,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/entities/{entityId}/respOrgs/active:
     get:
       tags:
@@ -1236,13 +1040,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/customer-config:
     get:
       tags:
@@ -1264,13 +1061,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/tollfree/reserve/{tfn}:
     delete:
       tags:
@@ -1302,165 +1092,8 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
-    ReserveRequest:
-      required:
-      - numbers
-      type: object
-      properties:
-        numbers:
-          type: array
-          items:
-            type: string
-    TemplateCreateRequest:
-      required:
-      - effDtTm
-      - tmplName
-      type: object
-      properties:
-        tmplName:
-          pattern: ^[*][a-zA-Z0-9]{2}[a-zA-Z0-9\-]{1,12}$
-          type: string
-        effDtTm:
-          type: string
-        tmplDesc:
-          type: string
-        cmd:
-          type: string
-        timezone:
-          type: string
-        dayLightSavings:
-          type: string
-        priInterLT:
-          type: string
-        priIntraLT:
-          type: string
-        interLATACarrier:
-          type: array
-          items:
-            type: string
-        intraLATACarrier:
-          type: array
-          items:
-            type: string
-        numTermLine:
-          type: integer
-          format: int32
-        conName:
-          type: string
-        conTel:
-          type: string
-        notes:
-          type: string
-        aos:
-          type: object
-        cprSectName:
-          type: array
-          items:
-            type: object
-        lbl:
-          type: array
-          items:
-            type: object
-    ActivateRequest:
-      required:
-      - effDtTm
-      - numbers
-      - svcOrderNum
-      - tmplName
-      type: object
-      properties:
-        numbers:
-          type: array
-          items:
-            type: string
-        tmplName:
-          type: string
-        effDtTm:
-          type: string
-        svcOrderNum:
-          type: string
-    TemplateCopyRequest:
-      required:
-      - srcEffDtTm
-      - srcTmplName
-      - tgtEffDtTm
-      - tgtTmplName
-      type: object
-      properties:
-        srcTmplName:
-          type: string
-        srcEffDtTm:
-          type: string
-        tgtTmplName:
-          pattern: ^[*][a-zA-Z0-9]{2}[a-zA-Z0-9\-]{1,12}$
-          type: string
-        tgtEffDtTm:
-          type: string
-    TemplateDraftDto:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        customerId:
-          type: string
-          format: uuid
-        tmplName:
-          type: string
-        effDtTm:
-          type: string
-        status:
-          type: string
-        cprData:
-          type: object
-        createdBy:
-          type: string
-        updatedBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        somosRecVersionId:
-          type: string
-    ActivationResultDto:
-      type: object
-      properties:
-        num:
-          type: string
-          description: 10-digit toll-free number
-        success:
-          type: boolean
-          description: Whether the pointer-record submit was accepted — MUST be checked per item
-        tmplName:
-          type: string
-          description: CPR template applied
-        effDtTm:
-          type: string
-          description: Normalized effective date/time actually sent to Somos (quarter-hour aligned)
-        errorMessage:
-          type: string
-          description: 'Failure detail incl. Somos error codes (e.g. ''599049: Service Order: ...'')'
-        operationId:
-          type: string
-          description: tollfree_ptr_operations row id for this attempt
-          format: uuid
-        inventoryId:
-          type: string
-          description: number_inventory row id written through on success
-          format: uuid
-      description: Per-number activation outcomes
     TollFreePtrOperationDto:
       type: object
       properties:
@@ -1548,6 +1181,166 @@ components:
         parentOperationId:
           type: string
           format: uuid
+    ActivateRequest:
+      required:
+      - effDtTm
+      - numbers
+      - svcOrderNum
+      - tmplName
+      type: object
+      properties:
+        numbers:
+          type: array
+          items:
+            type: string
+        tmplName:
+          type: string
+        effDtTm:
+          type: string
+        svcOrderNum:
+          type: string
+    TemplateCopyRequest:
+      required:
+      - srcEffDtTm
+      - srcTmplName
+      - tgtEffDtTm
+      - tgtTmplName
+      type: object
+      properties:
+        srcTmplName:
+          type: string
+        srcEffDtTm:
+          type: string
+        tgtTmplName:
+          pattern: ^[*][a-zA-Z0-9]{2}[a-zA-Z0-9\-]{1,12}$
+          type: string
+        tgtEffDtTm:
+          type: string
+    ActivationResultDto:
+      type: object
+      properties:
+        num:
+          type: string
+          description: 10-digit toll-free number
+        success:
+          type: boolean
+          description: Whether the pointer-record submit was accepted — MUST be checked per item
+        tmplName:
+          type: string
+          description: CPR template applied
+        effDtTm:
+          type: string
+          description: Normalized effective date/time actually sent to Somos (quarter-hour aligned)
+        errorMessage:
+          type: string
+          description: 'Failure detail incl. Somos error codes (e.g. ''599049: Service Order: ...'')'
+        operationId:
+          type: string
+          description: tollfree_ptr_operations row id for this attempt
+          format: uuid
+        inventoryId:
+          type: string
+          description: number_inventory row id written through on success
+          format: uuid
+      description: Per-number activation outcomes
+    ReserveRequest:
+      required:
+      - numbers
+      type: object
+      properties:
+        numbers:
+          type: array
+          items:
+            type: string
+    TemplateCreateRequest:
+      required:
+      - effDtTm
+      - tmplName
+      type: object
+      properties:
+        tmplName:
+          pattern: ^[*][a-zA-Z0-9]{2}[a-zA-Z0-9\-]{1,12}$
+          type: string
+        effDtTm:
+          type: string
+        tmplDesc:
+          type: string
+        cmd:
+          type: string
+        timezone:
+          type: string
+        dayLightSavings:
+          type: string
+        priInterLT:
+          type: string
+        priIntraLT:
+          type: string
+        interLATACarrier:
+          type: array
+          items:
+            type: string
+        intraLATACarrier:
+          type: array
+          items:
+            type: string
+        numTermLine:
+          type: integer
+          format: int32
+        conName:
+          type: string
+        conTel:
+          type: string
+        notes:
+          type: string
+        aos:
+          type: object
+        cprSectName:
+          type: array
+          items:
+            type: object
+        lbl:
+          type: array
+          items:
+            type: object
+    TemplateDraftDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        tmplName:
+          type: string
+        effDtTm:
+          type: string
+        status:
+          type: string
+        cprData:
+          type: object
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        somosRecVersionId:
+          type: string
+    SpareSearchRequest:
+      required:
+      - pattern
+      type: object
+      properties:
+        pattern:
+          type: string
+        quantity:
+          type: integer
+          format: int32
     TemplateUpdateRequest:
       required:
       - effDtTm
@@ -1603,16 +1396,6 @@ components:
           type: string
         tmplRecCompPart:
           type: string
-    SpareSearchRequest:
-      required:
-      - pattern
-      type: object
-      properties:
-        pattern:
-          type: string
-        quantity:
-          type: integer
-          format: int32
     ActivateBatchResponse:
       type: object
       properties:
@@ -1636,6 +1419,3 @@ components:
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Messaging Brands API
-  version: v1
+  title: TNIQ by Ringer — Customer Messaging Brands API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Messaging Brands across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -103,13 +103,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/revet:
     put:
       tags:
@@ -136,13 +129,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/application:
     put:
       tags:
@@ -176,13 +162,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands:
     get:
       tags:
@@ -249,13 +228,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/vetting:
     post:
       tags:
@@ -288,13 +260,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/vetting/{vettingId}/appeal:
     post:
       tags:
@@ -332,13 +297,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/vetting/import:
     post:
       tags:
@@ -371,13 +329,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/transfer:
     post:
       tags:
@@ -405,13 +356,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/cnp-register:
     post:
       tags:
@@ -439,13 +383,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/appeal:
     post:
       tags:
@@ -478,13 +415,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/appeal-evidence:
     post:
       tags:
@@ -522,13 +452,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/link:
     post:
       tags:
@@ -556,13 +479,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/vetting/providers:
     get:
       tags:
@@ -576,13 +492,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/lookup/{tcrBrandId}:
     get:
       tags:
@@ -603,13 +512,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/appeal-categories/vet:
     get:
       tags:
@@ -623,13 +525,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/appeal-categories/identity:
     get:
       tags:
@@ -643,13 +538,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/messaging/brands/{brandId}/appeal-evidence/{attachmentId}:
     delete:
       tags:
@@ -681,27 +569,26 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
-    SubmitVettingRequest:
+    LinkBrandRequest:
       required:
-      - evpId
-      - vettingClass
+      - tcrBrandId
       type: object
       properties:
-        evpId:
+        tcrBrandId:
           type: string
-        vettingClass:
+    BindApplicationRequest:
+      required:
+      - applicationId
+      type: object
+      properties:
+        applicationId:
           type: string
-        additionalRequestPayload:
-          type: string
+        applicationMetadata:
+          type: object
+          additionalProperties:
+            type: object
     CreateBrandRequest:
       required:
       - displayName
@@ -755,30 +642,18 @@ components:
           type: object
           additionalProperties:
             type: object
-    LinkBrandRequest:
+    SubmitVettingRequest:
       required:
-      - tcrBrandId
+      - evpId
+      - vettingClass
       type: object
       properties:
-        tcrBrandId:
+        evpId:
           type: string
-    TransferRequest:
-      type: object
-      properties:
-        toCustomerId:
+        vettingClass:
           type: string
-          format: uuid
-    BindApplicationRequest:
-      required:
-      - applicationId
-      type: object
-      properties:
-        applicationId:
+        additionalRequestPayload:
           type: string
-        applicationMetadata:
-          type: object
-          additionalProperties:
-            type: object
     ImportVettingRequest:
       required:
       - evpId
@@ -791,23 +666,12 @@ components:
           type: string
         vettingToken:
           type: string
-    SubmitIdentityAppealRequest:
-      required:
-      - appealCategories
+    TransferRequest:
       type: object
       properties:
-        appealCategories:
-          type: array
-          items:
-            type: string
-        explanation:
-          maxLength: 1024
-          minLength: 0
+        toCustomerId:
           type: string
-        attachmentUuids:
-          type: array
-          items:
-            type: string
+          format: uuid
     SubmitVetAppealRequest:
       required:
       - appealCategories
@@ -828,12 +692,26 @@ components:
           type: array
           items:
             type: string
+    SubmitIdentityAppealRequest:
+      required:
+      - appealCategories
+      type: object
+      properties:
+        appealCategories:
+          type: array
+          items:
+            type: string
+        explanation:
+          maxLength: 1024
+          minLength: 0
+          type: string
+        attachmentUuids:
+          type: array
+          items:
+            type: string
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

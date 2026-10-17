@@ -1,14 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Teliax Route Link API
+  title: Telique Telecom Route Link API
   version: 2026.6.25
+  description: 'Unified Telique telecom data API. Consolidated from 4 services: lrn, cnam, lerg, routelink.
+
+
+    Get your API token at telique.ringer.tel.'
   contact:
     name: Ringer Support
     email: support@ringer.com
     url: https://telique.ringer.tel
   license:
     name: Proprietary
-  description: 'Operations tagged RouteLink across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.telique.ringer.tel
   description: Production
@@ -81,9 +84,6 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/cicror/{crn}/{ani}/{lata}:
     get:
       operationId: lookupCicRor
@@ -131,9 +131,6 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/ror/{crn}:
     get:
       operationId: lookupRor
@@ -183,9 +180,6 @@ paths:
           $ref: '#/components/responses/RateLimited'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/ror/{ror}/tfns:
     get:
       operationId: lookupTfnsByRor
@@ -253,9 +247,6 @@ paths:
           $ref: '#/components/responses/RateLimited'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/ror/{ror}/cprs:
     get:
       operationId: lookupCprsByRor
@@ -317,9 +308,6 @@ paths:
           $ref: '#/components/responses/RateLimited'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/cpr/{crn}:
     get:
       operationId: dumpCpr
@@ -404,11 +392,48 @@ paths:
           $ref: '#/components/responses/RateLimited'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
 components:
   schemas:
+    CprDumpResponse:
+      type: object
+      properties:
+        crn:
+          type: string
+          description: 10-digit CRN (zero-padded)
+          example: '8002211212'
+        ror:
+          type:
+          - string
+          - 'null'
+          description: Responsible Organization code, or null if the CRN has no ROR assigned
+          example: ATX01
+        cpr_sha1:
+          type:
+          - string
+          - 'null'
+          description: SHA-1 hash of the CPR content, or null if the CRN has no CPR
+          example: f4fbadea1aed0c596ef3a764b364485ad945af92
+        cpr_json:
+          type:
+          - object
+          - 'null'
+          description: Raw CPR decision tree as JSON. Omitted from the response when the CRN has no CPR.
+        tree_text:
+          type: string
+          description: Human-readable rendering of the CPR decision tree (empty string if the CRN has no CPR)
+          example: '-> Template 0000350718
+
+            '
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-04-04 14:32:15.123456+00:00
+      required:
+      - crn
+      - ror
+      - cpr_sha1
+      - tree_text
+      - timestamp
     TfnsByRorResponse:
       type: object
       properties:
@@ -443,24 +468,6 @@ components:
       - tfns
       - limit
       - offset
-      - timestamp
-    CicResponse:
-      type: object
-      properties:
-        carrier:
-          type: string
-          description: 4-digit Carrier Identification Code (zero-padded)
-          example: 0288
-        networkmanagementclass:
-          type: integer
-          description: Network Management Class (present only when the CPR specifies one)
-          example: 14
-        timestamp:
-          type: string
-          format: date-time
-          example: 2026-04-04 14:32:15.123456+00:00
-      required:
-      - carrier
       - timestamp
     CprsByRorResponse:
       type: object
@@ -530,45 +537,23 @@ components:
       required:
       - ror
       - timestamp
-    CprDumpResponse:
+    CicResponse:
       type: object
       properties:
-        crn:
+        carrier:
           type: string
-          description: 10-digit CRN (zero-padded)
-          example: '8002211212'
-        ror:
-          type:
-          - string
-          - 'null'
-          description: Responsible Organization code, or null if the CRN has no ROR assigned
-          example: ATX01
-        cpr_sha1:
-          type:
-          - string
-          - 'null'
-          description: SHA-1 hash of the CPR content, or null if the CRN has no CPR
-          example: f4fbadea1aed0c596ef3a764b364485ad945af92
-        cpr_json:
-          type:
-          - object
-          - 'null'
-          description: Raw CPR decision tree as JSON. Omitted from the response when the CRN has no CPR.
-        tree_text:
-          type: string
-          description: Human-readable rendering of the CPR decision tree (empty string if the CRN has no CPR)
-          example: '-> Template 0000350718
-
-            '
+          description: 4-digit Carrier Identification Code (zero-padded)
+          example: 0288
+        networkmanagementclass:
+          type: integer
+          description: Network Management Class (present only when the CPR specifies one)
+          example: 14
         timestamp:
           type: string
           format: date-time
           example: 2026-04-04 14:32:15.123456+00:00
       required:
-      - crn
-      - ror
-      - cpr_sha1
-      - tree_text
+      - carrier
       - timestamp
     ErrorResponse:
       type: object
@@ -601,6 +586,34 @@ components:
           description: Optional structured context; omitted when absent.
           additionalProperties: true
   parameters:
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of results to return (default 1000, max 10000)
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        default: 1000
+    ani:
+      name: ani
+      in: path
+      required: true
+      description: 10-digit caller number / Automatic Number Identification (digits only)
+      schema:
+        type: string
+        pattern: ^\d{10}$
+        example: '2125551234'
+    crn:
+      name: crn
+      in: path
+      required: true
+      description: 10-digit toll-free number (digits only)
+      schema:
+        type: string
+        pattern: ^\d{10}$
+        example: '8005551234'
     offset:
       name: offset
       in: query
@@ -610,6 +623,15 @@ components:
         type: integer
         minimum: 0
         default: 0
+    ror:
+      name: ror
+      in: path
+      required: true
+      description: 1–5 character Responsible Organization code (alphanumeric, case-insensitive)
+      schema:
+        type: string
+        pattern: ^[A-Za-z0-9]{1,5}$
+        example: ATX01
     format:
       name: format
       in: query
@@ -622,15 +644,6 @@ components:
         - json
         - xml
         default: plain
-    ani:
-      name: ani
-      in: path
-      required: true
-      description: 10-digit caller number / Automatic Number Identification (digits only)
-      schema:
-        type: string
-        pattern: ^\d{10}$
-        example: '2125551234'
     lata:
       name: lata
       in: path
@@ -640,34 +653,6 @@ components:
         type: string
         pattern: ^\d{3}$
         example: '820'
-    crn:
-      name: crn
-      in: path
-      required: true
-      description: 10-digit toll-free number (digits only)
-      schema:
-        type: string
-        pattern: ^\d{10}$
-        example: '8005551234'
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of results to return (default 1000, max 10000)
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 10000
-        default: 1000
-    ror:
-      name: ror
-      in: path
-      required: true
-      description: 1–5 character Responsible Organization code (alphanumeric, case-insensitive)
-      schema:
-        type: string
-        pattern: ^[A-Za-z0-9]{1,5}$
-        example: ATX01
   responses:
     BadRequest:
       description: Invalid request parameters (malformed CRN, ANI, LATA, or ROR)
@@ -680,17 +665,6 @@ components:
             error_code: 400
             error_type: parse
             error_desc: 'Invalid CRN format: abc'
-    InternalError:
-      description: CPR interpretation failed (malformed routing tree, missing template, or unexpected interpreter error)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            error: true
-            error_code: 500
-            error_type: interp
-            error_desc: CPR interpretation failed
     ServiceUnavailable:
       description: Data store service is unavailable
       content:
@@ -702,6 +676,17 @@ components:
             error_code: 503
             error_type: unavailable
             error_desc: Data store unavailable
+    InternalError:
+      description: CPR interpretation failed (malformed routing tree, missing template, or unexpected interpreter error)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: true
+            error_code: 500
+            error_type: interp
+            error_desc: CPR interpretation failed
     RateLimited:
       description: Rate limit exceeded
       content:
@@ -719,6 +704,3 @@ components:
       in: header
       name: x-api-token
       description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
-x-refined-from:
-- teliax-telique-openapi.yaml
-- teliax-telique-openapi.yml

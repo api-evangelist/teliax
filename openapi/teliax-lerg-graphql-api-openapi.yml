@@ -1,14 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Teliax LERG GraphQL API
+  title: Telique Telecom LERG GraphQL API
   version: 2026.6.25
+  description: 'Unified Telique telecom data API. Consolidated from 4 services: lrn, cnam, lerg, routelink.
+
+
+    Get your API token at telique.ringer.tel.'
   contact:
     name: Ringer Support
     email: support@ringer.com
     url: https://telique.ringer.tel
   license:
     name: Proprietary
-  description: 'Operations tagged LERG GraphQL across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.telique.ringer.tel
   description: Production
@@ -142,9 +145,6 @@ paths:
                     carrier:
                       ocnNum: '7167'
                       ocnName: CELLCO PARTNERSHIP DBA VERIZON WIRELESS
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
 components:
   securitySchemes:
     apiToken:
@@ -152,6 +152,3 @@ components:
       in: header
       name: x-api-token
       description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
-x-refined-from:
-- teliax-telique-openapi.yaml
-- teliax-telique-openapi.yml

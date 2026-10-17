@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax CIC Reference Data API
-  version: v1
+  title: TNIQ by Ringer — Customer CIC Reference Data API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged CIC Reference Data across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -37,13 +37,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/CicResolveResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/cics:
     get:
       tags:
@@ -90,13 +83,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PageCicDirectorySummaryDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/cics/{cic}:
     get:
       tags:
@@ -116,139 +102,8 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/CicDirectoryDetailDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
-    CicResolutionDto:
-      type: object
-      properties:
-        cic:
-          type: string
-        found:
-          type: boolean
-        assigneeName:
-          type: string
-        recordStatus:
-          type: string
-        retired:
-          type: boolean
-    SortObject:
-      type: object
-      properties:
-        empty:
-          type: boolean
-        sorted:
-          type: boolean
-        unsorted:
-          type: boolean
-    CicResolveRequest:
-      required:
-      - cics
-      type: object
-      properties:
-        cics:
-          maxItems: 500
-          minItems: 0
-          type: array
-          items:
-            type: string
-    PageCicDirectorySummaryDto:
-      type: object
-      properties:
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/CicDirectorySummaryDto'
-        number:
-          type: integer
-          format: int32
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        numberOfElements:
-          type: integer
-          format: int32
-        first:
-          type: boolean
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
-        last:
-          type: boolean
-        empty:
-          type: boolean
-    CicDatasetFreshnessDto:
-      type: object
-      properties:
-        sourceName:
-          type: string
-        sourceAsOf:
-          type: string
-          format: date-time
-        retrievedAt:
-          type: string
-          format: date-time
-        freshness:
-          type: string
-    CicDirectorySummaryDto:
-      type: object
-      properties:
-        cic:
-          type: string
-        assigneeName:
-          type: string
-        recordStatus:
-          type: string
-        assignmentDate:
-          type: string
-          format: date
-        sourceAsOf:
-          type: string
-          format: date-time
-        retired:
-          type: boolean
-        freshness:
-          type: string
-    PageableObject:
-      type: object
-      properties:
-        offset:
-          type: integer
-          format: int64
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        pageSize:
-          type: integer
-          format: int32
-        pageNumber:
-          type: integer
-          format: int32
-        paged:
-          type: boolean
-        unpaged:
-          type: boolean
-    CicResolveResponse:
-      type: object
-      properties:
-        results:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CicResolutionDto'
-        dataset:
-          $ref: '#/components/schemas/CicDatasetFreshnessDto'
     CicDirectoryDetailDto:
       type: object
       properties:
@@ -289,12 +144,133 @@ components:
           type: boolean
         freshness:
           type: string
+    CicResolutionDto:
+      type: object
+      properties:
+        cic:
+          type: string
+        found:
+          type: boolean
+        assigneeName:
+          type: string
+        recordStatus:
+          type: string
+        retired:
+          type: boolean
+    CicDirectorySummaryDto:
+      type: object
+      properties:
+        cic:
+          type: string
+        assigneeName:
+          type: string
+        recordStatus:
+          type: string
+        assignmentDate:
+          type: string
+          format: date
+        sourceAsOf:
+          type: string
+          format: date-time
+        retired:
+          type: boolean
+        freshness:
+          type: string
+    CicResolveResponse:
+      type: object
+      properties:
+        results:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CicResolutionDto'
+        dataset:
+          $ref: '#/components/schemas/CicDatasetFreshnessDto'
+    CicResolveRequest:
+      required:
+      - cics
+      type: object
+      properties:
+        cics:
+          maxItems: 500
+          minItems: 0
+          type: array
+          items:
+            type: string
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    CicDatasetFreshnessDto:
+      type: object
+      properties:
+        sourceName:
+          type: string
+        sourceAsOf:
+          type: string
+          format: date-time
+        retrievedAt:
+          type: string
+          format: date-time
+        freshness:
+          type: string
+    PageCicDirectorySummaryDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CicDirectorySummaryDto'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        empty:
+          type: boolean
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

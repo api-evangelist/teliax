@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Analytics API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Analytics API
   contact: {}
-  description: 'Operations tagged Customer/Analytics across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -111,8 +111,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CdrDetails
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/cdr/export:
     get:
       security:
@@ -237,8 +235,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CdrExport
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/cdr/export/jobs/{job_id}:
     get:
       security:
@@ -334,8 +330,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CdrExportJobsByJobId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/cdr/statistics:
     get:
       security:
@@ -407,8 +401,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CdrStatistics
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/cdr/trends:
     get:
       security:
@@ -488,10 +480,42 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CdrTrends
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
+    github_com_ringer-warp_api-gateway_internal_models.CDRExportJobStatus:
+      type: object
+      properties:
+        error_code:
+          type: string
+        expires_at:
+          type: string
+        job_id:
+          type: string
+        status:
+          type: string
+        url:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
     github_com_ringer-warp_api-gateway_internal_models.QualityStats:
       type: object
       properties:
@@ -505,6 +529,79 @@ components:
           type: number
         samples:
           type: integer
+    github_com_ringer-warp_api-gateway_internal_models.CDRCursorPage:
+      type: object
+      properties:
+        has_more:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CallDetail'
+        limit:
+          description: 'Limit echoes the page size actually applied after clamping, which may
+
+            differ from what the caller asked for.'
+          type: integer
+        next_cursor:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.CallStatistics:
+      type: object
+      properties:
+        acd:
+          type: number
+        answered_calls:
+          type: integer
+        asr:
+          type: number
+        avg_margin_pct:
+          type: number
+        call_type_breakdown:
+          type: object
+          additionalProperties:
+            type: integer
+        connected_minutes:
+          type: number
+        disposition_breakdown:
+          type: object
+          additionalProperties:
+            type: integer
+        inbound_calls:
+          type: integer
+        outbound_calls:
+          type: integer
+        period_end:
+          type: string
+        period_start:
+          type: string
+        quality:
+          description: 'Quality is populated ONLY when CDR_MIRROR_READS is enabled — the mirror
+
+            grain (migration 152) carries sum/cnt quality columns the legacy
+
+            per-row raw_cdr scan never aggregated. nil on the legacy path; the
+
+            frontend falls back to its existing no-quality-data rendering. Never
+
+            redacted (customer-visible; internal/cdrredact zeroes fields
+
+            individually and does not touch this one).'
+          allOf:
+          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.QualityStats'
+        total_calls:
+          type: integer
+        total_charge:
+          type: number
+        total_cost:
+          description: 'Wholesale economics — customer wire: always redacted by internal/cdrredact.
+
+            omitempty so the zeroed values are absent rather than misleading zeros.'
+          type: number
+        total_margin:
+          type: number
+        total_minutes:
+          description: Minimum/increment-rounded billed minutes.
+          type: number
     github_com_ringer-warp_api-gateway_internal_models.CallDetail:
       type: object
       properties:
@@ -659,130 +756,6 @@ components:
 
             column.'
           type: string
-    github_com_ringer-warp_api-gateway_internal_models.CallStatistics:
-      type: object
-      properties:
-        acd:
-          type: number
-        answered_calls:
-          type: integer
-        asr:
-          type: number
-        avg_margin_pct:
-          type: number
-        call_type_breakdown:
-          type: object
-          additionalProperties:
-            type: integer
-        connected_minutes:
-          type: number
-        disposition_breakdown:
-          type: object
-          additionalProperties:
-            type: integer
-        inbound_calls:
-          type: integer
-        outbound_calls:
-          type: integer
-        period_end:
-          type: string
-        period_start:
-          type: string
-        quality:
-          description: 'Quality is populated ONLY when CDR_MIRROR_READS is enabled — the mirror
-
-            grain (migration 152) carries sum/cnt quality columns the legacy
-
-            per-row raw_cdr scan never aggregated. nil on the legacy path; the
-
-            frontend falls back to its existing no-quality-data rendering. Never
-
-            redacted (customer-visible; internal/cdrredact zeroes fields
-
-            individually and does not touch this one).'
-          allOf:
-          - $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.QualityStats'
-        total_calls:
-          type: integer
-        total_charge:
-          type: number
-        total_cost:
-          description: 'Wholesale economics — customer wire: always redacted by internal/cdrredact.
-
-            omitempty so the zeroed values are absent rather than misleading zeros.'
-          type: number
-        total_margin:
-          type: number
-        total_minutes:
-          description: Minimum/increment-rounded billed minutes.
-          type: number
-    github_com_ringer-warp_api-gateway_internal_models.Meta:
-      type: object
-      properties:
-        page:
-          type: integer
-        per_page:
-          type: integer
-        total:
-          type: integer
-        total_pages:
-          type: integer
-    github_com_ringer-warp_api-gateway_internal_models.CDRCursorPage:
-      type: object
-      properties:
-        has_more:
-          type: boolean
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.CallDetail'
-        limit:
-          description: 'Limit echoes the page size actually applied after clamping, which may
-
-            differ from what the caller asked for.'
-          type: integer
-        next_cursor:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.CDRExportJobStatus:
-      type: object
-      properties:
-        error_code:
-          type: string
-        expires_at:
-          type: string
-        job_id:
-          type: string
-        status:
-          type: string
-        url:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.CDRExportJobRef:
-      type: object
-      properties:
-        job_id:
-          type: string
-        status:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
-      type: object
-      properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_models.APIError:
-      type: object
-      properties:
-        code:
-          type: string
-        details:
-          type: object
-          additionalProperties: true
-        message:
-          type: string
     github_com_ringer-warp_api-gateway_internal_models.TrendDataPoint:
       type: object
       properties:
@@ -806,12 +779,26 @@ components:
         total_minutes:
           description: Minimum/increment-rounded billed minutes.
           type: number
+    github_com_ringer-warp_api-gateway_internal_models.CDRExportJobRef:
+      type: object
+      properties:
+        job_id:
+          type: string
+        status:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
   securitySchemes:
     ApiKeyAuth:
       description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

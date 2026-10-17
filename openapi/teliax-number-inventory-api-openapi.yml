@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Number Inventory API
-  version: v1
+  title: TNIQ by Ringer — Customer Number Inventory API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Number Inventory across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -46,13 +46,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/metadata:
     put:
       tags:
@@ -81,13 +74,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/by-id/{id}/metadata:
     put:
       tags:
@@ -117,13 +103,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/snapback:
     get:
       tags:
@@ -163,13 +142,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/reserve:
     post:
       tags:
@@ -198,13 +170,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/release:
     post:
       tags:
@@ -236,13 +201,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/reassign:
     post:
       tags:
@@ -269,13 +227,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/quarantine:
     post:
       tags:
@@ -362,13 +313,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/disconnect:
     post:
       tags:
@@ -395,13 +339,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/assign:
     post:
       tags:
@@ -430,13 +367,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/by-id/{id}/reserve:
     post:
       tags:
@@ -466,13 +396,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/by-id/{id}/release:
     post:
       tags:
@@ -505,13 +428,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/by-id/{id}/reassign:
     post:
       tags:
@@ -539,13 +455,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/by-id/{id}/disconnect:
     post:
       tags:
@@ -573,13 +482,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/by-id/{id}/assign:
     post:
       tags:
@@ -609,13 +511,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/summary:
     get:
       tags:
@@ -636,13 +531,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}:
     get:
       tags:
@@ -668,13 +556,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/numbers/{telephoneNumber}/activity:
     get:
       tags:
@@ -709,13 +590,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
     ReassignRequest:
@@ -735,6 +609,3 @@ components:
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

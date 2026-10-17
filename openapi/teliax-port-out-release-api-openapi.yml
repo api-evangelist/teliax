@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Port-Out Release API
-  version: v1
+  title: TNIQ by Ringer — Customer Port-Out Release API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Port-Out Release across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -56,13 +56,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PortProjectDetailResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-out-releases/projects:
     get:
       tags:
@@ -108,13 +101,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PortProjectResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-out-releases/projects/{projectId}/submit:
     post:
       tags:
@@ -148,13 +134,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/SubmitResultResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-out-releases/projects/{projectId}/retry:
     post:
       tags:
@@ -188,13 +167,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/SubmitResultResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-out-releases/lookup:
     post:
       tags:
@@ -222,13 +194,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/TnLookupResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-out-releases/projects/{projectId}:
     get:
       tags:
@@ -256,13 +221,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PortProjectResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-out-releases/projects/{projectId}/details:
     get:
       tags:
@@ -295,268 +253,8 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PagePortProjectDetailResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
-    CarrierReleaseRecoveryProjection:
-      type: object
-      properties:
-        state:
-          type: string
-          enum:
-          - NONE
-          - QUEUED
-          - SUBMITTING
-          - AWAITING_CARRIER
-          - AWAITING_NPAC_RELEASE
-          - READY_TO_RESUBMIT
-          - FAILED
-          - OUTCOME_UNKNOWN
-          - VERIFICATION_REQUIRED
-        requested_due_date:
-          type: string
-          format: date
-        carrier_display_name:
-          type: string
-        carrier_order_id:
-          type: string
-        carrier_foc_date:
-          type: string
-          format: date
-        npac_release_due_date:
-          type: string
-          format: date
-        can_request:
-          type: boolean
-        can_resubmit:
-          type: boolean
-        blocker_code:
-          type: string
-        message:
-          type: string
-    SortObject:
-      type: object
-      properties:
-        empty:
-          type: boolean
-        sorted:
-          type: boolean
-        unsorted:
-          type: boolean
-    NpacStateResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        role:
-          type: string
-        our_spid:
-          type: string
-        new_spid:
-          type: string
-        old_spid:
-          type: string
-        lrn:
-          type: string
-        new_sp_due_date:
-          type: string
-          format: date
-        old_sp_due_date:
-          type: string
-          format: date
-        old_sp_authorization:
-          type: string
-        conflict_placed_by:
-          type: string
-        conflict_at:
-          type: string
-          format: date-time
-        raw_sv_state:
-          type: string
-        observed_at:
-          type: string
-          format: date-time
-        source:
-          type: string
-        current_spid:
-          type: string
-    LifecycleStatusDisplay:
-      type: object
-      properties:
-        display_text:
-          type: string
-        color:
-          type: string
-        icon:
-          type: string
-        description:
-          type: string
-        next_action:
-          type: string
-        metadata:
-          type: object
-          additionalProperties:
-            type: object
-    PortProjectDetailResponse:
-      type: object
-      properties:
-        project_id:
-          type: string
-          format: uuid
-        tn:
-          type: string
-        lata:
-          type: string
-        current_lata_source:
-          type: string
-        gaining_lata_source:
-          type: string
-        state:
-          type: string
-        locality:
-          type: string
-        npac_region:
-          type: string
-        current_ocn:
-          type: string
-        current_lrn:
-          type: string
-        current_spid:
-          type: string
-        current_tandem:
-          type: string
-        current_tandem_name:
-          type: string
-        gaining_ocn:
-          type: string
-        gaining_lrn:
-          type: string
-        gaining_spid:
-          type: string
-        gaining_tandem:
-          type: string
-        gaining_tandem_name:
-          type: string
-        user_provided_lrn:
-          type: string
-        btn:
-          type: string
-        soa_status:
-          type: string
-        lsr_status:
-          type: string
-          enum:
-          - NONE
-          - SENDING
-          - SENT
-          - EBOND
-          - FAILED
-          - SKIPPED
-          - UNRECOGNIZED
-        csr_status:
-          type: string
-          enum:
-          - NONE
-          - SENT
-          - EBOND
-          - MANUAL_APPROVAL
-        lsr_submitted_at:
-          type: string
-          format: date-time
-        foc_date:
-          type: string
-          format: date
-        lifecycle_state:
-          type: string
-        lifecycle_state_display:
-          type: string
-        lifecycle_status_display:
-          $ref: '#/components/schemas/LifecycleStatusDisplay'
-        can_activate:
-          type: boolean
-        can_activate_early:
-          type: boolean
-        can_update_due_date:
-          type: boolean
-        activation_blocker:
-          type: string
-        reconciliation_source:
-          type: string
-        reconciliation_validation_status:
-          type: string
-        failure_reason:
-          type: string
-        validation_status:
-          type: string
-          enum:
-          - PENDING
-          - VALIDATING
-          - VALID
-          - ERROR
-        validation_errors:
-          type: object
-          additionalProperties:
-            type: object
-        notes:
-          type: object
-          additionalProperties:
-            type: object
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        is_pushed_release:
-          type: boolean
-        pushed_ddd:
-          type: string
-          format: date
-        pushed_release_event_id:
-          type: string
-          format: uuid
-        carrier_release_recovery:
-          $ref: '#/components/schemas/CarrierReleaseRecoveryProjection'
-        npac:
-          $ref: '#/components/schemas/NpacStateResponse'
-    PagePortProjectDetailResponse:
-      type: object
-      properties:
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/PortProjectDetailResponse'
-        number:
-          type: integer
-          format: int32
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        numberOfElements:
-          type: integer
-          format: int32
-        first:
-          type: boolean
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
-        last:
-          type: boolean
-        empty:
-          type: boolean
     PortProjectDetail:
       type: object
       properties:
@@ -789,144 +487,7 @@ components:
           $ref: '#/components/schemas/LifecycleStatusDisplay'
         carrierReleaseRecovery:
           $ref: '#/components/schemas/CarrierReleaseRecoveryProjection'
-    ApplicationAssignmentIntentResponse:
-      type: object
-      properties:
-        applicationId:
-          type: string
-        metadata:
-          type: object
-          additionalProperties:
-            type: object
-        orderReference:
-          type: string
-        frozen:
-          type: boolean
-    RoutingData:
-      type: object
-      properties:
-        currentLrn:
-          type: string
-        currentOcn:
-          type: string
-        npacRegion:
-          type: string
-      description: TN routing information
-    PageableObject:
-      type: object
-      properties:
-        offset:
-          type: integer
-          format: int64
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        pageSize:
-          type: integer
-          format: int32
-        pageNumber:
-          type: integer
-          format: int32
-        paged:
-          type: boolean
-        unpaged:
-          type: boolean
-    CustomerSpid:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        customer:
-          $ref: '#/components/schemas/ApiCustomer'
-        spid:
-          type: string
-        description:
-          type: string
-        isActive:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        ccna:
-          type: string
-        acna:
-          type: string
-        lsrName:
-          type: string
-        lsrStreet:
-          type: string
-        lsrCity:
-          type: string
-        lsrState:
-          type: string
-        lsrZip:
-          type: string
-        lsrContactPhone:
-          type: string
-        p2pCnpCarrierCode:
-          type: string
-        messagingAccountId:
-          type: string
-          format: uuid
-    TnSubmitResultResponse:
-      type: object
-      properties:
-        tn:
-          type: string
-        success:
-          type: boolean
-        confirmationNumber:
-          type: string
-        errorMessage:
-          type: string
-    Pageable:
-      type: object
-      properties:
-        page:
-          minimum: 0
-          type: integer
-          format: int32
-        size:
-          minimum: 1
-          type: integer
-          format: int32
-        sort:
-          type: array
-          items:
-            type: string
-    MetadataDisplayColumn:
-      type: object
-      properties:
-        key:
-          type: string
-        label:
-          type: string
-    TnLookupResult:
-      type: object
-      properties:
-        tn:
-          type: string
-          description: 10-digit telephone number
-        sourceSpid:
-          type: string
-          description: Source SPID (current owner)
-        foundInInventory:
-          type: boolean
-          description: Whether TN was found in our inventory
-        foundViaTelique:
-          type: boolean
-          description: Whether TN was found via Telique LRN lookup
-        subscriberData:
-          $ref: '#/components/schemas/SubscriberData'
-        routingData:
-          $ref: '#/components/schemas/RoutingData'
-        error:
-          type: string
-          description: Error message if lookup failed
-      description: Individual TN lookup result
-    PagePortProjectResponse:
+    PagePortProjectDetailResponse:
       type: object
       properties:
         totalElements:
@@ -941,7 +502,7 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/PortProjectResponse'
+            $ref: '#/components/schemas/PortProjectDetailResponse'
         number:
           type: integer
           format: int32
@@ -982,249 +543,99 @@ components:
         btn:
           type: string
       description: Subscriber account information
-    TnDetail:
-      required:
-      - tn
+    CarrierReleaseRecoveryProjection:
       type: object
       properties:
-        tn:
-          pattern: ^[0-9]{10}$
-          type: string
-          description: 10-digit telephone number
-        accountNumber:
-          type: string
-          description: Account number for subscriber
-        endUserName:
-          type: string
-          description: End user name
-        streetNum:
-          type: string
-          description: Street number
-        streetName:
-          type: string
-          description: Street name
-        streetType:
-          type: string
-          description: Street type (St, Ave, Blvd, etc.)
-        city:
-          type: string
-          description: City
         state:
-          maxLength: 2
-          minLength: 0
-          type: string
-          description: State (2-letter code)
-        postalCode:
-          maxLength: 10
-          minLength: 0
-          type: string
-          description: Postal code
-        pin:
-          type: string
-          description: PIN for authorization
-        npacRegion:
-          type: string
-          description: NPAC region (auto-detected if not provided)
-      description: Individual TN details for release
-    TnLookupRequest:
-      required:
-      - tns
-      type: object
-      properties:
-        tns:
-          maxItems: 1000
-          minItems: 0
-          type: array
-          description: List of 10-digit telephone numbers to lookup
-          items:
-            type: string
-            description: List of 10-digit telephone numbers to lookup
-      description: Request to lookup TNs for port-out release
-    SubmitResultResponse:
-      type: object
-      properties:
-        totalTns:
-          type: integer
-          format: int32
-        submitted:
-          type: integer
-          format: int32
-        failed:
-          type: integer
-          format: int32
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/TnSubmitResultResponse'
-    PortProject:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        customer:
-          $ref: '#/components/schemas/ApiCustomer'
-        spid:
-          type: string
-        lastActivityAt:
-          type: string
-          format: date-time
-        isPushedRelease:
-          type: boolean
-        autoActivationMode:
           type: string
           enum:
-          - DISABLED
-          - ASAP
-          - SCHEDULED
-        scheduledActivationAt:
-          type: string
-          format: date-time
-        lastAutoActivationAttempt:
-          type: string
-          format: date-time
-        autoActivationFailureCount:
-          type: integer
-          format: int32
-        autoAssignLrn:
-          type: boolean
-        lsrWorkflowEnabled:
-          type: boolean
-        lsrGateMode:
-          type: string
-          enum:
-          - DISABLED
-          - SOFT_WARNING
-          - HARD_GATE
-        desiredDueDate:
+          - NONE
+          - QUEUED
+          - SUBMITTING
+          - AWAITING_CARRIER
+          - AWAITING_NPAC_RELEASE
+          - READY_TO_RESUBMIT
+          - FAILED
+          - OUTCOME_UNKNOWN
+          - VERIFICATION_REQUIRED
+        requested_due_date:
           type: string
           format: date
-        portDirection:
+        carrier_display_name:
           type: string
-          enum:
-          - GAINING
-          - LOSING
-        gainingCarrierSpid:
+        carrier_order_id:
           type: string
-        syncNotifyEmail:
+        carrier_foc_date:
           type: string
-        activeReconciliationJobId:
+          format: date
+        npac_release_due_date:
           type: string
-        applicationId:
+          format: date
+        can_request:
+          type: boolean
+        can_resubmit:
+          type: boolean
+        blocker_code:
           type: string
-        applicationMetadata:
-          type: object
-          additionalProperties:
-            type: object
-        orderReference:
+        message:
           type: string
-        assignmentSetBy:
-          type: string
-        assignmentSetAt:
-          type: string
-          format: date-time
-        assignmentFrozenAt:
-          type: string
-          format: date-time
-        snapbackOriginatingInventoryId:
-          type: string
-          format: uuid
-        snapbackOriginatingFinalizationId:
-          type: string
-          format: uuid
-        snapbackRegisteredBy:
-          type: string
-        snapbackRegisteredAt:
-          type: string
-          format: date-time
-        billingName:
-          type: string
-        billingStreet:
-          type: string
-        billingFloor:
-          type: string
-        billingRoomMailStop:
-          type: string
-        billingCity:
-          type: string
-        billingState:
-          type: string
-        billingZip:
-          type: string
-        billingAccountNumber:
-          type: string
-        portOutPin:
-          type: string
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    ApiCustomer:
+    NpacStateResponse:
       type: object
       properties:
-        id:
+        status:
           type: string
-          format: uuid
-        customerName:
+        role:
           type: string
-        email:
+        our_spid:
           type: string
-        company:
+        new_spid:
           type: string
-        isActive:
-          type: boolean
-        rateLimit:
-          type: integer
-          format: int32
-        notes:
+        old_spid:
           type: string
-        lastApiCall:
+        lrn:
+          type: string
+        new_sp_due_date:
+          type: string
+          format: date
+        old_sp_due_date:
+          type: string
+          format: date
+        old_sp_authorization:
+          type: string
+        conflict_placed_by:
+          type: string
+        conflict_at:
           type: string
           format: date-time
-        createdAt:
+        raw_sv_state:
+          type: string
+        observed_at:
           type: string
           format: date-time
-        updatedAt:
+        source:
           type: string
-          format: date-time
-        createdBy:
+        current_spid:
+          type: string
+    ApplicationAssignmentIntentResponse:
+      type: object
+      properties:
+        applicationId:
           type: string
         metadata:
           type: object
           additionalProperties:
             type: object
-        metadataDisplayConfig:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetadataDisplayColumn'
-        respOrgEntityId:
+        orderReference:
           type: string
-        respOrgId:
-          type: string
-        tollFreeEnabled:
+        frozen:
           type: boolean
-        tollFreeContactName:
+    MetadataDisplayColumn:
+      type: object
+      properties:
+        key:
           type: string
-        tollFreeContactPhone:
+        label:
           type: string
-        tollFreeContactEmail:
-          type: string
-        customerSpids:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerSpid'
-        activeSpids:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
     TnLookupResponse:
       type: object
       properties:
@@ -1378,6 +789,215 @@ components:
           type: boolean
         assignment:
           $ref: '#/components/schemas/ApplicationAssignmentIntentResponse'
+    PagePortProjectResponse:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortProjectResponse'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    RoutingData:
+      type: object
+      properties:
+        currentLrn:
+          type: string
+        currentOcn:
+          type: string
+        npacRegion:
+          type: string
+      description: TN routing information
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    TnDetail:
+      required:
+      - tn
+      type: object
+      properties:
+        tn:
+          pattern: ^[0-9]{10}$
+          type: string
+          description: 10-digit telephone number
+        accountNumber:
+          type: string
+          description: Account number for subscriber
+        endUserName:
+          type: string
+          description: End user name
+        streetNum:
+          type: string
+          description: Street number
+        streetName:
+          type: string
+          description: Street name
+        streetType:
+          type: string
+          description: Street type (St, Ave, Blvd, etc.)
+        city:
+          type: string
+          description: City
+        state:
+          maxLength: 2
+          minLength: 0
+          type: string
+          description: State (2-letter code)
+        postalCode:
+          maxLength: 10
+          minLength: 0
+          type: string
+          description: Postal code
+        pin:
+          type: string
+          description: PIN for authorization
+        npacRegion:
+          type: string
+          description: NPAC region (auto-detected if not provided)
+      description: Individual TN details for release
+    TnLookupRequest:
+      required:
+      - tns
+      type: object
+      properties:
+        tns:
+          maxItems: 1000
+          minItems: 0
+          type: array
+          description: List of 10-digit telephone numbers to lookup
+          items:
+            type: string
+            description: List of 10-digit telephone numbers to lookup
+      description: Request to lookup TNs for port-out release
+    ApiCustomer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customerName:
+          type: string
+        email:
+          type: string
+        company:
+          type: string
+        isActive:
+          type: boolean
+        rateLimit:
+          type: integer
+          format: int32
+        notes:
+          type: string
+        lastApiCall:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        metadataDisplayConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataDisplayColumn'
+        respOrgEntityId:
+          type: string
+        respOrgId:
+          type: string
+        tollFreeEnabled:
+          type: boolean
+        tollFreeContactName:
+          type: string
+        tollFreeContactPhone:
+          type: string
+        tollFreeContactEmail:
+          type: string
+        customerSpids:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerSpid'
+        activeSpids:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    CustomerSpid:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customer:
+          $ref: '#/components/schemas/ApiCustomer'
+        spid:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        ccna:
+          type: string
+        acna:
+          type: string
+        lsrName:
+          type: string
+        lsrStreet:
+          type: string
+        lsrCity:
+          type: string
+        lsrState:
+          type: string
+        lsrZip:
+          type: string
+        lsrContactPhone:
+          type: string
+        p2pCnpCarrierCode:
+          type: string
+        messagingAccountId:
+          type: string
+          format: uuid
     PortOutProjectCreateRequest:
       required:
       - customerId
@@ -1413,6 +1033,286 @@ components:
           items:
             $ref: '#/components/schemas/TnDetail'
       description: Request to create a port-out release project
+    PortProjectDetailResponse:
+      type: object
+      properties:
+        project_id:
+          type: string
+          format: uuid
+        tn:
+          type: string
+        lata:
+          type: string
+        current_lata_source:
+          type: string
+        gaining_lata_source:
+          type: string
+        state:
+          type: string
+        locality:
+          type: string
+        npac_region:
+          type: string
+        current_ocn:
+          type: string
+        current_lrn:
+          type: string
+        current_spid:
+          type: string
+        current_tandem:
+          type: string
+        current_tandem_name:
+          type: string
+        gaining_ocn:
+          type: string
+        gaining_lrn:
+          type: string
+        gaining_spid:
+          type: string
+        gaining_tandem:
+          type: string
+        gaining_tandem_name:
+          type: string
+        user_provided_lrn:
+          type: string
+        btn:
+          type: string
+        soa_status:
+          type: string
+        lsr_status:
+          type: string
+          enum:
+          - NONE
+          - SENDING
+          - SENT
+          - EBOND
+          - FAILED
+          - SKIPPED
+          - UNRECOGNIZED
+        csr_status:
+          type: string
+          enum:
+          - NONE
+          - SENT
+          - EBOND
+          - MANUAL_APPROVAL
+        lsr_submitted_at:
+          type: string
+          format: date-time
+        foc_date:
+          type: string
+          format: date
+        lifecycle_state:
+          type: string
+        lifecycle_state_display:
+          type: string
+        lifecycle_status_display:
+          $ref: '#/components/schemas/LifecycleStatusDisplay'
+        can_activate:
+          type: boolean
+        can_activate_early:
+          type: boolean
+        can_update_due_date:
+          type: boolean
+        activation_blocker:
+          type: string
+        reconciliation_source:
+          type: string
+        reconciliation_validation_status:
+          type: string
+        failure_reason:
+          type: string
+        validation_status:
+          type: string
+          enum:
+          - PENDING
+          - VALIDATING
+          - VALID
+          - ERROR
+        validation_errors:
+          type: object
+          additionalProperties:
+            type: object
+        notes:
+          type: object
+          additionalProperties:
+            type: object
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        is_pushed_release:
+          type: boolean
+        pushed_ddd:
+          type: string
+          format: date
+        pushed_release_event_id:
+          type: string
+          format: uuid
+        carrier_release_recovery:
+          $ref: '#/components/schemas/CarrierReleaseRecoveryProjection'
+        npac:
+          $ref: '#/components/schemas/NpacStateResponse'
+    PortProject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        customer:
+          $ref: '#/components/schemas/ApiCustomer'
+        spid:
+          type: string
+        lastActivityAt:
+          type: string
+          format: date-time
+        isPushedRelease:
+          type: boolean
+        autoActivationMode:
+          type: string
+          enum:
+          - DISABLED
+          - ASAP
+          - SCHEDULED
+        scheduledActivationAt:
+          type: string
+          format: date-time
+        lastAutoActivationAttempt:
+          type: string
+          format: date-time
+        autoActivationFailureCount:
+          type: integer
+          format: int32
+        autoAssignLrn:
+          type: boolean
+        lsrWorkflowEnabled:
+          type: boolean
+        lsrGateMode:
+          type: string
+          enum:
+          - DISABLED
+          - SOFT_WARNING
+          - HARD_GATE
+        desiredDueDate:
+          type: string
+          format: date
+        portDirection:
+          type: string
+          enum:
+          - GAINING
+          - LOSING
+        gainingCarrierSpid:
+          type: string
+        syncNotifyEmail:
+          type: string
+        activeReconciliationJobId:
+          type: string
+        applicationId:
+          type: string
+        applicationMetadata:
+          type: object
+          additionalProperties:
+            type: object
+        orderReference:
+          type: string
+        assignmentSetBy:
+          type: string
+        assignmentSetAt:
+          type: string
+          format: date-time
+        assignmentFrozenAt:
+          type: string
+          format: date-time
+        snapbackOriginatingInventoryId:
+          type: string
+          format: uuid
+        snapbackOriginatingFinalizationId:
+          type: string
+          format: uuid
+        snapbackRegisteredBy:
+          type: string
+        snapbackRegisteredAt:
+          type: string
+          format: date-time
+        billingName:
+          type: string
+        billingStreet:
+          type: string
+        billingFloor:
+          type: string
+        billingRoomMailStop:
+          type: string
+        billingCity:
+          type: string
+        billingState:
+          type: string
+        billingZip:
+          type: string
+        billingAccountNumber:
+          type: string
+        portOutPin:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TnLookupResult:
+      type: object
+      properties:
+        tn:
+          type: string
+          description: 10-digit telephone number
+        sourceSpid:
+          type: string
+          description: Source SPID (current owner)
+        foundInInventory:
+          type: boolean
+          description: Whether TN was found in our inventory
+        foundViaTelique:
+          type: boolean
+          description: Whether TN was found via Telique LRN lookup
+        subscriberData:
+          $ref: '#/components/schemas/SubscriberData'
+        routingData:
+          $ref: '#/components/schemas/RoutingData'
+        error:
+          type: string
+          description: Error message if lookup failed
+      description: Individual TN lookup result
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            type: string
+    TnSubmitResultResponse:
+      type: object
+      properties:
+        tn:
+          type: string
+        success:
+          type: boolean
+        confirmationNumber:
+          type: string
+        errorMessage:
+          type: string
     LookupSummary:
       type: object
       properties:
@@ -1432,12 +1332,60 @@ components:
           type: integer
           format: int32
       description: Summary of lookup results
+    LifecycleStatusDisplay:
+      type: object
+      properties:
+        display_text:
+          type: string
+        color:
+          type: string
+        icon:
+          type: string
+        description:
+          type: string
+        next_action:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+    SubmitResultResponse:
+      type: object
+      properties:
+        totalTns:
+          type: integer
+          format: int32
+        submitted:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/TnSubmitResultResponse'
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

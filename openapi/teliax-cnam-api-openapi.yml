@@ -1,14 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Teliax CNAM API
+  title: Telique Telecom CNAM API
   version: 2026.6.25
+  description: 'Unified Telique telecom data API. Consolidated from 4 services: lrn, cnam, lerg, routelink.
+
+
+    Get your API token at telique.ringer.tel.'
   contact:
     name: Ringer Support
     email: support@ringer.com
     url: https://telique.ringer.tel
   license:
     name: Proprietary
-  description: 'Operations tagged CNAM across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.telique.ringer.tel
   description: Production
@@ -103,9 +106,6 @@ paths:
               example:
                 error: upstream error
                 message: TransUnion request failed
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/cnam/identity:
     get:
       operationId: identityLookupGet
@@ -365,14 +365,33 @@ paths:
               example:
                 error: upstream error
                 message: TransUnion request failed
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
 components:
   schemas:
-    IdentityResponse:
+    CnamObject:
       type: object
-      description: Response from the full identity lookup
+      description: Caller name data
+      properties:
+        calling_name_status:
+          type: string
+          description: Whether a caller name is available for this number
+          enum:
+          - available
+          - unavailable
+          example: available
+        calling_name:
+          type: string
+          description: The registered caller name (up to 15 characters). Present only when `calling_name_status` is `available`.
+          example: WIRELESS CALLER
+        presentation_indicator:
+          type: string
+          description: Whether the caller name is allowed to be displayed
+          enum:
+          - allowed
+          - restricted
+          example: allowed
+    CnamResponse:
+      type: object
+      description: Response from the simplified CNAM lookup
       required:
       - status
       properties:
@@ -382,18 +401,6 @@ components:
           example: ok
         cnam:
           $ref: '#/components/schemas/CnamObject'
-        call_insight:
-          $ref: '#/components/schemas/CallInsight'
-        addtl_info:
-          type: object
-          description: Additional metadata about the lookup. Included only when the upstream returns it.
-          properties:
-            cnam_type:
-              type: string
-              description: Source type of CNAM data
-            cnam_source:
-              type: string
-              description: Provider source of CNAM data
     IdentityRequest:
       type: object
       description: Request body for the POST identity lookup
@@ -454,43 +461,6 @@ components:
             origid:
               type: string
               example: 1db966a6-8f30-11e7-bc77-fa163e70349d
-    CnamObject:
-      type: object
-      description: Caller name data
-      properties:
-        calling_name_status:
-          type: string
-          description: Whether a caller name is available for this number
-          enum:
-          - available
-          - unavailable
-          example: available
-        calling_name:
-          type: string
-          description: The registered caller name (up to 15 characters). Present only when `calling_name_status` is `available`.
-          example: WIRELESS CALLER
-        presentation_indicator:
-          type: string
-          description: Whether the caller name is allowed to be displayed
-          enum:
-          - allowed
-          - restricted
-          example: allowed
-    CnamErrorResponse:
-      type: object
-      description: Error response
-      required:
-      - error
-      - message
-      properties:
-        error:
-          type: string
-          description: Error type
-          example: bad request
-        message:
-          type: string
-          description: Human-readable error message
-          example: called_party is required
     CallInsight:
       type: object
       description: Robocall Mitigation risk scoring (included when the subscription supports it)
@@ -542,9 +512,24 @@ components:
             origid:
               type: string
               example: 1db966a6-8f30-11e7-bc77-fa163e70349d
-    CnamResponse:
+    CnamErrorResponse:
       type: object
-      description: Response from the simplified CNAM lookup
+      description: Error response
+      required:
+      - error
+      - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: bad request
+        message:
+          type: string
+          description: Human-readable error message
+          example: called_party is required
+    IdentityResponse:
+      type: object
+      description: Response from the full identity lookup
       required:
       - status
       properties:
@@ -554,12 +539,21 @@ components:
           example: ok
         cnam:
           $ref: '#/components/schemas/CnamObject'
+        call_insight:
+          $ref: '#/components/schemas/CallInsight'
+        addtl_info:
+          type: object
+          description: Additional metadata about the lookup. Included only when the upstream returns it.
+          properties:
+            cnam_type:
+              type: string
+              description: Source type of CNAM data
+            cnam_source:
+              type: string
+              description: Provider source of CNAM data
   securitySchemes:
     apiToken:
       type: apiKey
       in: header
       name: x-api-token
       description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
-x-refined-from:
-- teliax-telique-openapi.yaml
-- teliax-telique-openapi.yml

@@ -1,14 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Teliax LSMS API
+  title: Telique Telecom LSMS API
   version: 2026.6.25
+  description: 'Unified Telique telecom data API. Consolidated from 4 services: lrn, cnam, lerg, routelink.
+
+
+    Get your API token at telique.ringer.tel.'
   contact:
     name: Ringer Support
     email: support@ringer.com
     url: https://telique.ringer.tel
   license:
     name: Proprietary
-  description: 'Operations tagged LSMS across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.telique.ringer.tel
   description: Production
@@ -66,9 +69,6 @@ paths:
                   lrn: '7207081999'
         '400':
           description: Invalid parameters (must provide exactly one of lrn or spid)
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lsms/list/spid:
     get:
       operationId: lsmsListSpids
@@ -110,9 +110,6 @@ paths:
                   lrn: '7207081999'
         '400':
           description: Invalid parameters (must provide exactly one of lrn or phone_number)
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lsms/list/lrn:
     get:
       operationId: lsmsListLrns
@@ -155,9 +152,6 @@ paths:
                   spid: 567G
         '400':
           description: Invalid parameters (must provide exactly one of spid or phone_number)
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lsms/gql:
     post:
       operationId: lsmsGraphql
@@ -239,11 +233,28 @@ paths:
                     lnpType: lspp
                     activationTimestamp: 2026-04-04 23:04:50.386843+00:00
                     isActive: true
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
 components:
   schemas:
+    SpidListResponse:
+      type: object
+      required:
+      - count
+      - spids
+      - query
+      properties:
+        count:
+          type: integer
+          description: Number of results
+          example: 1
+        spids:
+          type: array
+          items:
+            type: string
+          description: List of 4-character Service Provider IDs
+          example:
+          - 567G
+        query:
+          $ref: '#/components/schemas/LsmsListQuery'
     LrnListResponse:
       type: object
       required:
@@ -278,26 +289,6 @@ components:
         phone_number:
           type: string
           example: '3036298301'
-    SpidListResponse:
-      type: object
-      required:
-      - count
-      - spids
-      - query
-      properties:
-        count:
-          type: integer
-          description: Number of results
-          example: 1
-        spids:
-          type: array
-          items:
-            type: string
-          description: List of 4-character Service Provider IDs
-          example:
-          - 567G
-        query:
-          $ref: '#/components/schemas/LsmsListQuery'
     PhoneNumberListResponse:
       type: object
       required:
@@ -326,6 +317,3 @@ components:
       in: header
       name: x-api-token
       description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
-x-refined-from:
-- teliax-telique-openapi.yaml
-- teliax-telique-openapi.yml

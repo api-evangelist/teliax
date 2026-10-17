@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Network API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Network API
   contact: {}
-  description: 'Operations tagged Customer/Network across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -42,8 +42,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1NetworkIngressIps
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/network/vendor-ips:
     get:
       security:
@@ -77,23 +75,18 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1NetworkVendorIps
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
-    github_com_ringer-warp_api-gateway_internal_networkinfo.IngressServer:
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
       type: object
       properties:
-        hostname:
-          type: string
-        ip:
-          type: string
-        port:
-          type: string
-        primary:
-          type: string
-        protocol:
-          type: string
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
     github_com_ringer-warp_api-gateway_internal_models.Meta:
       type: object
       properties:
@@ -129,16 +122,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_networkinfo.IngressServer'
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+    github_com_ringer-warp_api-gateway_internal_networkinfo.IngressServer:
       type: object
       properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
+        hostname:
+          type: string
+        ip:
+          type: string
+        port:
+          type: string
+        primary:
+          type: string
+        protocol:
+          type: string
     github_com_ringer-warp_api-gateway_internal_models.APIError:
       type: object
       properties:
@@ -155,6 +151,3 @@ components:
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

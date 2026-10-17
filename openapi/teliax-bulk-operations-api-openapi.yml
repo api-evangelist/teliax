@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Bulk Operations API
-  version: v1
+  title: TNIQ by Ringer — Customer Bulk Operations API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Bulk Operations across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -38,13 +38,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/bulk/{id}/cancel:
     post:
       tags:
@@ -66,13 +59,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/bulk/{action}:
     post:
       tags:
@@ -99,13 +85,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/bulk/{action}/preview:
     post:
       tags:
@@ -132,13 +111,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/bulk:
     get:
       tags:
@@ -173,13 +145,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PageBulkOperationResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/bulk/{id}:
     get:
       tags:
@@ -201,13 +166,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/BulkOperationResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/inventory/bulk/{id}/items:
     get:
       tags:
@@ -247,36 +205,24 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PageBulkOperationItemResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
-    BulkOperationItemResponse:
+    CreateBulkOperationRequest:
       type: object
       properties:
-        telephoneNumber:
+        tns:
+          type: array
+          items:
+            type: string
+        query:
           type: string
-        status:
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        customerId:
           type: string
-        errorMessage:
-          type: string
-        processedAt:
-          type: string
-          format: date-time
-    SortObject:
-      type: object
-      properties:
-        empty:
-          type: boolean
-        sorted:
-          type: boolean
-        unsorted:
-          type: boolean
+          format: uuid
     PageBulkOperationItemResponse:
       type: object
       properties:
@@ -309,6 +255,77 @@ components:
           type: boolean
         empty:
           type: boolean
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    PageBulkOperationResponse:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkOperationResponse'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    BulkOperationItemResponse:
+      type: object
+      properties:
+        telephoneNumber:
+          type: string
+        status:
+          type: string
+        errorMessage:
+          type: string
+        processedAt:
+          type: string
+          format: date-time
     BulkOperationResponse:
       type: object
       properties:
@@ -353,78 +370,9 @@ components:
         completedAt:
           type: string
           format: date-time
-    PageableObject:
-      type: object
-      properties:
-        offset:
-          type: integer
-          format: int64
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        pageSize:
-          type: integer
-          format: int32
-        pageNumber:
-          type: integer
-          format: int32
-        paged:
-          type: boolean
-        unpaged:
-          type: boolean
-    PageBulkOperationResponse:
-      type: object
-      properties:
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkOperationResponse'
-        number:
-          type: integer
-          format: int32
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        numberOfElements:
-          type: integer
-          format: int32
-        first:
-          type: boolean
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
-        last:
-          type: boolean
-        empty:
-          type: boolean
-    CreateBulkOperationRequest:
-      type: object
-      properties:
-        tns:
-          type: array
-          items:
-            type: string
-        query:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: object
-        customerId:
-          type: string
-          format: uuid
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

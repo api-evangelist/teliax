@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Messaging API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Messaging API
   contact: {}
-  description: 'Operations tagged Customer/Messaging across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -202,8 +202,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1Messages
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messages/stats:
     get:
       security:
@@ -255,8 +253,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagesStats
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messages/{id}:
     get:
       security:
@@ -337,8 +333,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagesById
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/brands:
     get:
       security:
@@ -438,8 +432,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1MessagingBrands
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/brands/link:
     post:
       security:
@@ -491,8 +483,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1MessagingBrandsLink
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/brands/lookup/{tcrBrandId}:
     get:
       security:
@@ -546,8 +536,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagingBrandsLookupByTcrBrandId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/brands/{id}:
     get:
       security:
@@ -706,8 +694,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1MessagingBrandsById
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns:
     get:
       security:
@@ -810,8 +796,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1MessagingCampaigns
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/link:
     post:
       security:
@@ -865,8 +849,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1MessagingCampaignsLink
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/lookup/{tcrCampaignId}:
     get:
       security:
@@ -920,8 +902,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagingCampaignsLookupByTcrCampaignId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/{id}:
     get:
       security:
@@ -1036,8 +1016,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: putV1MessagingCampaignsById
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/{id}/cnp:
     post:
       security:
@@ -1112,8 +1090,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1MessagingCampaignsByIdCnp
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/{id}/mno-status:
     get:
       security:
@@ -1167,8 +1143,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagingCampaignsByIdMnoStatus
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/{id}/nudge:
     post:
       security:
@@ -1225,8 +1199,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1MessagingCampaignsByIdNudge
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/{id}/numbers:
     get:
       security:
@@ -1449,8 +1421,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1MessagingCampaignsByIdNumbers
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/{id}/resubmit:
     put:
       security:
@@ -1502,8 +1472,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: putV1MessagingCampaignsByIdResubmit
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/campaigns/{id}/sharing:
     get:
       security:
@@ -1557,8 +1525,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagingCampaignsByIdSharing
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/carriers:
     get:
       security:
@@ -1587,8 +1553,6 @@ paths:
                         $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.MNOInfo'
       operationId: getV1MessagingCarriers
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/dcas:
     get:
       security:
@@ -1617,8 +1581,6 @@ paths:
                         $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.DCAInfo'
       operationId: getV1MessagingDcas
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/entity-types:
     get:
       security:
@@ -1647,8 +1609,6 @@ paths:
                         $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.EntityTypeInfo'
       operationId: getV1MessagingEntityTypes
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/numbers:
     get:
       security:
@@ -1711,8 +1671,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagingNumbers
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/throughput-estimate:
     get:
       security:
@@ -1762,8 +1720,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagingThroughputEstimate
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/use-case-requirements:
     get:
       security:
@@ -1806,8 +1762,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1MessagingUseCaseRequirements
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/use-cases:
     get:
       security:
@@ -1836,8 +1790,6 @@ paths:
                         $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.UseCaseInfo'
       operationId: getV1MessagingUseCases
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/messaging/verticals:
     get:
       security:
@@ -1864,32 +1816,16 @@ paths:
                         $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.VerticalInfo'
       operationId: getV1MessagingVerticals
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
-    internal_handlers.campaignNumbersRequest:
+    internal_handlers.linkBrandRequest:
       type: object
       required:
-      - phone_numbers
+      - tcr_brand_id
       properties:
-        phone_numbers:
-          description: PhoneNumbers is the list of telephone numbers to attach or detach.
-          type: array
-          minItems: 1
-          items:
-            type: string
-    internal_handlers.assignCampaignNumbersResponse:
-      type: object
-      properties:
-        assigned:
-          type: array
-          items:
-            type: string
-        failed:
-          type: array
-          items:
-            $ref: '#/components/schemas/internal_handlers.campaignNumberResult'
+        tcr_brand_id:
+          description: TCRBrandID is the TCR brand ID to link into this account.
+          type: string
     github_com_ringer-warp_api-gateway_internal_repository.Message:
       type: object
       properties:
@@ -1920,6 +1856,16 @@ components:
         updated_at:
           type: string
         vendor_message_id:
+          type: string
+    internal_handlers.campaignNumberResult:
+      type: object
+      properties:
+        reason:
+          description: 'Reason is the per-TN failure reason: not_found, not_owned, lookup_error,
+
+            or write_error.'
+          type: string
+        tn:
           type: string
     github_com_ringer-warp_api-gateway_internal_tniq.CampaignPayload:
       type: object
@@ -1994,6 +1940,49 @@ components:
           type: string
         useCase:
           type: string
+    internal_handlers.createMessageRequest:
+      type: object
+      properties:
+        body:
+          description: 'Body is the message text. Encoding (GSM-7 vs UCS-2) and segment count are
+
+            computed automatically from the content.'
+          type: string
+          example: Your verification code is 123456
+        from:
+          description: 'From is the sending telephone number. Must be a number assigned to your
+
+            account AND enrolled in an approved 10DLC campaign. NANP format, e.g.
+
+            "13039813633".'
+          type: string
+          example: '13039813633'
+        status_callback:
+          description: 'StatusCallback is recorded against the message but is NOT yet delivered
+
+            to: nothing posts message-status webhooks to it today. Poll
+
+            GET /v1/messages/{id} for status. Inbound-message webhooks are a separate,
+
+            working feature configured per telephone number.'
+          type: string
+          example: https://example.com/webhooks/sms
+        to:
+          description: 'To is the destination telephone number in E.164 / NANP format, e.g.
+
+            "13125551212".'
+          type: string
+          example: '13125551212'
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
     github_com_ringer-warp_api-gateway_internal_models.UseCaseInfo:
       type: object
       properties:
@@ -2013,6 +2002,102 @@ components:
 
             messages for this use case, tuned to maximize approval chance.'
           type: integer
+    github_com_ringer-warp_api-gateway_internal_models.DCAInfo:
+      type: object
+      properties:
+        dca_id:
+          type: string
+        display_name:
+          type: string
+    internal_handlers.removeCampaignNumbersResponse:
+      type: object
+      properties:
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.campaignNumberResult'
+        removed:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_models.MNOInfo:
+      type: object
+      properties:
+        mno_id:
+          type: string
+        name:
+          type: string
+    internal_handlers.campaignNumbersRequest:
+      type: object
+      required:
+      - phone_numbers
+      properties:
+        phone_numbers:
+          description: PhoneNumbers is the list of telephone numbers to attach or detach.
+          type: array
+          minItems: 1
+          items:
+            type: string
+    internal_handlers.linkCampaignRequest:
+      type: object
+      required:
+      - tcr_campaign_id
+      properties:
+        tcr_campaign_id:
+          description: TCRCampaignID is the TCR campaign ID to link into this account.
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.EntityTypeInfo:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        display_name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.VerticalInfo:
+      type: object
+      properties:
+        code:
+          type: string
+        display_name:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_repository.MessagingNumber:
+      type: object
+      properties:
+        brand_id:
+          type: string
+        campaign_id:
+          type: string
+        campaign_source:
+          type: string
+        has_webhook:
+          type: boolean
+        last_sync_at:
+          type: string
+        messaging_status:
+          type: string
+        mms_enabled:
+          type: boolean
+        tn:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.ListResponse:
+      type: object
+      properties:
+        items: {}
+        pagination:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
     github_com_ringer-warp_api-gateway_internal_repository.MessageCampaignStats:
       type: object
       properties:
@@ -2022,20 +2107,43 @@ components:
           type: integer
         outbound:
           type: integer
-    internal_handlers.linkBrandRequest:
-      type: object
-      required:
-      - tcr_brand_id
-      properties:
-        tcr_brand_id:
-          description: TCRBrandID is the TCR brand ID to link into this account.
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.MNOInfo:
+    internal_handlers.assignCampaignNumbersResponse:
       type: object
       properties:
-        mno_id:
+        assigned:
+          type: array
+          items:
+            type: string
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.campaignNumberResult'
+    github_com_ringer-warp_api-gateway_internal_repository.MessageStats:
+      type: object
+      properties:
+        by_campaign:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.MessageCampaignStats'
+        delivered:
+          type: integer
+        failed:
+          type: integer
+        inbound:
+          type: integer
+        outbound:
+          type: integer
+        total:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
           type: string
-        name:
+        details:
+          type: object
+          additionalProperties: true
+        message:
           type: string
     github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload:
       type: object
@@ -2096,172 +2204,7 @@ components:
           type: string
         website:
           type: string
-    github_com_ringer-warp_api-gateway_internal_models.DCAInfo:
-      type: object
-      properties:
-        dca_id:
-          type: string
-        display_name:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_repository.MessageStats:
-      type: object
-      properties:
-        by_campaign:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.MessageCampaignStats'
-        delivered:
-          type: integer
-        failed:
-          type: integer
-        inbound:
-          type: integer
-        outbound:
-          type: integer
-        total:
-          type: integer
-    internal_handlers.linkCampaignRequest:
-      type: object
-      required:
-      - tcr_campaign_id
-      properties:
-        tcr_campaign_id:
-          description: TCRCampaignID is the TCR campaign ID to link into this account.
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
-      type: object
-      properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_models.VerticalInfo:
-      type: object
-      properties:
-        code:
-          type: string
-        display_name:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_repository.MessagingNumber:
-      type: object
-      properties:
-        brand_id:
-          type: string
-        campaign_id:
-          type: string
-        campaign_source:
-          type: string
-        has_webhook:
-          type: boolean
-        last_sync_at:
-          type: string
-        messaging_status:
-          type: string
-        mms_enabled:
-          type: boolean
-        tn:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.APIError:
-      type: object
-      properties:
-        code:
-          type: string
-        details:
-          type: object
-          additionalProperties: true
-        message:
-          type: string
-    internal_handlers.createMessageRequest:
-      type: object
-      properties:
-        body:
-          description: 'Body is the message text. Encoding (GSM-7 vs UCS-2) and segment count are
-
-            computed automatically from the content.'
-          type: string
-          example: Your verification code is 123456
-        from:
-          description: 'From is the sending telephone number. Must be a number assigned to your
-
-            account AND enrolled in an approved 10DLC campaign. NANP format, e.g.
-
-            "13039813633".'
-          type: string
-          example: '13039813633'
-        status_callback:
-          description: 'StatusCallback is recorded against the message but is NOT yet delivered
-
-            to: nothing posts message-status webhooks to it today. Poll
-
-            GET /v1/messages/{id} for status. Inbound-message webhooks are a separate,
-
-            working feature configured per telephone number.'
-          type: string
-          example: https://example.com/webhooks/sms
-        to:
-          description: 'To is the destination telephone number in E.164 / NANP format, e.g.
-
-            "13125551212".'
-          type: string
-          example: '13125551212'
-    internal_handlers.removeCampaignNumbersResponse:
-      type: object
-      properties:
-        failed:
-          type: array
-          items:
-            $ref: '#/components/schemas/internal_handlers.campaignNumberResult'
-        removed:
-          type: array
-          items:
-            type: string
-    github_com_ringer-warp_api-gateway_internal_models.EntityTypeInfo:
-      type: object
-      properties:
-        code:
-          type: string
-        description:
-          type: string
-        display_name:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.Meta:
-      type: object
-      properties:
-        page:
-          type: integer
-        per_page:
-          type: integer
-        total:
-          type: integer
-        total_pages:
-          type: integer
-    github_com_ringer-warp_api-gateway_internal_models.ListResponse:
-      type: object
-      properties:
-        items: {}
-        pagination:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-    internal_handlers.campaignNumberResult:
-      type: object
-      properties:
-        reason:
-          description: 'Reason is the per-TN failure reason: not_found, not_owned, lookup_error,
-
-            or write_error.'
-          type: string
-        tn:
-          type: string
   requestBodies:
-    github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload'
-      description: Brand payload
-      required: true
     github_com_ringer-warp_api-gateway_internal_tniq.CampaignPayload:
       content:
         application/json:
@@ -2269,12 +2212,16 @@ components:
             $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.CampaignPayload'
       description: Campaign payload
       required: true
+    github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.BrandPayload'
+      description: Brand payload
+      required: true
   securitySchemes:
     ApiKeyAuth:
       description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

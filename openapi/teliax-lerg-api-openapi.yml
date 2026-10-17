@@ -1,14 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Teliax LERG API
+  title: Telique Telecom LERG API
   version: 2026.6.25
+  description: 'Unified Telique telecom data API. Consolidated from 4 services: lrn, cnam, lerg, routelink.
+
+
+    Get your API token at telique.ringer.tel.'
   contact:
     name: Ringer Support
     email: support@ringer.com
     url: https://telique.ringer.tel
   license:
     name: Proprietary
-  description: 'Operations tagged LERG across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.telique.ringer.tel
   description: Production
@@ -60,9 +63,6 @@ paths:
                 - name: block_id
                   display_name: Block ID
                   data_type: string
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lerg/tables/{table_name}:
     get:
       operationId: getTableInfo
@@ -141,9 +141,6 @@ paths:
               example:
                 error: Table 'invalid_table' not found
                 status: 404
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lerg/tables/{table_name}/schema:
     get:
       operationId: getTableSchema
@@ -198,9 +195,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LergErrorResponse'
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lerg/fast/lerg_6/{fields}/{query}:
     get:
       operationId: queryLerg6Fast
@@ -300,9 +294,6 @@ paths:
               example:
                 error: 'Invalid filter field: invalid_field'
                 status: 400
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lerg/{table_name}/{fields}/{query}:
     get:
       operationId: queryTable
@@ -439,9 +430,6 @@ paths:
               example:
                 error: Table 'invalid' not found
                 status: 404
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lerg/query:
     post:
       operationId: complexQuery
@@ -548,9 +536,6 @@ paths:
               example:
                 error: 'Invalid filter operator: ''invalid'''
                 status: 400
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
   /v1/telique/lerg/tandem:
     get:
       operationId: queryTandem
@@ -704,11 +689,215 @@ paths:
                   value:
                     error: NXX is required when searching by NPA
                     status: 400
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
 components:
   schemas:
+    JoinClause:
+      type: object
+      required:
+      - table
+      - 'on'
+      properties:
+        table:
+          type: string
+          description: Table to join with
+          example: lerg_1
+        'on':
+          type: array
+          description: Join conditions
+          items:
+            $ref: '#/components/schemas/JoinCondition'
+        fields:
+          type: array
+          description: Fields to include from joined table
+          items:
+            type: string
+          example:
+          - ocn_name
+        join_type:
+          type: string
+          description: Type of join (defaults to inner)
+          enum:
+          - inner
+          - left
+          - right
+          default: inner
+          example: inner
+    FieldInfo:
+      type: object
+      required:
+      - name
+      - display_name
+      - data_type
+      - nullable
+      properties:
+        name:
+          type: string
+          description: Internal field name
+          example: npa
+        display_name:
+          type: string
+          description: Display field name
+          example: NPA
+        data_type:
+          type: string
+          description: Data type of the field
+          enum:
+          - string
+          - integer
+          - float
+          - boolean
+          - date
+          example: integer
+        nullable:
+          type: boolean
+          description: Whether the field can be null
+          example: false
+    ComplexQueryRequest:
+      type: object
+      required:
+      - table
+      properties:
+        table:
+          type: string
+          description: Name of the table to query
+          example: lerg_6
+        fields:
+          type: array
+          description: Fields to return (all fields if omitted)
+          items:
+            type: string
+          example:
+          - npa
+          - nxx
+          - ocn
+          - loc_name
+        filters:
+          type: array
+          description: Filter conditions (combined with AND)
+          items:
+            $ref: '#/components/schemas/FilterCondition'
+        limit:
+          type: integer
+          description: Maximum number of records to return
+          minimum: 1
+          maximum: 10000
+          default: 100
+          example: 10
+        offset:
+          type: integer
+          description: Number of records to skip
+          minimum: 0
+          default: 0
+          example: 0
+        join:
+          $ref: '#/components/schemas/JoinClause'
+    JoinCondition:
+      type: object
+      required:
+      - left_field
+      - right_field
+      properties:
+        left_field:
+          type: string
+          description: Field from the main table
+          example: ocn
+        right_field:
+          type: string
+          description: Field from the joined table
+          example: ocn_num
+    LergErrorResponse:
+      type: object
+      required:
+      - error
+      - status
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: Invalid request
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+    FilterCondition:
+      type: object
+      required:
+      - field
+      - operator
+      - value
+      properties:
+        field:
+          type: string
+          description: Field name to filter on
+          example: npa
+        operator:
+          type: string
+          description: Filter operator
+          enum:
+          - eq
+          - ne
+          - gt
+          - gte
+          - lt
+          - lte
+          - like
+          - in
+          - notin
+          - isnull
+          - isnotnull
+          example: eq
+        value:
+          description: Value to filter by (type depends on field and operator)
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          - type: array
+            items:
+              oneOf:
+              - type: string
+              - type: number
+    TandemQueryResponse:
+      type: object
+      required:
+      - count
+      - records
+      - query
+      properties:
+        count:
+          type: integer
+          description: Number of records returned
+          example: 1
+        records:
+          type: array
+          description: Tandem query results
+          items:
+            $ref: '#/components/schemas/TandemRecord'
+        query:
+          type: object
+          description: Query metadata
+          required:
+          - query_type
+          - limit
+          - offset
+          properties:
+            query_type:
+              type: string
+              description: Type of query performed
+              enum:
+              - npa_nxx
+              - switch
+              - tandem
+              - name
+              example: npa_nxx
+            limit:
+              type: integer
+              description: Maximum records requested
+              example: 100
+            offset:
+              type: integer
+              description: Number of records skipped
+              example: 0
     TandemRecord:
       type: object
       properties:
@@ -778,59 +967,6 @@ components:
           - 'null'
           description: Tandem Operating Company Name
           example: QWEST CORPORATION
-    ComplexQueryRequest:
-      type: object
-      required:
-      - table
-      properties:
-        table:
-          type: string
-          description: Name of the table to query
-          example: lerg_6
-        fields:
-          type: array
-          description: Fields to return (all fields if omitted)
-          items:
-            type: string
-          example:
-          - npa
-          - nxx
-          - ocn
-          - loc_name
-        filters:
-          type: array
-          description: Filter conditions (combined with AND)
-          items:
-            $ref: '#/components/schemas/FilterCondition'
-        limit:
-          type: integer
-          description: Maximum number of records to return
-          minimum: 1
-          maximum: 10000
-          default: 100
-          example: 10
-        offset:
-          type: integer
-          description: Number of records to skip
-          minimum: 0
-          default: 0
-          example: 0
-        join:
-          $ref: '#/components/schemas/JoinClause'
-    LergErrorResponse:
-      type: object
-      required:
-      - error
-      - status
-      properties:
-        error:
-          type: string
-          description: Error message
-          example: Invalid request
-        status:
-          type: integer
-          description: HTTP status code
-          example: 400
     QueryResponse:
       type: object
       required:
@@ -866,50 +1002,6 @@ components:
           - string
           - 'null'
           description: Name of the joined table when a join was applied. Always present on responses from `POST /v1/telique/lerg/query`; `null` when no join was requested.
-    FieldInfo:
-      type: object
-      required:
-      - name
-      - display_name
-      - data_type
-      - nullable
-      properties:
-        name:
-          type: string
-          description: Internal field name
-          example: npa
-        display_name:
-          type: string
-          description: Display field name
-          example: NPA
-        data_type:
-          type: string
-          description: Data type of the field
-          enum:
-          - string
-          - integer
-          - float
-          - boolean
-          - date
-          example: integer
-        nullable:
-          type: boolean
-          description: Whether the field can be null
-          example: false
-    JoinCondition:
-      type: object
-      required:
-      - left_field
-      - right_field
-      properties:
-        left_field:
-          type: string
-          description: Field from the main table
-          example: ocn
-        right_field:
-          type: string
-          description: Field from the joined table
-          example: ocn_num
     TableInfo:
       type: object
       required:
@@ -935,37 +1027,6 @@ components:
           description: List of fields in the table
           items:
             $ref: '#/components/schemas/FieldInfo'
-    JoinClause:
-      type: object
-      required:
-      - table
-      - 'on'
-      properties:
-        table:
-          type: string
-          description: Table to join with
-          example: lerg_1
-        'on':
-          type: array
-          description: Join conditions
-          items:
-            $ref: '#/components/schemas/JoinCondition'
-        fields:
-          type: array
-          description: Fields to include from joined table
-          items:
-            type: string
-          example:
-          - ocn_name
-        join_type:
-          type: string
-          description: Type of join (defaults to inner)
-          enum:
-          - inner
-          - left
-          - right
-          default: inner
-          example: inner
     TableSchemaResponse:
       type: object
       required:
@@ -986,91 +1047,9 @@ components:
           description: List of field definitions
           items:
             $ref: '#/components/schemas/FieldInfo'
-    TandemQueryResponse:
-      type: object
-      required:
-      - count
-      - records
-      - query
-      properties:
-        count:
-          type: integer
-          description: Number of records returned
-          example: 1
-        records:
-          type: array
-          description: Tandem query results
-          items:
-            $ref: '#/components/schemas/TandemRecord'
-        query:
-          type: object
-          description: Query metadata
-          required:
-          - query_type
-          - limit
-          - offset
-          properties:
-            query_type:
-              type: string
-              description: Type of query performed
-              enum:
-              - npa_nxx
-              - switch
-              - tandem
-              - name
-              example: npa_nxx
-            limit:
-              type: integer
-              description: Maximum records requested
-              example: 100
-            offset:
-              type: integer
-              description: Number of records skipped
-              example: 0
-    FilterCondition:
-      type: object
-      required:
-      - field
-      - operator
-      - value
-      properties:
-        field:
-          type: string
-          description: Field name to filter on
-          example: npa
-        operator:
-          type: string
-          description: Filter operator
-          enum:
-          - eq
-          - ne
-          - gt
-          - gte
-          - lt
-          - lte
-          - like
-          - in
-          - notin
-          - isnull
-          - isnotnull
-          example: eq
-        value:
-          description: Value to filter by (type depends on field and operator)
-          oneOf:
-          - type: string
-          - type: number
-          - type: boolean
-          - type: array
-            items:
-              oneOf:
-              - type: string
-              - type: number
   securitySchemes:
     apiToken:
       type: apiKey
       in: header
       name: x-api-token
       description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
-x-refined-from:
-- teliax-telique-openapi.yaml
-- teliax-telique-openapi.yml

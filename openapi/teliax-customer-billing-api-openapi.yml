@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Billing API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Billing API
   contact: {}
-  description: 'Operations tagged Customer/Billing across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -64,8 +64,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1BillingBalance
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/billing/ledger:
     get:
       security:
@@ -140,8 +138,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1BillingLedger
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/billing/ledger/statement:
     get:
       security:
@@ -216,8 +212,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1BillingLedgerStatement
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/invoices:
     get:
       security:
@@ -275,8 +269,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1Invoices
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/invoices/{id}:
     get:
       security:
@@ -339,8 +331,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1InvoicesById
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/invoices/{id}/html:
     get:
       security:
@@ -398,8 +388,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1InvoicesByIdHtml
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/invoices/{id}/pdf:
     get:
       security:
@@ -458,61 +446,18 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1InvoicesByIdPdf
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
-    github_com_ringer-warp_api-gateway_internal_repository.InvoiceLineDetail:
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
       type: object
       properties:
-        description:
-          type: string
-        extended_amount:
-          type: number
-        quantity:
-          type: number
-        section:
-          type: string
-        sku_code:
-          type: string
-        tax_code:
-          type: string
-        unit:
-          type: string
-        unit_price:
-          type: number
-    github_com_ringer-warp_api-gateway_internal_models.LedgerStatement:
-      type: object
-      properties:
-        charge_total:
-          description: 'ChargeTotal is the sum of negative lines only, which is the denominator
-
-            the composition bar proportions against. Summing signed amounts would let
-
-            a payment shrink the bar and misstate every share.'
-          type: number
-        from:
-          type: string
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.LedgerSKUSummary'
-        net_amount:
-          description: NetAmount is the signed sum of every line — the period's balance movement.
-          type: number
-        to:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_models.Meta:
-      type: object
-      properties:
-        page:
-          type: integer
-        per_page:
-          type: integer
-        total:
-          type: integer
-        total_pages:
-          type: integer
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
     github_com_ringer-warp_api-gateway_internal_repository.InvoiceDetail:
       type: object
       properties:
@@ -558,6 +503,17 @@ components:
           type: number
         total:
           type: number
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
     github_com_ringer-warp_api-gateway_internal_repository.InvoiceListItem:
       type: object
       properties:
@@ -581,6 +537,97 @@ components:
           type: string
         total:
           type: number
+    github_com_ringer-warp_api-gateway_internal_models.LedgerStatement:
+      type: object
+      properties:
+        charge_total:
+          description: 'ChargeTotal is the sum of negative lines only, which is the denominator
+
+            the composition bar proportions against. Summing signed amounts would let
+
+            a payment shrink the bar and misstate every share.'
+          type: number
+        from:
+          type: string
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.LedgerSKUSummary'
+        net_amount:
+          description: NetAmount is the signed sum of every line — the period's balance movement.
+          type: number
+        to:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.InvoiceLineDetail:
+      type: object
+      properties:
+        description:
+          type: string
+        extended_amount:
+          type: number
+        quantity:
+          type: number
+        section:
+          type: string
+        sku_code:
+          type: string
+        tax_code:
+          type: string
+        unit:
+          type: string
+        unit_price:
+          type: number
+    github_com_ringer-warp_api-gateway_internal_repository.InvoiceApplicationItem:
+      type: object
+      properties:
+        amount_applied:
+          type: number
+        applied_at:
+          type: string
+        created_by:
+          type: string
+        ledger_txn_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_repository.InvoiceTaxLineDetail:
+      type: object
+      properties:
+        amount:
+          type: number
+        is_fee:
+          type: boolean
+        jurisdiction_code:
+          type: string
+        jurisdiction_name:
+          type: string
+        tax_type:
+          type: string
+        taxable_base:
+          type: number
+    github_com_ringer-warp_api-gateway_internal_models.Balance:
+      type: object
+      properties:
+        available:
+          type: number
+        billing_suspended:
+          type: boolean
+        credit_limit:
+          type: number
+        currency:
+          type: string
+        current_balance:
+          type: number
+        customer_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
     github_com_ringer-warp_api-gateway_internal_models.LedgerSKUSummary:
       type: object
       properties:
@@ -605,73 +652,9 @@ components:
           type: string
         unit:
           type: string
-    github_com_ringer-warp_api-gateway_internal_models.Balance:
-      type: object
-      properties:
-        available:
-          type: number
-        billing_suspended:
-          type: boolean
-        credit_limit:
-          type: number
-        currency:
-          type: string
-        current_balance:
-          type: number
-        customer_id:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_repository.InvoiceTaxLineDetail:
-      type: object
-      properties:
-        amount:
-          type: number
-        is_fee:
-          type: boolean
-        jurisdiction_code:
-          type: string
-        jurisdiction_name:
-          type: string
-        tax_type:
-          type: string
-        taxable_base:
-          type: number
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
-      type: object
-      properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_models.APIError:
-      type: object
-      properties:
-        code:
-          type: string
-        details:
-          type: object
-          additionalProperties: true
-        message:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_repository.InvoiceApplicationItem:
-      type: object
-      properties:
-        amount_applied:
-          type: number
-        applied_at:
-          type: string
-        created_by:
-          type: string
-        ledger_txn_id:
-          type: string
   securitySchemes:
     ApiKeyAuth:
       description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

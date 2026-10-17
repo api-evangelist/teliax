@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Telecom Reference Data API
-  version: v1
+  title: TNIQ by Ringer — Customer Telecom Reference Data API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged Telecom Reference Data across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -37,13 +37,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/SpidResolveResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/resp-orgs/resolve:
     post:
       tags:
@@ -63,13 +56,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RespOrgResolveResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/nnids/resolve:
     post:
       tags:
@@ -89,13 +75,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/NnidResolveResponse'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/spids:
     get:
       tags:
@@ -149,13 +128,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/NpacSpidDirectoryPageDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/spids/{spid}:
     get:
       tags:
@@ -176,13 +148,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/NpacSpidDirectoryDetailDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/resp-orgs:
     get:
       tags:
@@ -236,13 +201,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RespOrgDirectoryPageDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/resp-orgs/{respOrgId}:
     get:
       tags:
@@ -263,13 +221,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RespOrgDirectoryReadDetailDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/nnids:
     get:
       tags:
@@ -327,13 +278,6 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/NnidDirectoryPageDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/reference-data/nnids/{nnid}:
     get:
       tags:
@@ -353,16 +297,9 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/NnidDirectoryDetailDto'
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
-    NnidDirectoryDetailDto:
+    NnidDirectorySummaryDto:
       type: object
       properties:
         nnid:
@@ -375,33 +312,52 @@ components:
           type: string
         countryName:
           type: string
-        countryCallingCode:
-          type: string
         countryIso2:
           type: string
-        rawMccList:
-          type: string
-        rawMncList:
-          type: string
-        rawMccMncList:
-          type: string
-        mobileNetworks:
-          type: array
-          items:
-            $ref: '#/components/schemas/NnidMobileNetworkDto'
         retired:
           type: boolean
-        dataset:
-          $ref: '#/components/schemas/NnidDatasetFreshnessDto'
-    NnidMobileNetworkDto:
+    RespOrgDirectoryPageDto:
       type: object
       properties:
-        plmn:
-          type: string
-        mcc:
-          type: string
-        mnc:
-          type: string
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/RespOrgDirectorySummaryDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        dataset:
+          $ref: '#/components/schemas/RespOrgDatasetFreshnessDto'
+    NnidDirectoryPageDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/NnidDirectorySummaryDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        dataset:
+          $ref: '#/components/schemas/NnidDatasetFreshnessDto'
     NnidResolveResponse:
       type: object
       properties:
@@ -411,47 +367,23 @@ components:
             $ref: '#/components/schemas/NnidResolutionDto'
         dataset:
           $ref: '#/components/schemas/NnidDatasetFreshnessDto'
-    SpidResolveRequest:
-      required:
-      - spids
-      type: object
-      properties:
-        spids:
-          maxItems: 500
-          minItems: 0
-          type: array
-          items:
-            type: string
-    RespOrgDirectoryReadDetailDto:
-      type: object
-      properties:
-        respOrgId:
-          type: string
-        entityId:
-          type: string
-        companyName:
-          type: string
-        companyAddress:
-          type: string
-        primaryContact:
-          type: string
-        changeContact:
-          type: string
-        notes:
-          type: string
-        sourceAsOf:
-          type: string
-          format: date-time
-        retired:
-          type: boolean
-        freshness:
-          type: string
     NnidResolveRequest:
       required:
       - nnids
       type: object
       properties:
         nnids:
+          maxItems: 500
+          minItems: 0
+          type: array
+          items:
+            type: string
+    RespOrgResolveRequest:
+      required:
+      - respOrgIds
+      type: object
+      properties:
+        respOrgIds:
           maxItems: 500
           minItems: 0
           type: array
@@ -485,19 +417,26 @@ components:
             $ref: '#/components/schemas/NpacSpidContactDto'
         dataset:
           $ref: '#/components/schemas/NpacSpidDatasetFreshnessDto'
-    RespOrgDatasetFreshnessDto:
+    NnidMobileNetworkDto:
       type: object
       properties:
-        sourceName:
+        plmn:
           type: string
-        sourceAsOf:
+        mcc:
           type: string
-          format: date-time
-        retrievedAt:
+        mnc:
           type: string
-          format: date-time
-        freshness:
-          type: string
+    SpidResolveRequest:
+      required:
+      - spids
+      type: object
+      properties:
+        spids:
+          maxItems: 500
+          minItems: 0
+          type: array
+          items:
+            type: string
     NpacSpidContactDto:
       type: object
       properties:
@@ -521,28 +460,6 @@ components:
           type: array
           items:
             type: string
-    SpidResolveResponse:
-      type: object
-      properties:
-        results:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/SpidResolutionDto'
-        dataset:
-          $ref: '#/components/schemas/NpacSpidDatasetFreshnessDto'
-    RespOrgResolutionDto:
-      type: object
-      properties:
-        respOrgId:
-          type: string
-        found:
-          type: boolean
-        entityId:
-          type: string
-        companyName:
-          type: string
-        retired:
-          type: boolean
     SpidResolutionDto:
       type: object
       properties:
@@ -567,18 +484,29 @@ components:
           format: int32
         retired:
           type: boolean
-    RespOrgResolveRequest:
-      required:
-      - respOrgIds
+    RespOrgResolutionDto:
       type: object
       properties:
-        respOrgIds:
-          maxItems: 500
-          minItems: 0
-          type: array
-          items:
-            type: string
-    NpacSpidDatasetFreshnessDto:
+        respOrgId:
+          type: string
+        found:
+          type: boolean
+        entityId:
+          type: string
+        companyName:
+          type: string
+        retired:
+          type: boolean
+    SpidResolveResponse:
+      type: object
+      properties:
+        results:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SpidResolutionDto'
+        dataset:
+          $ref: '#/components/schemas/NpacSpidDatasetFreshnessDto'
+    RespOrgDatasetFreshnessDto:
       type: object
       properties:
         sourceName:
@@ -591,13 +519,77 @@ components:
           format: date-time
         freshness:
           type: string
-    RespOrgDirectoryPageDto:
+    NnidDirectoryDetailDto:
+      type: object
+      properties:
+        nnid:
+          type: string
+        companyName:
+          type: string
+        brandName:
+          type: string
+        serviceType:
+          type: string
+        countryName:
+          type: string
+        countryCallingCode:
+          type: string
+        countryIso2:
+          type: string
+        rawMccList:
+          type: string
+        rawMncList:
+          type: string
+        rawMccMncList:
+          type: string
+        mobileNetworks:
+          type: array
+          items:
+            $ref: '#/components/schemas/NnidMobileNetworkDto'
+        retired:
+          type: boolean
+        dataset:
+          $ref: '#/components/schemas/NnidDatasetFreshnessDto'
+    RespOrgResolveResponse:
+      type: object
+      properties:
+        results:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RespOrgResolutionDto'
+        dataset:
+          $ref: '#/components/schemas/RespOrgDatasetFreshnessDto'
+    RespOrgDirectoryReadDetailDto:
+      type: object
+      properties:
+        respOrgId:
+          type: string
+        entityId:
+          type: string
+        companyName:
+          type: string
+        companyAddress:
+          type: string
+        primaryContact:
+          type: string
+        changeContact:
+          type: string
+        notes:
+          type: string
+        sourceAsOf:
+          type: string
+          format: date-time
+        retired:
+          type: boolean
+        freshness:
+          type: string
+    NpacSpidDirectoryPageDto:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/RespOrgDirectorySummaryDto'
+            $ref: '#/components/schemas/NpacSpidDirectorySummaryDto'
         totalElements:
           type: integer
           format: int64
@@ -611,16 +603,7 @@ components:
           type: integer
           format: int32
         dataset:
-          $ref: '#/components/schemas/RespOrgDatasetFreshnessDto'
-    RespOrgResolveResponse:
-      type: object
-      properties:
-        results:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/RespOrgResolutionDto'
-        dataset:
-          $ref: '#/components/schemas/RespOrgDatasetFreshnessDto'
+          $ref: '#/components/schemas/NpacSpidDatasetFreshnessDto'
     NpacSpidDirectorySummaryDto:
       type: object
       properties:
@@ -643,23 +626,6 @@ components:
           format: int32
         retired:
           type: boolean
-    NnidDirectorySummaryDto:
-      type: object
-      properties:
-        nnid:
-          type: string
-        companyName:
-          type: string
-        brandName:
-          type: string
-        serviceType:
-          type: string
-        countryName:
-          type: string
-        countryIso2:
-          type: string
-        retired:
-          type: boolean
     NnidResolutionDto:
       type: object
       properties:
@@ -677,27 +643,6 @@ components:
           type: string
         retired:
           type: boolean
-    NpacSpidDirectoryPageDto:
-      type: object
-      properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/NpacSpidDirectorySummaryDto'
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int32
-        number:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        dataset:
-          $ref: '#/components/schemas/NpacSpidDatasetFreshnessDto'
     NnidDatasetFreshnessDto:
       type: object
       properties:
@@ -711,27 +656,19 @@ components:
           format: date-time
         freshness:
           type: string
-    NnidDirectoryPageDto:
+    NpacSpidDatasetFreshnessDto:
       type: object
       properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/NnidDirectorySummaryDto'
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int32
-        number:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        dataset:
-          $ref: '#/components/schemas/NnidDatasetFreshnessDto'
+        sourceName:
+          type: string
+        sourceAsOf:
+          type: string
+          format: date-time
+        retrievedAt:
+          type: string
+          format: date-time
+        freshness:
+          type: string
     RespOrgDirectorySummaryDto:
       type: object
       properties:
@@ -754,6 +691,3 @@ components:
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

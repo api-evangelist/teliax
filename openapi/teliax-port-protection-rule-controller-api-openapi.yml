@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax Port Protection Rule Controller API
-  version: v1
+  title: TNIQ by Ringer — Customer Port Protection Rule Controller…
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged port-protection-rule-controller across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -98,13 +98,6 @@ paths:
           description: OK
       summary: Delete
       x-summary-source: derived
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-protection-rules:
     get:
       tags:
@@ -154,13 +147,6 @@ paths:
                 $ref: '#/components/schemas/PortProtectionRuleResponse'
       summary: Create
       x-summary-source: derived
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/port-protection-rules/effective:
     get:
       tags:
@@ -187,15 +173,86 @@ paths:
                 $ref: '#/components/schemas/EffectivePolicyResponse'
       summary: Effective
       x-summary-source: derived
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
+    EffectivePolicyResponse:
+      type: object
+      properties:
+        tn:
+          type: string
+        decision:
+          $ref: '#/components/schemas/ProtectionDecision'
+    PortProtectionRuleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        scope:
+          type: string
+          enum:
+          - CUSTOMER
+          - SPID
+          - TN
+        target:
+          type: string
+        action:
+          type: string
+          enum:
+          - BLOCK
+          - ALLOW
+          - REQUIRE_APPROVAL
+          - REQUIRE_PIN
+          - HOLD_PERIOD
+        holdPeriodHours:
+          type: integer
+          format: int32
+        reason:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        createdByUserId:
+          type: string
+          format: uuid
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        systemManaged:
+          type: boolean
+    UpdateRuleRequest:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          enum:
+          - BLOCK
+          - ALLOW
+          - REQUIRE_APPROVAL
+          - REQUIRE_PIN
+          - HOLD_PERIOD
+        holdPeriodHours:
+          maximum: 168
+          minimum: 1
+          type: integer
+          format: int32
+        reason:
+          maxLength: 4000
+          minLength: 0
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
     ProtectionDecision:
       type: object
       properties:
@@ -261,90 +318,9 @@ components:
         expiresAt:
           type: string
           format: date-time
-    EffectivePolicyResponse:
-      type: object
-      properties:
-        tn:
-          type: string
-        decision:
-          $ref: '#/components/schemas/ProtectionDecision'
-    UpdateRuleRequest:
-      required:
-      - action
-      type: object
-      properties:
-        action:
-          type: string
-          enum:
-          - BLOCK
-          - ALLOW
-          - REQUIRE_APPROVAL
-          - REQUIRE_PIN
-          - HOLD_PERIOD
-        holdPeriodHours:
-          maximum: 168
-          minimum: 1
-          type: integer
-          format: int32
-        reason:
-          maxLength: 4000
-          minLength: 0
-          type: string
-        expiresAt:
-          type: string
-          format: date-time
-    PortProtectionRuleResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        customerId:
-          type: string
-          format: uuid
-        scope:
-          type: string
-          enum:
-          - CUSTOMER
-          - SPID
-          - TN
-        target:
-          type: string
-        action:
-          type: string
-          enum:
-          - BLOCK
-          - ALLOW
-          - REQUIRE_APPROVAL
-          - REQUIRE_PIN
-          - HOLD_PERIOD
-        holdPeriodHours:
-          type: integer
-          format: int32
-        reason:
-          type: string
-        expiresAt:
-          type: string
-          format: date-time
-        createdByUserId:
-          type: string
-          format: uuid
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        systemManaged:
-          type: boolean
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

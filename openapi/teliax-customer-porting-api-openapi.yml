@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Porting API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Porting API
   contact: {}
-  description: 'Operations tagged Customer/Porting across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -66,8 +66,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingPreview
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests:
     get:
       security:
@@ -186,8 +184,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequests
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}:
     get:
       security:
@@ -311,8 +307,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1PortingRequestsById
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/actions/{actionId}/respond:
     post:
       security:
@@ -399,8 +393,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdActionsByActionIdRespond
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/activate:
     post:
       security:
@@ -476,8 +468,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdActivate
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/auto-activation:
     put:
       security:
@@ -547,8 +537,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: putV1PortingRequestsByIdAutoActivation
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/auto-fix:
     post:
       security:
@@ -606,8 +594,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdAutoFix
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/cancel:
     post:
       security:
@@ -687,8 +673,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdCancel
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/documents:
     get:
       security:
@@ -841,8 +825,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdDocuments
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/documents/{docId}:
     get:
       security:
@@ -972,8 +954,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: deleteV1PortingRequestsByIdDocumentsByDocId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/error-groups:
     get:
       security:
@@ -1027,8 +1007,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1PortingRequestsByIdErrorGroups
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/groups/{spid}/details:
     put:
       security:
@@ -1104,8 +1082,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: putV1PortingRequestsByIdGroupsBySpidDetails
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/groups/{spid}/loa:
     post:
       security:
@@ -1192,8 +1168,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdGroupsBySpidLoa
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/groups/{spid}/loa/upload:
     post:
       security:
@@ -1283,8 +1257,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdGroupsBySpidLoaUpload
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/history:
     get:
       security:
@@ -1338,8 +1310,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1PortingRequestsByIdHistory
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/notes:
     get:
       security:
@@ -1461,8 +1431,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdNotes
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/progress:
     get:
       security:
@@ -1514,8 +1482,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1PortingRequestsByIdProgress
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/resubmit:
     post:
       security:
@@ -1591,8 +1557,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdResubmit
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/revalidate:
     post:
       security:
@@ -1646,8 +1610,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdRevalidate
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/statistics:
     get:
       security:
@@ -1699,8 +1661,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1PortingRequestsByIdStatistics
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/submit:
     post:
       security:
@@ -1774,8 +1734,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdSubmit
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/supplement:
     post:
       security:
@@ -1856,8 +1814,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdSupplement
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/tns:
     post:
       security:
@@ -1922,8 +1878,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdTns
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/requests/{id}/validate:
     post:
       security:
@@ -2019,8 +1973,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingRequestsByIdValidate
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/transfer:
     post:
       security:
@@ -2074,8 +2026,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingTransfer
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/porting/transfer/preview:
     post:
       security:
@@ -2124,8 +2074,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1PortingTransferPreview
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/tincomply/lookup-company-details:
     post:
       security:
@@ -2177,8 +2125,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1TincomplyLookupCompanyDetails
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/tincomply/lookup-ein:
     get:
       security:
@@ -2230,8 +2176,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1TincomplyLookupEin
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/tincomply/validate-ein-format:
     get:
       security:
@@ -2272,8 +2216,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1TincomplyValidateEinFormat
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/tincomply/verify-tin-name:
     post:
       security:
@@ -2325,10 +2267,428 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: postV1TincomplyVerifyTinName
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
+    internal_handlers.PortingTNSelectionRequest:
+      type: object
+      properties:
+        tns:
+          type: array
+          items:
+            type: string
+    internal_handlers.PortingCreateDraftResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        tniq_project_id:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchResult:
+      type: object
+      properties:
+        company_name:
+          type: string
+        confidence:
+          description: '"high", "medium", "low"'
+          type: string
+        exact_match:
+          type: boolean
+        fuzzy_match:
+          type: boolean
+        irs_verified:
+          type: boolean
+        match_details:
+          type: string
+        match_score:
+          type: number
+        matched:
+          type: boolean
+        tin:
+          type: string
+    internal_handlers.PortingTNsRequest:
+      type: object
+      properties:
+        tns:
+          type: string
+    internal_handlers.PortingDeletedResponse:
+      type: object
+      properties:
+        deleted:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchRequest:
+      type: object
+      required:
+      - company_name
+      - tin
+      properties:
+        company_name:
+          type: string
+        tin:
+          type: string
+    internal_handlers.PortingCreateDraftRequest:
+      type: object
+      properties:
+        desired_due_date:
+          type: string
+        name:
+          type: string
+    internal_handlers.PortingGroupDetailsRequest:
+      type: object
+      required:
+      - btn
+      - business_name
+      - end_user_name
+      - service_address
+      properties:
+        account_number:
+          type: string
+          example: '123456789'
+        btn:
+          type: string
+          example: '2125550100'
+        business_name:
+          type: string
+          example: ACME Corp
+        end_user_name:
+          type: string
+          example: Jane Smith
+        losing_carrier_name:
+          type: string
+          example: Current Carrier LLC
+        pin:
+          type: string
+        service_address:
+          type: string
+          example: 21699 E Quincy Ave, Aurora, CO 80015
+    internal_handlers.transferResult:
+      type: object
+      properties:
+        reason:
+          type: string
+        tn:
+          type: string
+        transferred:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
+    internal_handlers.transferItemReq:
+      type: object
+      properties:
+        pin:
+          type: string
+        tn:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.BulkActionResult:
+      type: object
+      properties:
+        action:
+          type: string
+        failed:
+          type: integer
+        results:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties: true
+        succeeded:
+          type: integer
+        total:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_tincomply.TinComplyRequestInfo:
+      type: object
+      properties:
+        enabledServices:
+          type: array
+          items:
+            type: string
+        requestDate:
+          type: string
+        requestedServices:
+          type: string
+        tin:
+          description: Masked as XXXXX9949
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetails:
+      type: object
+      properties:
+        city:
+          type: string
+        company_name:
+          type: string
+        country:
+          type: string
+        ein:
+          type: string
+        entity_type:
+          type: string
+        incorporated_at:
+          type: string
+        industry:
+          type: string
+        legal_name:
+          type: string
+        match_score:
+          type: number
+        naics_code:
+          type: string
+        phone:
+          type: string
+        sic_code:
+          type: string
+        state:
+          type: string
+        status:
+          type: string
+        street:
+          type: string
+        website:
+          type: string
+        zip_code:
+          type: string
+    internal_handlers.PortingDocument:
+      type: object
+      properties:
+        content_type:
+          type: string
+        document_type:
+          type: string
+        file_name:
+          type: string
+        file_size_bytes:
+          type: integer
+        id:
+          type: string
+        notes:
+          type: string
+        signed_at:
+          type: string
+        signer_ip:
+          type: string
+        signer_name:
+          type: string
+        tn:
+          type: string
+        uploaded_at:
+          type: string
+    internal_handlers.PortingAddTNsResponse:
+      type: object
+      properties:
+        added:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_repository.PortRequest:
+      type: object
+      properties:
+        can_resume:
+          type: boolean
+        created_at:
+          type: string
+        derived_status:
+          type: string
+        desired_due_date:
+          type: string
+        id:
+          type: string
+        last_synced_at:
+          type: string
+        managed_version:
+          type: integer
+        name:
+          type: string
+        next_step:
+          type: string
+        tniq_project_id:
+          type: string
+        tniq_spid:
+          type: string
+        warp_customer_id:
+          type: string
+    internal_handlers.PortCarrierGroup:
+      type: object
+      properties:
+        spid:
+          type: string
+        tns:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.PortProjectDetail'
+    internal_handlers.PortingSupplementRequest:
+      type: object
+      properties:
+        new_ddd:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    github_com_ringer-warp_api-gateway_internal_repository.PortAuditEntry:
+      type: object
+      properties:
+        action:
+          type: string
+        actor_type:
+          type: string
+        created_at:
+          type: string
+        id:
+          type: string
+        override_reason:
+          type: string
+    internal_handlers.PortingResumeDescriptor:
+      type: object
+      properties:
+        allowed:
+          type: boolean
+        reason:
+          type: string
+          enum:
+          - project_temporarily_unavailable
+          - project_counts_unavailable
+          - numbers_missing
+          - validation_in_progress
+          - validation_errors
+          - group_details_missing
+          - loa_missing
+          - due_date_missing
+          - ready_to_review
+        step:
+          type: string
+          enum:
+          - NUMBERS
+          - VALIDATION
+          - CARRIER_DETAILS
+          - DOCUMENTS
+          - SCHEDULE
+          - REVIEW
+    internal_handlers.PortingPreviewResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_porting.PreviewGroup'
+        tn_count:
+          type: integer
+    internal_handlers.ManagedPortResponse:
+      type: object
+      properties:
+        created_at:
+          type: string
+        customer_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction'
+        error_code:
+          type: string
+        message:
+          type: string
+        process_id:
+          type: string
+        project_id:
+          type: string
+        state:
+          type: string
+        updated_at:
+          type: string
+        version:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_porting.ActionResponse:
+      type: object
+      properties:
+        acknowledged:
+          type: boolean
+        desired_due_date:
+          type: string
+        document_id:
+          type: string
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+        response_type:
+          type: string
+    internal_handlers.PortingDetailResponse:
+      type: object
+      properties:
+        customer_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction'
+        group_state:
+          type: array
+          items:
+            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.PortRequestGroup'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.PortCarrierGroup'
+        project:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.PortProjectResponse'
+        request:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.PortRequest'
+        resume:
+          $ref: '#/components/schemas/internal_handlers.PortingResumeDescriptor'
+    github_com_ringer-warp_api-gateway_internal_tniq.PortProjectResponse:
+      type: object
+      properties:
+        activated_tns:
+          type: integer
+        can_activate:
+          type: boolean
+        can_cancel:
+          type: boolean
+        can_submit:
+          type: boolean
+        cancelled_tns:
+          type: integer
+        customer_id:
+          type: string
+        derived_status:
+          type: string
+        derived_status_display:
+          type: string
+        desired_due_date:
+          type: string
+        error_tns:
+          type: integer
+        id:
+          type: string
+        name:
+          type: string
+        spid:
+          type: string
+        status:
+          type: string
+        submit_blocker_reason:
+          type: string
+        submitted_tns:
+          type: integer
+        total_tns:
+          type: integer
+        valid_tns:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_repository.Note:
+      type: object
+      properties:
+        author_id:
+          type: string
+        body:
+          type: string
+        created_at:
+          type: string
+        id:
+          type: string
+        visibility:
+          type: string
     github_com_ringer-warp_api-gateway_internal_porting.PreviewGroup:
       type: object
       properties:
@@ -2346,6 +2706,188 @@ components:
           type: array
           items:
             type: string
+    github_com_ringer-warp_api-gateway_internal_repository.PortRequestGroup:
+      type: object
+      properties:
+        btn:
+          type: string
+        business_name:
+          type: string
+        credential_tn_set_hash:
+          type: string
+        details_applied_at:
+          type: string
+        end_user_name:
+          type: string
+        loa_document_id:
+          type: string
+        loa_revision:
+          type: integer
+        loa_signed_at:
+          type: string
+        loa_signer_name:
+          type: string
+        loa_tn_set_hash:
+          type: string
+        losing_carrier_name:
+          type: string
+        losing_spid:
+          type: string
+        masked_account_tail:
+          type: string
+        pin_present:
+          type: boolean
+        service_address:
+          type: string
+        tn_count:
+          type: integer
+        tn_set_hash:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.ProjectStatistics:
+      type: object
+      properties:
+        cancelledTns:
+          type: integer
+        completedTns:
+          type: integer
+        errorTns:
+          type: integer
+        focReceivedTns:
+          type: integer
+        pendingFocTns:
+          type: integer
+        progressPercentage:
+          type: integer
+        projectId:
+          type: string
+        readyForActivationTns:
+          type: integer
+        stage:
+          type: string
+        stageMessage:
+          type: string
+        submittedTns:
+          type: integer
+        totalTns:
+          type: integer
+        validTns:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetailsRequest:
+      type: object
+      required:
+      - company_name
+      properties:
+        city:
+          type: string
+        company_name:
+          type: string
+        state:
+          type: string
+        street:
+          type: string
+        zip_code:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_tniq.ProjectProgress:
+      type: object
+      properties:
+        cancelledTns:
+          type: integer
+        errorTns:
+          type: integer
+        isComplete:
+          type: boolean
+        pendingTns:
+          type: integer
+        progressPercentage:
+          type: integer
+        projectId:
+          type: string
+        status:
+          type: string
+        submittedTns:
+          type: integer
+        totalTns:
+          type: integer
+        validTns:
+          type: integer
+    github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction:
+      type: object
+      properties:
+        allowed_response:
+          type: string
+        code:
+          type: string
+        group_id:
+          type: string
+        id:
+          type: string
+        message:
+          type: string
+        opened_at:
+          type: string
+        required_document_type:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    internal_handlers.PortingAutoActivationRequest:
+      type: object
+      properties:
+        mode:
+          type: string
+        scheduled_at:
+          type: string
+    internal_handlers.previewItem:
+      type: object
+      properties:
+        eligible:
+          type: boolean
+        on_net:
+          type: boolean
+        owning_customer_ban:
+          description: MASKED
+          type: string
+        reason:
+          type: string
+        tn:
+          type: string
+    internal_handlers.PortingTransferRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/internal_handlers.transferItemReq'
+    github_com_ringer-warp_api-gateway_internal_tniq.ErrorGroup:
+      type: object
+      properties:
+        count:
+          type: integer
+        errorGroupId:
+          type: string
+        errorMessage:
+          type: string
+        tns:
+          type: array
+          items:
+            type: string
+    internal_handlers.PortingMessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    github_com_ringer-warp_api-gateway_internal_models.Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
     internal_handlers.loaRequest:
       type: object
       properties:
@@ -2376,12 +2918,37 @@ components:
               type: string
             title:
               type: string
-    internal_handlers.PortingNoteRequest:
+    internal_handlers.PortingUpdatedResponse:
       type: object
       properties:
-        body:
+        updated:
+          type: integer
+    internal_handlers.EINFormatResult:
+      type: object
+      properties:
+        formatted:
           type: string
-        visibility:
+        message:
+          type: string
+        valid:
+          type: boolean
+    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetailsResponse:
+      type: object
+      properties:
+        completed_at:
+          type: string
+        error:
+          type: string
+        original_params:
+          type: object
+          additionalProperties: true
+        request_id:
+          type: string
+        result:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetails'
+        service_type:
+          type: string
+        status:
           type: string
     github_com_ringer-warp_api-gateway_internal_tniq.PortProjectDetail:
       type: object
@@ -2426,416 +2993,24 @@ components:
           additionalProperties: true
         validation_status:
           type: string
-    internal_handlers.transferItemReq:
+    github_com_ringer-warp_api-gateway_internal_tincomply.EINLookupResponse:
       type: object
       properties:
-        pin:
+        companyNameLookupByEinResult:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.CompanyNameLookupByEinResult'
+        id:
           type: string
-        tn:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetails:
-      type: object
-      properties:
-        city:
-          type: string
-        company_name:
-          type: string
-        country:
-          type: string
-        ein:
-          type: string
-        entity_type:
-          type: string
-        incorporated_at:
-          type: string
-        industry:
-          type: string
-        legal_name:
-          type: string
-        match_score:
-          type: number
-        naics_code:
-          type: string
-        phone:
-          type: string
-        sic_code:
-          type: string
-        state:
-          type: string
-        status:
-          type: string
-        street:
-          type: string
-        website:
-          type: string
-        zip_code:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetailsResponse:
-      type: object
-      properties:
-        completed_at:
-          type: string
-        error:
-          type: string
-        original_params:
-          type: object
-          additionalProperties: true
-        request_id:
-          type: string
-        result:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetails'
-        service_type:
-          type: string
-        status:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_repository.PortRequestGroup:
-      type: object
-      properties:
-        btn:
-          type: string
-        business_name:
-          type: string
-        credential_tn_set_hash:
-          type: string
-        details_applied_at:
-          type: string
-        end_user_name:
-          type: string
-        loa_document_id:
-          type: string
-        loa_revision:
-          type: integer
-        loa_signed_at:
-          type: string
-        loa_signer_name:
-          type: string
-        loa_tn_set_hash:
-          type: string
-        losing_carrier_name:
-          type: string
-        losing_spid:
-          type: string
-        masked_account_tail:
-          type: string
-        pin_present:
-          type: boolean
-        service_address:
-          type: string
-        tn_count:
-          type: integer
-        tn_set_hash:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyDetailsRequest:
-      type: object
-      required:
-      - company_name
-      properties:
-        city:
-          type: string
-        company_name:
-          type: string
-        state:
-          type: string
-        street:
-          type: string
-        zip_code:
-          type: string
-    internal_handlers.PortingUpdatedResponse:
-      type: object
-      properties:
-        updated:
-          type: integer
-    internal_handlers.PortingDetailResponse:
-      type: object
-      properties:
-        customer_actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction'
-        group_state:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.PortRequestGroup'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/internal_handlers.PortCarrierGroup'
-        project:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.PortProjectResponse'
         request:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.PortRequest'
-        resume:
-          $ref: '#/components/schemas/internal_handlers.PortingResumeDescriptor'
-    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyNameLookupByEinResult:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.TinComplyRequestInfo'
+    internal_handlers.PortingAutoFixRequest:
       type: object
       properties:
-        completed:
-          description: true if lookup completed
-          type: boolean
-        found:
-          description: true if match found
-          type: boolean
-        message:
-          description: '"EIN lookup match found" or "No match found"'
-          type: string
-        name:
-          description: Official registered company name
-          type: string
-    github_com_ringer-warp_api-gateway_internal_repository.Note:
-      type: object
-      properties:
-        author_id:
-          type: string
-        body:
-          type: string
-        created_at:
-          type: string
-        id:
-          type: string
-        visibility:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchResult:
-      type: object
-      properties:
-        company_name:
-          type: string
-        confidence:
-          description: '"high", "medium", "low"'
-          type: string
-        exact_match:
-          type: boolean
-        fuzzy_match:
-          type: boolean
-        irs_verified:
-          type: boolean
-        match_details:
-          type: string
-        match_score:
-          type: number
-        matched:
-          type: boolean
-        tin:
-          type: string
-    internal_handlers.previewItem:
-      type: object
-      properties:
-        eligible:
-          type: boolean
-        on_net:
-          type: boolean
-        owning_customer_ban:
-          description: MASKED
-          type: string
-        reason:
-          type: string
-        tn:
-          type: string
-    internal_handlers.PortingPreviewResponse:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_porting.PreviewGroup'
-        tn_count:
-          type: integer
-    internal_handlers.PortingTransferRequest:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/internal_handlers.transferItemReq'
-    github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchRequest:
-      type: object
-      required:
-      - company_name
-      - tin
-      properties:
-        company_name:
-          type: string
-        tin:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_tniq.ProjectProgress:
-      type: object
-      properties:
-        cancelledTns:
-          type: integer
-        errorTns:
-          type: integer
-        isComplete:
-          type: boolean
-        pendingTns:
-          type: integer
-        progressPercentage:
-          type: integer
-        projectId:
-          type: string
-        status:
-          type: string
-        submittedTns:
-          type: integer
-        totalTns:
-          type: integer
-        validTns:
-          type: integer
-    internal_handlers.EINFormatResult:
-      type: object
-      properties:
-        formatted:
-          type: string
-        message:
-          type: string
-        valid:
-          type: boolean
-    internal_handlers.PortingCreateDraftRequest:
-      type: object
-      properties:
-        desired_due_date:
-          type: string
-        name:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction:
-      type: object
-      properties:
-        allowed_response:
-          type: string
-        code:
-          type: string
-        group_id:
-          type: string
-        id:
-          type: string
-        message:
-          type: string
-        opened_at:
-          type: string
-        required_document_type:
+        error_group_id:
           type: string
         tns:
           type: array
           items:
             type: string
-    github_com_ringer-warp_api-gateway_internal_tniq.PortProjectResponse:
-      type: object
-      properties:
-        activated_tns:
-          type: integer
-        can_activate:
-          type: boolean
-        can_cancel:
-          type: boolean
-        can_submit:
-          type: boolean
-        cancelled_tns:
-          type: integer
-        customer_id:
-          type: string
-        derived_status:
-          type: string
-        derived_status_display:
-          type: string
-        desired_due_date:
-          type: string
-        error_tns:
-          type: integer
-        id:
-          type: string
-        name:
-          type: string
-        spid:
-          type: string
-        status:
-          type: string
-        submit_blocker_reason:
-          type: string
-        submitted_tns:
-          type: integer
-        total_tns:
-          type: integer
-        valid_tns:
-          type: integer
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
-      type: object
-      properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
-    internal_handlers.PortingResumeDescriptor:
-      type: object
-      properties:
-        allowed:
-          type: boolean
-        reason:
-          type: string
-          enum:
-          - project_temporarily_unavailable
-          - project_counts_unavailable
-          - numbers_missing
-          - validation_in_progress
-          - validation_errors
-          - group_details_missing
-          - loa_missing
-          - due_date_missing
-          - ready_to_review
-        step:
-          type: string
-          enum:
-          - NUMBERS
-          - VALIDATION
-          - CARRIER_DETAILS
-          - DOCUMENTS
-          - SCHEDULE
-          - REVIEW
-    internal_handlers.PortingGroupDetailsRequest:
-      type: object
-      required:
-      - btn
-      - business_name
-      - end_user_name
-      - service_address
-      properties:
-        account_number:
-          type: string
-          example: '123456789'
-        btn:
-          type: string
-          example: '2125550100'
-        business_name:
-          type: string
-          example: ACME Corp
-        end_user_name:
-          type: string
-          example: Jane Smith
-        losing_carrier_name:
-          type: string
-          example: Current Carrier LLC
-        pin:
-          type: string
-        service_address:
-          type: string
-          example: 21699 E Quincy Ave, Aurora, CO 80015
-    internal_handlers.PortingDeletedResponse:
-      type: object
-      properties:
-        deleted:
-          type: boolean
-    internal_handlers.PortingMessageResponse:
-      type: object
-      properties:
-        message:
-          type: string
-    internal_handlers.PortingAutoActivationRequest:
-      type: object
-      properties:
-        mode:
-          type: string
-        scheduled_at:
-          type: string
     github_com_ringer-warp_api-gateway_internal_tincomply.TINNameMatchResponse:
       type: object
       properties:
@@ -2854,62 +3029,20 @@ components:
           type: string
         status:
           type: string
-    github_com_ringer-warp_api-gateway_internal_tincomply.TinComplyRequestInfo:
+    github_com_ringer-warp_api-gateway_internal_tincomply.CompanyNameLookupByEinResult:
       type: object
       properties:
-        enabledServices:
-          type: array
-          items:
-            type: string
-        requestDate:
-          type: string
-        requestedServices:
-          type: string
-        tin:
-          description: Masked as XXXXX9949
-          type: string
-    github_com_ringer-warp_api-gateway_internal_porting.ActionResponse:
-      type: object
-      properties:
-        acknowledged:
+        completed:
+          description: true if lookup completed
           type: boolean
-        desired_due_date:
-          type: string
-        document_id:
-          type: string
-        fields:
-          type: object
-          additionalProperties:
-            type: string
-        response_type:
-          type: string
-    internal_handlers.ManagedPortResponse:
-      type: object
-      properties:
-        created_at:
-          type: string
-        customer_actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_repository.ManagedCustomerAction'
-        error_code:
-          type: string
+        found:
+          description: true if match found
+          type: boolean
         message:
+          description: '"EIN lookup match found" or "No match found"'
           type: string
-        process_id:
-          type: string
-        project_id:
-          type: string
-        state:
-          type: string
-        updated_at:
-          type: string
-        version:
-          type: integer
-    internal_handlers.PortingTNsRequest:
-      type: object
-      properties:
-        tns:
+        name:
+          description: Official registered company name
           type: string
     github_com_ringer-warp_api-gateway_internal_models.APIError:
       type: object
@@ -2921,213 +3054,14 @@ components:
           additionalProperties: true
         message:
           type: string
-    internal_handlers.PortCarrierGroup:
+    internal_handlers.PortingNoteRequest:
       type: object
       properties:
-        spid:
+        body:
           type: string
-        tns:
-          type: array
-          items:
-            $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tniq.PortProjectDetail'
-    github_com_ringer-warp_api-gateway_internal_tniq.BulkActionResult:
-      type: object
-      properties:
-        action:
-          type: string
-        failed:
-          type: integer
-        results:
-          type: object
-          additionalProperties:
-            type: object
-            additionalProperties: true
-        succeeded:
-          type: integer
-        total:
-          type: integer
-    internal_handlers.PortingSupplementRequest:
-      type: object
-      properties:
-        new_ddd:
-          type: string
-        tns:
-          type: array
-          items:
-            type: string
-    github_com_ringer-warp_api-gateway_internal_tniq.ProjectStatistics:
-      type: object
-      properties:
-        cancelledTns:
-          type: integer
-        completedTns:
-          type: integer
-        errorTns:
-          type: integer
-        focReceivedTns:
-          type: integer
-        pendingFocTns:
-          type: integer
-        progressPercentage:
-          type: integer
-        projectId:
-          type: string
-        readyForActivationTns:
-          type: integer
-        stage:
-          type: string
-        stageMessage:
-          type: string
-        submittedTns:
-          type: integer
-        totalTns:
-          type: integer
-        validTns:
-          type: integer
-    github_com_ringer-warp_api-gateway_internal_tniq.ErrorGroup:
-      type: object
-      properties:
-        count:
-          type: integer
-        errorGroupId:
-          type: string
-        errorMessage:
-          type: string
-        tns:
-          type: array
-          items:
-            type: string
-    internal_handlers.PortingAutoFixRequest:
-      type: object
-      properties:
-        error_group_id:
-          type: string
-        tns:
-          type: array
-          items:
-            type: string
-    github_com_ringer-warp_api-gateway_internal_models.Meta:
-      type: object
-      properties:
-        page:
-          type: integer
-        per_page:
-          type: integer
-        total:
-          type: integer
-        total_pages:
-          type: integer
-    internal_handlers.PortingDocument:
-      type: object
-      properties:
-        content_type:
-          type: string
-        document_type:
-          type: string
-        file_name:
-          type: string
-        file_size_bytes:
-          type: integer
-        id:
-          type: string
-        notes:
-          type: string
-        signed_at:
-          type: string
-        signer_ip:
-          type: string
-        signer_name:
-          type: string
-        tn:
-          type: string
-        uploaded_at:
-          type: string
-    internal_handlers.PortingAddTNsResponse:
-      type: object
-      properties:
-        added:
-          type: integer
-    internal_handlers.PortingTNSelectionRequest:
-      type: object
-      properties:
-        tns:
-          type: array
-          items:
-            type: string
-    internal_handlers.transferResult:
-      type: object
-      properties:
-        reason:
-          type: string
-        tn:
-          type: string
-        transferred:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_repository.PortAuditEntry:
-      type: object
-      properties:
-        action:
-          type: string
-        actor_type:
-          type: string
-        created_at:
-          type: string
-        id:
-          type: string
-        override_reason:
-          type: string
-    internal_handlers.PortingCreateDraftResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-        tniq_project_id:
-          type: string
-    github_com_ringer-warp_api-gateway_internal_tincomply.EINLookupResponse:
-      type: object
-      properties:
-        companyNameLookupByEinResult:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.CompanyNameLookupByEinResult'
-        id:
-          type: string
-        request:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_tincomply.TinComplyRequestInfo'
-    github_com_ringer-warp_api-gateway_internal_repository.PortRequest:
-      type: object
-      properties:
-        can_resume:
-          type: boolean
-        created_at:
-          type: string
-        derived_status:
-          type: string
-        desired_due_date:
-          type: string
-        id:
-          type: string
-        last_synced_at:
-          type: string
-        managed_version:
-          type: integer
-        name:
-          type: string
-        next_step:
-          type: string
-        tniq_project_id:
-          type: string
-        tniq_spid:
-          type: string
-        warp_customer_id:
+        visibility:
           type: string
   requestBodies:
-    internal_handlers.PortingTNSelectionRequest:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/internal_handlers.PortingTNSelectionRequest'
-      description: Optional TN subset
     internal_handlers.PortingTNsRequest:
       content:
         application/json:
@@ -3135,12 +3069,15 @@ components:
             $ref: '#/components/schemas/internal_handlers.PortingTNsRequest'
       description: Free-form TN list
       required: true
+    internal_handlers.PortingTNSelectionRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/internal_handlers.PortingTNSelectionRequest'
+      description: Optional TN subset
   securitySchemes:
     ApiKeyAuth:
       description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

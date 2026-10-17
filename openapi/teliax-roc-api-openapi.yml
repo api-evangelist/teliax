@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Teliax ROC API
-  version: v1
+  title: TNIQ by Ringer — Customer ROC API
+  description: External API for TNIQ customers.
   contact:
     name: Ringer API Support
     url: https://ringer.tel
     email: api-support@ringer.tel
-  description: 'Operations tagged ROC across 2 of this provider''s published API definitions: teliax-tniq-openapi.json, teliax-tniq-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.tniq.ringer.tel
   description: Production
@@ -51,13 +51,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/cancel:
     put:
       tags:
@@ -83,13 +76,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/inbound/projects/{projectId}/process:
     put:
       tags:
@@ -116,13 +102,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/inbound/projects/{projectId}/checkout:
     put:
       tags:
@@ -148,13 +127,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/inbound/projects/{projectId}/checkin:
     put:
       tags:
@@ -180,13 +152,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/webhook:
     post:
       tags:
@@ -209,13 +174,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/sync:
     post:
       tags:
@@ -235,13 +193,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects:
     get:
       tags:
@@ -312,13 +263,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/submit:
     post:
       tags:
@@ -345,13 +289,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/refresh:
     post:
       tags:
@@ -377,13 +314,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/loa/upload:
     post:
       tags:
@@ -420,13 +350,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/loa/generate:
     post:
       tags:
@@ -453,13 +376,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/escalate-hdi:
     post:
       tags:
@@ -498,13 +414,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/documents/upload:
     post:
       tags:
@@ -551,13 +460,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}:
     get:
       tags:
@@ -578,13 +480,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/documents:
     get:
       tags:
@@ -605,13 +500,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/documents/{documentId}/download:
     get:
       tags:
@@ -643,13 +531,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/details:
     get:
       tags:
@@ -670,13 +551,6 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
   /v1/roc/projects/{projectId}/audit:
     get:
       tags:
@@ -697,15 +571,20 @@ paths:
             '*/*':
               schema:
                 type: object
-    servers:
-    - url: https://api.tniq.ringer.tel
-      description: Production
-    - url: https://tniq-api.ringer.tel
-      description: Production (legacy alias)
-    - url: https://staging-api.ringer.tel
-      description: Staging
 components:
   schemas:
+    RocProcessRequest:
+      required:
+      - actions
+      - respOrgId
+      type: object
+      properties:
+        respOrgId:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TfnActionDto'
     RocSubmitRequest:
       required:
       - respOrgId
@@ -714,18 +593,6 @@ components:
         respOrgId:
           type: string
         contactInformation:
-          type: string
-    TfnActionDto:
-      required:
-      - actionCode
-      - tfn
-      type: object
-      properties:
-        tfn:
-          type: string
-        actionCode:
-          type: string
-        rejectNote:
           type: string
     RocLoaGenerateRequest:
       required:
@@ -762,6 +629,38 @@ components:
           type: string
         email:
           type: string
+    RocSyncRequest:
+      required:
+      - customerId
+      - direction
+      - endDate
+      - respOrgId
+      - startDate
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+        respOrgId:
+          type: string
+        direction:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+    TfnActionDto:
+      required:
+      - actionCode
+      - tfn
+      type: object
+      properties:
+        tfn:
+          type: string
+        actionCode:
+          type: string
+        rejectNote:
+          type: string
     RocCreateRequest:
       required:
       - entityId
@@ -789,44 +688,9 @@ components:
           maxLength: 1000
           minLength: 0
           type: string
-    RocProcessRequest:
-      required:
-      - actions
-      - respOrgId
-      type: object
-      properties:
-        respOrgId:
-          type: string
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/TfnActionDto'
-    RocSyncRequest:
-      required:
-      - customerId
-      - direction
-      - endDate
-      - respOrgId
-      - startDate
-      type: object
-      properties:
-        customerId:
-          type: string
-          format: uuid
-        respOrgId:
-          type: string
-        direction:
-          type: string
-        startDate:
-          type: string
-        endDate:
-          type: string
   securitySchemes:
     bearerAuth:
       type: http
       description: 'Bearer token authentication. Pass your API token or user JWT in the Authorization header: Authorization: Bearer YOUR_TOKEN'
       scheme: bearer
       bearerFormat: JWT
-x-refined-from:
-- teliax-tniq-openapi.json
-- teliax-tniq-openapi.yml

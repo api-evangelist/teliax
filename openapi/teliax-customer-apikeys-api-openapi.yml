@@ -1,9 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Teliax Customer/Api Keys API
-  version: 1.0.0
+  description: Wholesale telecom platform API — SIP trunking, numbers, porting, messaging, and billing. All customer endpoints accept an API key (Bearer rk_...) or a session cookie; responses use the {success, data} / {success:false, error:{code,message}} envelope.
+  title: WARP Customer Customer/Api Keys API
   contact: {}
-  description: 'Operations tagged Customer/ApiKeys across 2 of this provider''s published API definitions: teliax-warp-openapi.json, teliax-warp-openapi.yml. Each path carries the servers of the definition it was published in.'
+  version: 1.0.0
 servers:
 - url: //api.warp.ringer.tel
 tags:
@@ -68,8 +68,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersByIdApiKeys
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/api-keys/audit:
     get:
       security:
@@ -123,8 +121,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersByIdApiKeysAudit
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/api-keys/{keyId}:
     get:
       security:
@@ -193,8 +189,6 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersByIdApiKeysByKeyId
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
   /v1/customers/{id}/api-keys/{keyId}/audit:
     get:
       security:
@@ -265,10 +259,21 @@ paths:
                       $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
       operationId: getV1CustomersByIdApiKeysByKeyIdAudit
       x-operation-id-source: derived
-    servers:
-    - url: //api.warp.ringer.tel
 components:
   schemas:
+    net.IPNet:
+      type: object
+      properties:
+        ip:
+          description: network number
+          type: array
+          items:
+            type: integer
+        mask:
+          description: network mask
+          type: array
+          items:
+            type: integer
     github_com_ringer-warp_api-gateway_internal_models.APIKeyAudit:
       type: object
       properties:
@@ -300,14 +305,16 @@ components:
           type: string
         user_agent:
           type: string
-    github_com_ringer-warp_api-gateway_internal_models.KeyEnvironment:
-      type: string
-      enum:
-      - live
-      - test
-      x-enum-varnames:
-      - KeyEnvironmentLive
-      - KeyEnvironmentTest
+    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
+      type: object
+      properties:
+        data: {}
+        error:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
+        meta:
+          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
+        success:
+          type: boolean
     github_com_ringer-warp_api-gateway_internal_models.Meta:
       type: object
       properties:
@@ -328,39 +335,14 @@ components:
           type: array
           items:
             type: string
-    github_com_ringer-warp_api-gateway_internal_models.APIResponse:
-      type: object
-      properties:
-        data: {}
-        error:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.APIError'
-        meta:
-          $ref: '#/components/schemas/github_com_ringer-warp_api-gateway_internal_models.Meta'
-        success:
-          type: boolean
-    github_com_ringer-warp_api-gateway_internal_models.APIError:
-      type: object
-      properties:
-        code:
-          type: string
-        details:
-          type: object
-          additionalProperties: true
-        message:
-          type: string
-    net.IPNet:
-      type: object
-      properties:
-        ip:
-          description: network number
-          type: array
-          items:
-            type: integer
-        mask:
-          description: network mask
-          type: array
-          items:
-            type: integer
+    github_com_ringer-warp_api-gateway_internal_models.KeyEnvironment:
+      type: string
+      enum:
+      - live
+      - test
+      x-enum-varnames:
+      - KeyEnvironmentLive
+      - KeyEnvironmentTest
     github_com_ringer-warp_api-gateway_internal_models.APIKey:
       type: object
       properties:
@@ -407,12 +389,19 @@ components:
           type: array
           items:
             type: string
+    github_com_ringer-warp_api-gateway_internal_models.APIError:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        message:
+          type: string
   securitySchemes:
     ApiKeyAuth:
       description: 'API key auth: "Authorization: Bearer rk_..." (live) or "Bearer rk_test_..." (test label). Mint keys in the portal under Settings → API Keys.'
       type: apiKey
       name: Authorization
       in: header
-x-refined-from:
-- teliax-warp-openapi.json
-- teliax-warp-openapi.yml

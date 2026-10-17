@@ -1,14 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Teliax DNO API
+  title: Telique Telecom DNO API
   version: 2026.6.25
+  description: 'Unified Telique telecom data API. Consolidated from 4 services: lrn, cnam, lerg, routelink.
+
+
+    Get your API token at telique.ringer.tel.'
   contact:
     name: Ringer Support
     email: support@ringer.com
     url: https://telique.ringer.tel
   license:
     name: Proprietary
-  description: 'Operations tagged DNO across 2 of this provider''s published API definitions: teliax-telique-openapi.yaml, teliax-telique-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.telique.ringer.tel
   description: Production
@@ -76,9 +79,6 @@ paths:
                 source: ITG
                 created_at: 2022-10-12 07:44:48+00:00
                 matched_pattern: '8008291040'
-    servers:
-    - url: https://api.telique.ringer.tel
-      description: Production
 components:
   schemas:
     DnoLookupResponse:
@@ -123,6 +123,3 @@ components:
       in: header
       name: x-api-token
       description: API token for authentication. Get yours at https://telique.ringer.tel. Anonymous access (no token) is rate-limited to 10 requests per minute.
-x-refined-from:
-- teliax-telique-openapi.yaml
-- teliax-telique-openapi.yml

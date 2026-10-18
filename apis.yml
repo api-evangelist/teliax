@@ -507,6 +507,8 @@ apis:
   humanURL: https://telique.ringer.tel/docs
   baseURL: https://api.telique.ringer.tel
   tags:
+  - Customer Account
+  tags_raw:
   - Customer/Account
   properties:
   - type: OpenAPI
@@ -563,6 +565,8 @@ apis:
   humanURL: https://telique.ringer.tel/docs
   baseURL: https://api.telique.ringer.tel
   tags:
+  - Customer Analytics
+  tags_raw:
   - Customer/Analytics
   properties:
   - type: OpenAPI
@@ -731,6 +735,8 @@ apis:
   humanURL: https://telique.ringer.tel/docs
   baseURL: https://api.telique.ringer.tel
   tags:
+  - Customer Messaging
+  tags_raw:
   - Customer/Messaging
   properties:
   - type: OpenAPI
@@ -1011,6 +1017,8 @@ apis:
   humanURL: https://telique.ringer.tel/docs
   baseURL: https://api.telique.ringer.tel
   tags:
+  - Customer Trunks
+  tags_raw:
   - Customer/Trunks
   properties:
   - type: OpenAPI
@@ -1237,6 +1245,8 @@ apis:
   humanURL: https://telique.ringer.tel/docs
   baseURL: https://api.telique.ringer.tel
   tags:
+  - JobRuns
+  tags_raw:
   - Job Runs
   properties:
   - type: OpenAPI

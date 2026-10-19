@@ -1,0 +1,12 @@
+{
+ "url": "https://telique.ringer.tel/openapi.yaml",
+ "requested_url": "https://telique.ringer.tel/openapi.yaml",
+ "status": 200,
+ "content_type": "text/yaml; charset=utf-8",
+ "bytes": 95270,
+ "sha256": "85af6bc861640ccc7cca87f34736dd89758d1347116f01c1d76e85ca27c20e44",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
